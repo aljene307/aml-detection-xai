@@ -1,0 +1,16 @@
+{
+  "ram_disponible_au_depart_mo": 3412,
+  "telechargement": {
+    "methode": "kagglehub",
+    "duree_s": 285.7,
+    "pic_memoire_mo": 117,
+    "taille_csv_octets": 996168850
+  },
+  "conversion_parquet": {
+    "duree_s": 19.12,
+    "pic_memoire_mo": 1314,
+    "taille_parquet_octets": 154030003,
+    "lignes": 9504852,
+    "groupes_de_lignes": 15
+  }
+}
