@@ -1,0 +1,11 @@
+# Environnement de travail local : application + API + notebook + tests.
+-r requirements.txt
+-r requirements-api.txt
+
+polars==2.1.0
+jupyterlab==4.6.5
+ipykernel==7.4.0
+nbconvert==7.17.2
+nbformat==5.11.1
+pytest==9.2.0
+psutil==7.2.2

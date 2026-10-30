@@ -1,0 +1,52 @@
+# Secrets : seul .env.example est commité
+.env
+.env.*
+!.env.example
+
+# Environnements et caches Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.cache/
+
+# Node (au cas où)
+node_modules/
+
+# Données téléchargées et intermédiaires (seul data/demo/ est commité)
+data/*
+!data/demo/
+*.zip
+
+# Fichiers d'entrée / de sortie et exports
+inputs/
+outputs/
+exports/
+*.log
+
+# Dossiers et fichiers de sauvegarde
+backup/
+backups/
+*.bak
+*.orig
+*.git-backup/
+
+# Captures d'écran non relues (seules celles de docs/captures/ sont commitées)
+captures_brutes/
+Screenshot*.png
+Capture*.png
+
+# PDF du sujet et tout PDF à la racine (le one-pager est dans reports/)
+/*.pdf
+
+# Fichiers système / éditeur
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
