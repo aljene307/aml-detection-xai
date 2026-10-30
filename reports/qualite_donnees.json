@@ -1,0 +1,71 @@
+{
+  "lignes": 9504852,
+  "colonnes": [
+    "transaction_id",
+    "timestamp",
+    "Sender_account",
+    "Receiver_account",
+    "Amount",
+    "Payment_currency",
+    "Received_currency",
+    "Sender_bank_location",
+    "Receiver_bank_location",
+    "Payment_type",
+    "Is_laundering",
+    "Laundering_type"
+  ],
+  "valeurs_manquantes": {},
+  "doublons_hors_identifiant": 0,
+  "periode": [
+    "2022-10-07 10:35:19",
+    "2023-08-23 10:57:12"
+  ],
+  "ordre_chronologique_respecte": true,
+  "fin_periode_entrainement_60pct": "2023-04-16 21:10:37",
+  "nb_blanchiment": 9873,
+  "taux_blanchiment_pct": 0.1039,
+  "nb_typologies": 28,
+  "nb_typologies_normales": 11,
+  "nb_typologies_suspectes": 17,
+  "typologie_determine_etiquette": true,
+  "nb_comptes_emetteurs": 292715,
+  "nb_comptes_destinataires": 652266,
+  "montant_min_max": [
+    3.73,
+    12618498.4
+  ],
+  "transactions_par_typologie": {
+    "Normal_Small_Fan_Out": 3477717,
+    "Normal_Fan_Out": 2302220,
+    "Normal_Fan_In": 2104285,
+    "Normal_Group": 528351,
+    "Normal_Cash_Withdrawal": 305031,
+    "Normal_Cash_Deposits": 223801,
+    "Normal_Periodical": 210526,
+    "Normal_Plus_Mutual": 155041,
+    "Normal_Mutual": 125335,
+    "Normal_Foward": 42031,
+    "Normal_single_large": 20641,
+    "Structuring": 1870,
+    "Cash_Withdrawal": 1334,
+    "Deposit-Send": 945,
+    "Smurfing": 932,
+    "Layered_Fan_In": 656,
+    "Layered_Fan_Out": 529,
+    "Stacked Bipartite": 506,
+    "Behavioural_Change_1": 394,
+    "Bipartite": 383,
+    "Cycle": 382,
+    "Fan_In": 364,
+    "Gather-Scatter": 354,
+    "Behavioural_Change_2": 345,
+    "Scatter-Gather": 338,
+    "Single_large": 250,
+    "Fan_Out": 237,
+    "Over-Invoicing": 54
+  },
+  "mesure": {
+    "duree_s": 14.94,
+    "pic_memoire_mo": 3161
+  }
+}

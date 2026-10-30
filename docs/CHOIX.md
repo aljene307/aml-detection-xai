@@ -16,8 +16,8 @@ complétée quand l'étape correspondante aura produit ses chiffres.
 - **Mesures** (vérification du 30/10/2026) :
   - un fichier `SAML-D.csv`, 996 168 850 octets décompressé, archive ZIP de
     202 528 964 octets ;
-  - 9 504 852 transactions, 0,1039 % suspectes (description officielle,
-    à recompter à l'étape 1) ;
+  - 9 504 852 transactions, dont 9 873 suspectes (0,1039 %), recomptées
+    sur le fichier téléchargé (`reports/qualite_donnees.json`) ;
   - 12 colonnes : `Time, Date, Sender_account, Receiver_account, Amount,
     Payment_currency, Received_currency, Sender_bank_location,
     Receiver_bank_location, Payment_type, Is_laundering, Laundering_type` ;
@@ -101,8 +101,11 @@ complétée quand l'étape correspondante aura produit ses chiffres.
   ligne.
 - **Raison** : un échantillon ligne par ligne retirerait des transactions de
   l'historique des comptes, ce qui fausserait les compteurs et les moyennes.
-- **Mesures** : à compléter (mémoire nécessaire mesurée **avant** de
-  choisir : pic de mémoire et temps, pandas comparé à polars).
+- **Mesures** (étape 1, voir section 14) : trois variables par compte
+  émetteur calculées sur les 9,5 M de lignes en 5 s, avec un pic de 1,8 Go.
+  L'historique complet tient donc en mémoire sur le PC de travail : pas
+  d'échantillonnage nécessaire pour le calcul des variables. Pic avec toutes
+  les variables de l'étape 2 à mesurer.
 - **Alternative écartée** : échantillonnage aléatoire des lignes avant le
   calcul des variables.
 
@@ -155,3 +158,100 @@ complétée quand l'étape correspondante aura produit ses chiffres.
 - **Raison** : un seul endroit pour chaque calcul, donc des chiffres
   identiques partout ; un seul notebook est plus simple à présenter.
 - **Alternative écartée** : un notebook par module.
+
+## 12. Téléchargement avec kagglehub, sans jeton
+
+- **Choix** : `kagglehub.dataset_download`, sans identifiants ; requête HTTP
+  directe en secours (`aml_xai.data.download_raw`).
+- **Raison** : bibliothèque officielle de Kaggle ; le jeu est public, donc
+  aucun secret à gérer.
+- **Mesures** (`reports/mesures/donnees.json`) : téléchargement anonyme
+  réussi en 286 s (débit réseau d'environ 0,7 Mo/s), pic de mémoire 117 Mo,
+  taille du CSV conforme (996 168 850 octets).
+- **Alternative écartée** : CLI `kaggle`, qui exige un jeton.
+
+## 13. Format Parquet et types de colonnes
+
+- **Choix** : conversion unique du CSV en Parquet (compression zstd), par
+  morceaux de 64 Mo : `Date` et `Time` fusionnées en `timestamp`, comptes en
+  entiers, colonnes texte en catégories, `transaction_id` pour garder l'ordre
+  d'origine. `Is_laundering` sur 1 octet.
+- **Raison** : fichier 6,5 fois plus petit et relu en moins d'une seconde ;
+  la conversion par morceaux reste possible avec peu de RAM libre (3,3 Go
+  libres sur 15,7 Go au moment des mesures).
+- **Mesures** (`reports/mesures/donnees.json`, `pandas_polars.json`) :
+
+  | | CSV | Parquet |
+  |---|---|---|
+  | Taille sur disque | 996 Mo | 154 Mo |
+  | Tableau pandas en mémoire | ≈ 1 460 Mo (154 Mo par million de lignes, extrapolé) | 426 Mo |
+  | Lecture complète pandas | non mesurée (risque pour la RAM) | 0,45 s, pic 1,6 Go |
+
+  Conversion : 19 s, pic 1,3 Go.
+- **Alternative écartée** : relire le CSV à chaque fois.
+
+## 14. Calcul par compte : numpy (`searchsorted`) sur des tableaux pandas
+
+- **Choix** : les fenêtres glissantes par compte (nombre de transactions sur
+  1 h et 24 h, moyenne sur 30 jours, temps depuis la précédente) seront
+  calculées avec numpy : tri par compte puis par temps, puis recherche
+  dichotomique (`np.searchsorted`) du début de chaque fenêtre et sommes
+  cumulées. Polars **reste dans `requirements-dev.txt`** : il ne sert qu'aux
+  mesures, pas au code de `src/`.
+- **Raison** : sept fois plus rapide que pandas, avec des résultats
+  **identiques** à pandas ; ordre des lignes maîtrisé (voir ci-dessous) ; pas
+  de dépendance supplémentaire pour l'application et l'API.
+- **Mesures** (`reports/mesures/pandas_polars.json`, 9,5 M de lignes,
+  compte émetteur, 3 variables) :
+
+  | Méthode | Calcul | Pic mémoire | Somme des compteurs 24 h |
+  |---|---|---|---|
+  | pandas `groupby().rolling()` | 38,4 s | 2,2 Go | 249 826 357 |
+  | polars `rolling()` | 1,4 s | 1,1 Go | 249 829 747 |
+  | numpy `searchsorted` | 5,1 s | 1,8 Go | 249 826 357 |
+
+  **Écart de polars expliqué** : 3 384 groupes de transactions d'un même
+  émetteur à la même seconde (6 771 lignes). Polars compte, pour chaque
+  ligne, toutes les transactions de la même seconde, y compris celles qui la
+  suivent dans le fichier ; pandas et numpy ne comptent que celles qui la
+  précèdent. L'écart attendu (somme de k(k−1)/2 sur les groupes) vaut
+  exactement 3 390. Le traitement de ces ex æquo, sans regarder le futur,
+  sera fixé à l'étape 2.
+- **Alternatives écartées** : polars (le plus rapide et le plus léger, mais
+  une dépendance de plus et des ex æquo comptés autrement ; à 5 s contre
+  1,4 s, le gain ne compte pas à cette échelle) ; pandas `rolling` (sept fois
+  plus lent).
+
+## 15. Contrôles de qualité du jeu complet
+
+- **Mesures** (`reports/qualite_donnees.json`) :
+  - aucune valeur manquante, aucun doublon (hors identifiant) ;
+  - fichier déjà trié dans l'ordre du temps, du 07/10/2022 10:35 au
+    23/08/2023 10:57 (environ 10,5 mois) ;
+  - 28 typologies (11 normales, 17 suspectes) ; la typologie détermine
+    exactement l'étiquette (fuite confirmée, voir section 2) ;
+  - 292 715 comptes émetteurs, 652 266 comptes destinataires ;
+  - montants de 3,73 à 12 618 498,40 ;
+  - typologies suspectes très inégales : de 1 870 transactions
+    (`Structuring`) à 54 (`Over-Invoicing`).
+  - Le contrôle des doublons atteint un pic de 3,1 Go : à ne pas relancer
+    quand la RAM libre est faible.
+- **Conséquence** : le rappel par typologie sera instable pour les plus
+  petites typologies (environ 11 cas dans le test pour `Over-Invoicing` si
+  elle est répartie uniformément dans le temps, à vérifier à l'étape 2) ;
+  il sera présenté avec les effectifs.
+
+## 16. Période utilisée par l'exploration
+
+- **Choix** :
+  - chiffres descriptifs globaux (taille, période, taux global) : jeu
+    complet ;
+  - graphiques qui guident le choix des variables (taux par heure, par jour,
+    par type de paiement, par pays, par devise) : **période d'entraînement
+    seulement**, c'est-à-dire les premiers 60 % des lignes dans l'ordre du
+    temps, jusqu'au 16/04/2023 21:10:37 ;
+  - chaque graphique du notebook indique la période qu'il utilise.
+- **Raison** : choisir des variables en regardant la validation ou le test
+  reviendrait à regarder le futur ; les résultats finaux seraient
+  optimistes.
+- **Alternative écartée** : explorer tout le jeu.
