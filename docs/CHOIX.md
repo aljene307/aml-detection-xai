@@ -215,8 +215,7 @@ complétée quand l'étape correspondante aura produit ses chiffres.
   ligne, toutes les transactions de la même seconde, y compris celles qui la
   suivent dans le fichier ; pandas et numpy ne comptent que celles qui la
   précèdent. L'écart attendu (somme de k(k−1)/2 sur les groupes) vaut
-  exactement 3 390. Le traitement de ces ex æquo, sans regarder le futur,
-  sera fixé à l'étape 2.
+  exactement 3 390. Le traitement de ces ex æquo est fixé en section 18.
 - **Alternatives écartées** : polars (le plus rapide et le plus léger, mais
   une dépendance de plus et des ex æquo comptés autrement ; à 5 s contre
   1,4 s, le gain ne compte pas à cette échelle) ; pandas `rolling` (sept fois
@@ -247,11 +246,61 @@ complétée quand l'étape correspondante aura produit ses chiffres.
   - chiffres descriptifs globaux (taille, période, taux global) : jeu
     complet ;
   - graphiques qui guident le choix des variables (taux par heure, par jour,
-    par type de paiement, par pays, par devise) : **période d'entraînement
-    seulement**, c'est-à-dire les premiers 60 % des lignes dans l'ordre du
-    temps, jusqu'au 16/04/2023 21:10:37 ;
+    par type de paiement, par pays, par devise), ainsi que les montants et
+    les typologies : **période d'entraînement seulement**, c'est-à-dire les
+    lignes strictement antérieures au 16/04/2023 21:10:37 (5 702 911 lignes,
+    60,0 %) ;
+  - exception, le graphique du taux par semaine, demandé par le module 1 :
+    jeu complet, car il décrit la stabilité entre les trois périodes. Il ne
+    sert à choisir ni variable ni réglage ; le rythme qu'il montre est mesuré
+    à part sur la période d'entraînement (section 17) ;
   - chaque graphique du notebook indique la période qu'il utilise.
 - **Raison** : choisir des variables en regardant la validation ou le test
   reviendrait à regarder le futur ; les résultats finaux seraient
   optimistes.
+- **Mesures** : charger seulement cette période et les colonnes utiles
+  atteint un pic de 831 Mo (essai du 02/11/2026), contre 1,6 Go pour le jeu
+  complet.
 - **Alternative écartée** : explorer tout le jeu.
+
+## 17. Constats de l'exploration (période d'entraînement)
+
+Les chiffres sont calculés dans la section 1 du notebook. Ce sont des
+hypothèses pour le choix des variables, pas des résultats de modèle.
+
+- **Plafond des montants** : aucune transaction normale ne dépasse
+  999 946,47, alors que 26 cas de blanchiment vont au-delà. Ce sont tous les
+  cas `Over-Invoicing` de la période, tous au-dessus de 1,26 M. Probable
+  artefact du générateur : la détection de cette typologie par le montant
+  sera présentée comme telle.
+- **Rythme mensuel** : le taux par jour du mois va de 0,053 % (jour 31) à
+  0,138 % (jour 17), avec des intervalles à 95 % qui ne se recouvrent pas.
+  Aucune raison métier évidente, donc probable effet du générateur. Proposition
+  à confirmer à l'étape 2 : ne pas créer de variable « jour du mois ».
+- **Variables utiles attendues** : type de paiement (taux de 0,05 % à 0,61 %),
+  pays et devise du destinataire, devises différentes (0,322 % contre 0,072 %).
+- **Redondance** : 99,95 % des transactions entre deux pays sont de type
+  `Cross-border`.
+- **Signal faible** : heure (de 0,086 % à 0,135 %) ; jour de la semaine (de
+  0,095 % à 0,105 %, intervalles qui se recouvrent).
+- **Montant seul insuffisant** : 13 typologies suspectes sur 17 ont un montant
+  médian à moins d'un facteur 3 de la médiane normale.
+- **Pays émetteurs peu fiables** : hors Royaume-Uni (96,7 % des transactions),
+  chacun ne compte que 14 à 37 cas. D'où l'intervalle de confiance de Wilson
+  sur les graphiques, plus fiable que la formule usuelle pour un taux très
+  faible.
+
+## 18. Définition des fenêtres par compte
+
+- **Choix validé** : pour les transactions d'un même compte à la même seconde,
+  seules les transactions **strictement antérieures** comptent. Leur ordre dans
+  le fichier est arbitraire ; compter l'une d'elles reviendrait à regarder une
+  transaction simultanée.
+- **À décider à l'étape 2, avec mesures** :
+  - les compteurs (1 h, 24 h) incluent-ils la transaction actuelle ? Une même
+    règle pour toutes les variables ;
+  - moyenne des 30 derniers jours calculée sans la transaction actuelle ;
+  - traitement de la première transaction d'un compte (aucun historique) ;
+  - effet de démarrage : pendant le premier mois (depuis le 07/10/2022), aucun
+    compte n'a 30 jours d'historique. Mesurer son effet, puis signaler ou
+    exclure cette période de l'entraînement.

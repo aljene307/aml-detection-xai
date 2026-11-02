@@ -132,6 +132,19 @@ def train_cutoff(timestamps: pd.Series, train_frac: float = TRAIN_FRAC) -> pd.Ti
     return pd.Timestamp(ordered[int(len(ordered) * train_frac)])
 
 
+def load_training_period(
+    columns: list[str] | None = None, path: Path = PARQUET_PATH
+) -> tuple[pd.DataFrame, pd.Timestamp]:
+    """Charge les lignes strictement antérieures à la coupure des 60 %.
+
+    Le filtre est appliqué à la lecture pour limiter la mémoire. Une même
+    seconde n'est jamais coupée en deux : la coupure porte sur l'horodatage.
+    """
+    cutoff = train_cutoff(load_transactions([TIMESTAMP], path)[TIMESTAMP])
+    df = pd.read_parquet(path, columns=columns, filters=[(TIMESTAMP, "<", cutoff)])
+    return df, cutoff
+
+
 def quality_report(df: pd.DataFrame) -> dict:
     """Contrôles de qualité du jeu complet (chiffres descriptifs globaux)."""
     typologies = df.groupby(TYPOLOGY, observed=True)[TARGET].agg(["min", "max", "size"])

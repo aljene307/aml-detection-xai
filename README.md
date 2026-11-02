@@ -18,6 +18,19 @@ py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 ```
 
+## Reproduire les données et le notebook
+
+```powershell
+.\.venv\Scripts\python.exe scripts\download_data.py
+.\.venv\Scripts\python.exe scripts\check_quality.py
+.\.venv\Scripts\python.exe -m nbconvert --to notebook --execute --inplace notebooks\projet_aml.ipynb
+.\.venv\Scripts\python.exe scripts\clean_notebook.py
+```
+
+Utiliser `python -m nbconvert` et non `python -m jupyter nbconvert` : sans
+environnement activé, cette dernière peut lancer un autre Python installé sur
+le poste.
+
 ## Données
 
 - Jeu : *Anti Money Laundering Transaction Data (SAML-D)*, Berkan Oztas,
