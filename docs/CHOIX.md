@@ -250,10 +250,11 @@ complétée quand l'étape correspondante aura produit ses chiffres.
     les typologies : **période d'entraînement seulement**, c'est-à-dire les
     lignes strictement antérieures au 16/04/2023 21:10:37 (5 702 911 lignes,
     60,0 %) ;
-  - exception, le graphique du taux par semaine, demandé par le module 1 :
-    jeu complet, car il décrit la stabilité entre les trois périodes. Il ne
-    sert à choisir ni variable ni réglage ; le rythme qu'il montre est mesuré
-    à part sur la période d'entraînement (section 17) ;
+  - exception validée, le graphique du taux par semaine, demandé par le
+    module 1 : jeu complet, comme simple description de la stabilité entre les
+    trois périodes. **Aucune variable n'en est tirée**, et il ne sert à choisir
+    aucun réglage. Le rythme qu'il montre est mesuré à part sur la période
+    d'entraînement (section 17) ;
   - chaque graphique du notebook indique la période qu'il utilise.
 - **Raison** : choisir des variables en regardant la validation ou le test
   reviendrait à regarder le futur ; les résultats finaux seraient
@@ -270,13 +271,15 @@ hypothèses pour le choix des variables, pas des résultats de modèle.
 
 - **Plafond des montants** : aucune transaction normale ne dépasse
   999 946,47, alors que 26 cas de blanchiment vont au-delà. Ce sont tous les
-  cas `Over-Invoicing` de la période, tous au-dessus de 1,26 M. Probable
-  artefact du générateur : la détection de cette typologie par le montant
-  sera présentée comme telle.
+  cas `Over-Invoicing` de la période, tous au-dessus de 1,26 M. **Noté comme
+  artefact du générateur**, à rappeler dans l'analyse par typologie : une bonne
+  détection de cette typologie viendrait du montant seul et ne prouverait pas
+  la qualité de la méthode.
 - **Rythme mensuel** : le taux par jour du mois va de 0,053 % (jour 31) à
   0,138 % (jour 17), avec des intervalles à 95 % qui ne se recouvrent pas.
-  Aucune raison métier évidente, donc probable effet du générateur. Proposition
-  à confirmer à l'étape 2 : ne pas créer de variable « jour du mois ».
+  Aucune raison métier évidente, donc probable effet du générateur.
+  **Décision validée : pas de variable « jour du mois »**, car elle apprendrait
+  le générateur plutôt qu'un comportement de blanchiment.
 - **Variables utiles attendues** : type de paiement (taux de 0,05 % à 0,61 %),
   pays et devise du destinataire, devises différentes (0,322 % contre 0,072 %).
 - **Redondance** : 99,95 % des transactions entre deux pays sont de type
@@ -304,3 +307,5 @@ hypothèses pour le choix des variables, pas des résultats de modèle.
   - effet de démarrage : pendant le premier mois (depuis le 07/10/2022), aucun
     compte n'a 30 jours d'historique. Mesurer son effet, puis signaler ou
     exclure cette période de l'entraînement.
+- **Si la mémoire ne suffit pas** : calcul par morceaux de comptes, chaque
+  compte gardant tout son historique, et non échantillonnage.
