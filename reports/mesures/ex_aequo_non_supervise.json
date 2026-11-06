@@ -1,0 +1,163 @@
+{
+  "premiers": 5000,
+  "fichiers": {
+    "autoencodeur__goulot-12__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "autoencodeur__goulot-4__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 5000
+    },
+    "autoencodeur__goulot-8__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4999
+    },
+    "isolation_forest__n_estimators-100__max_samples-1024__max_features-0.5__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4989
+    },
+    "isolation_forest__n_estimators-100__max_samples-1024__max_features-1.0__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4933
+    },
+    "isolation_forest__n_estimators-100__max_samples-256__max_features-0.5__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4961
+    },
+    "isolation_forest__n_estimators-100__max_samples-256__max_features-1.0__graine-1": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4851
+    },
+    "isolation_forest__n_estimators-100__max_samples-256__max_features-1.0__graine-2": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4900
+    },
+    "isolation_forest__n_estimators-100__max_samples-256__max_features-1.0__graine-3": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4924
+    },
+    "isolation_forest__n_estimators-100__max_samples-256__max_features-1.0__graine-4": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4793
+    },
+    "isolation_forest__n_estimators-100__max_samples-256__max_features-1.0__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4938
+    },
+    "isolation_forest__n_estimators-100__max_samples-4096__max_features-0.5__graine-1": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "isolation_forest__n_estimators-100__max_samples-4096__max_features-0.5__graine-2": {
+      "au_maximum": 1,
+      "distincts_en_tete": 5000
+    },
+    "isolation_forest__n_estimators-100__max_samples-4096__max_features-0.5__graine-3": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "isolation_forest__n_estimators-100__max_samples-4096__max_features-0.5__graine-4": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "isolation_forest__n_estimators-100__max_samples-4096__max_features-0.5__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "isolation_forest__n_estimators-100__max_samples-4096__max_features-1.0__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4999
+    },
+    "isolation_forest__n_estimators-300__max_samples-1024__max_features-0.5__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 5000
+    },
+    "isolation_forest__n_estimators-300__max_samples-1024__max_features-1.0__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4994
+    },
+    "isolation_forest__n_estimators-300__max_samples-256__max_features-0.5__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4993
+    },
+    "isolation_forest__n_estimators-300__max_samples-256__max_features-1.0__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "isolation_forest__n_estimators-300__max_samples-4096__max_features-0.5__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4999
+    },
+    "isolation_forest__n_estimators-300__max_samples-4096__max_features-1.0__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4999
+    },
+    "lof__n_neighbors-100__echantillon-100000__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4996
+    },
+    "lof__n_neighbors-100__echantillon-50000__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "lof__n_neighbors-10__echantillon-100000__graine-1": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4996
+    },
+    "lof__n_neighbors-10__echantillon-100000__graine-2": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4995
+    },
+    "lof__n_neighbors-10__echantillon-100000__graine-3": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4994
+    },
+    "lof__n_neighbors-10__echantillon-100000__graine-4": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4997
+    },
+    "lof__n_neighbors-10__echantillon-100000__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "lof__n_neighbors-10__echantillon-50000__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4997
+    },
+    "lof__n_neighbors-20__echantillon-100000__graine-1": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4996
+    },
+    "lof__n_neighbors-20__echantillon-100000__graine-2": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4995
+    },
+    "lof__n_neighbors-20__echantillon-100000__graine-3": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4996
+    },
+    "lof__n_neighbors-20__echantillon-100000__graine-4": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "lof__n_neighbors-20__echantillon-100000__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4996
+    },
+    "lof__n_neighbors-20__echantillon-50000__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4998
+    },
+    "lof__n_neighbors-50__echantillon-100000__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4997
+    },
+    "lof__n_neighbors-50__echantillon-50000__graine-42": {
+      "au_maximum": 1,
+      "distincts_en_tete": 4994
+    }
+  },
+  "au_maximum_max": 1,
+  "distincts_en_tete_min": 4793
+}

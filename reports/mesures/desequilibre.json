@@ -1,0 +1,32 @@
+{
+  "retenue": "aucun",
+  "tirages": 200,
+  "comparaisons": [
+    {
+      "option": "poids",
+      "contre": "aucun",
+      "part_des_tirages_meilleure": 0.0,
+      "ecart_median": -0.399444
+    },
+    {
+      "option": "sous_echantillonnage",
+      "contre": "aucun",
+      "part_des_tirages_meilleure": 0.0,
+      "ecart_median": -0.080507
+    }
+  ],
+  "pr_auc_intervalle_95": {
+    "aucun": [
+      0.371624,
+      0.44838
+    ],
+    "poids": [
+      0.009405,
+      0.01412
+    ],
+    "sous_echantillonnage": [
+      0.294386,
+      0.361541
+    ]
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "taux_validation": 0.001046,
+  "desequilibre": {
+    "pr_auc": {
+      "aucun": 0.410958,
+      "poids": 0.011615,
+      "sous_echantillonnage": 0.331317
+    },
+    "retenue": "aucun",
+    "tirages": 200,
+    "comparaisons": [
+      {
+        "option": "poids",
+        "contre": "aucun",
+        "part_des_tirages_meilleure": 0.0,
+        "ecart_median": -0.399444
+      },
+      {
+        "option": "sous_echantillonnage",
+        "contre": "aucun",
+        "part_des_tirages_meilleure": 0.0,
+        "ecart_median": -0.080507
+      }
+    ],
+    "pr_auc_intervalle_95": {
+      "aucun": [
+        0.371624,
+        0.44838
+      ],
+      "poids": [
+        0.009405,
+        0.01412
+      ],
+      "sous_echantillonnage": [
+        0.294386,
+        0.361541
+      ]
+    }
+  },
+  "lignes": [
+    {
+      "methode": "Isolation Forest",
+      "version": "sans_etiquette",
+      "etiquettes": "aucune",
+      "pr_auc": 0.00418,
+      "roc_auc": 0.771117,
+      "fois_le_hasard": 4.0
+    },
+    {
+      "methode": "Isolation Forest",
+      "version": "reglee",
+      "etiquettes": "validation (réglage)",
+      "pr_auc": 0.005239,
+      "roc_auc": 0.807622,
+      "fois_le_hasard": 5.0
+    },
+    {
+      "methode": "LOF",
+      "version": "sans_etiquette",
+      "etiquettes": "aucune",
+      "pr_auc": 0.033047,
+      "roc_auc": 0.827636,
+      "fois_le_hasard": 31.6
+    },
+    {
+      "methode": "LOF",
+      "version": "reglee",
+      "etiquettes": "validation (réglage)",
+      "pr_auc": 0.044436,
+      "roc_auc": 0.833865,
+      "fois_le_hasard": 42.5
+    },
+    {
+      "methode": "Autoencodeur",
+      "version": "sans_etiquette",
+      "etiquettes": "aucune",
+      "pr_auc": 0.015149,
+      "roc_auc": 0.847283,
+      "fois_le_hasard": 14.5
+    },
+    {
+      "methode": "Autoencodeur",
+      "version": "reglee",
+      "etiquettes": "validation (réglage)",
+      "pr_auc": 0.015149,
+      "roc_auc": 0.847283,
+      "fois_le_hasard": 14.5
+    },
+    {
+      "methode": "LightGBM",
+      "version": "par_defaut",
+      "etiquettes": "entraînement (apprentissage)",
+      "pr_auc": 0.410958,
+      "roc_auc": 0.90106,
+      "reglage": null,
+      "arbres": 100,
+      "apprentissage_s": 10.2,
+      "taille_modele_mo": 0.34,
+      "fois_le_hasard": 392.9
+    },
+    {
+      "methode": "LightGBM",
+      "version": "reglee",
+      "etiquettes": "entraînement + validation (arrêt précoce)",
+      "pr_auc": 0.575562,
+      "roc_auc": 0.948307,
+      "reglage": {
+        "num_leaves": 63,
+        "learning_rate": 0.05
+      },
+      "arbres": 29,
+      "apprentissage_s": 33.9,
+      "taille_modele_mo": 0.2,
+      "fois_le_hasard": 550.3
+    },
+    {
+      "methode": "Régression logistique",
+      "version": "controle",
+      "etiquettes": "entraînement (apprentissage)",
+      "pr_auc": 0.027311,
+      "roc_auc": 0.911917,
+      "reglage": null,
+      "arbres": null,
+      "apprentissage_s": 4.6,
+      "taille_modele_mo": null,
+      "fois_le_hasard": 26.1
+    }
+  ],
+  "courbe_apprentissage": {
+    "0.01": {
+      "cas": [
+        79,
+        44,
+        40,
+        42,
+        30
+      ],
+      "pr_auc": [
+        0.049961,
+        0.005233,
+        0.003724,
+        0.01191,
+        0.001568
+      ],
+      "pr_auc_moyenne": 0.014479
+    },
+    "0.05": {
+      "cas": [
+        269,
+        240,
+        279,
+        245,
+        280
+      ],
+      "pr_auc": [
+        0.013902,
+        0.04142,
+        0.017337,
+        0.020198,
+        0.058526
+      ],
+      "pr_auc_moyenne": 0.030277
+    },
+    "0.1": {
+      "cas": [
+        538,
+        431,
+        535,
+        461,
+        537
+      ],
+      "pr_auc": [
+        0.119663,
+        0.072454,
+        0.104197,
+        0.088732,
+        0.04407
+      ],
+      "pr_auc_moyenne": 0.085823
+    },
+    "0.25": {
+      "cas": [
+        1305,
+        1236,
+        1211,
+        1294,
+        1248
+      ],
+      "pr_auc": [
+        0.263863,
+        0.224727,
+        0.24468,
+        0.25655,
+        0.181484
+      ],
+      "pr_auc_moyenne": 0.234261
+    },
+    "1.0": {
+      "cas": [
+        4954
+      ],
+      "pr_auc": [
+        0.410958
+      ],
+      "pr_auc_moyenne": 0.410958
+    }
+  },
+  "reference_lof": {
+    "sans_etiquette": 0.033047,
+    "reglee": 0.044436
+  },
+  "part_lof_sans_etiquette_sur_lightgbm_par_defaut": 0.0804
+}

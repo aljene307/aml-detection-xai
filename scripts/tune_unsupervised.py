@@ -14,6 +14,8 @@
   par fréquence, versions par défaut, mêmes lignes d'apprentissage pour les
   deux codages, mesurés sur les mêmes 20 % des comptes émetteurs de la
   validation ;
+- ex_aequo : vérifie qu'aucun score enregistré n'a d'ex æquo en tête
+  (docs/CHOIX.md, section 25) ;
 - graines_lof : contrôle, 4 autres tirages de l'échantillon de LOF pour les
   versions par défaut et réglée (environ 45 minutes, reprise possible).
 
@@ -327,6 +329,22 @@ def case_one_hot() -> None:
     print(json.dumps(out, indent=2, ensure_ascii=False))
 
 
+def top_ties(scores: np.ndarray, top: int = 5000) -> dict:
+    """Ex æquo en tête : lignes au score maximal, valeurs distinctes parmi les `top` premiers."""
+    best = np.sort(scores)[::-1][:top]
+    return {"au_maximum": int((scores == scores.max()).sum()), "distincts_en_tete": len(np.unique(best))}
+
+
+def case_ties() -> None:
+    files = sorted(SCORES_DIR.glob("*.npy"))
+    out = {"premiers": 5000, "fichiers": {f.stem: top_ties(np.load(f)) for f in files}}
+    out["au_maximum_max"] = max(v["au_maximum"] for v in out["fichiers"].values())
+    out["distincts_en_tete_min"] = min(v["distincts_en_tete"] for v in out["fichiers"].values())
+    (MEASURES_DIR / "ex_aequo_non_supervise.json").write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(len(files), "fichiers ;", out["au_maximum_max"], "ligne(s) au maximum au plus ;",
+          out["distincts_en_tete_min"], "valeurs distinctes au moins parmi les 5 000 premiers")
+
+
 def lof_seed_jobs(results: dict):
     """Autres tirages de l'échantillon de LOF, versions par défaut et réglée."""
     tuned = best(results, "lof")["reglage"]
@@ -337,7 +355,7 @@ def lof_seed_jobs(results: dict):
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cas", choices=["grilles", "tableau", "petit_echantillon", "one_hot", "graines_lof"], required=True)
+    parser.add_argument("--cas", choices=["grilles", "tableau", "petit_echantillon", "one_hot", "ex_aequo", "graines_lof"], required=True)
     args = parser.parse_args()
     if args.cas == "grilles":
         case_grids()
@@ -347,6 +365,8 @@ def main() -> None:
         case_table()
     elif args.cas == "one_hot":
         case_one_hot()
+    elif args.cas == "ex_aequo":
+        case_ties()
     else:
         case_small_sample()
 

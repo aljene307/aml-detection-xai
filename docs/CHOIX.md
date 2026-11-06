@@ -662,3 +662,133 @@ mesures. Le test n'est pas lu.
   les choix, donne une mesure non biaisée. Les versions « sans étiquette »
   ne sont pas réglées sur la validation : leurs scores de validation sont
   déjà honnêtes, à la dérive dans le temps près.
+
+## 25. Modèle supervisé : LightGBM, déséquilibre et courbe d'apprentissage
+
+- **Choix** : LightGBM (gradient boosting : des arbres construits l'un après
+  l'autre, chacun corrigeant les erreurs des précédents), sur la même matrice
+  de 23 variables que les méthodes non supervisées ; régression logistique
+  comme contrôle. Rôle : mesurer ce que l'on perd sans étiquettes.
+- **Raison** : référence sur les données en tableau, rapide (un modèle par
+  défaut apprend en une dizaine de secondes sur 4,8 M de lignes), léger pour
+  Render, expliqué exactement par SHAP (étape 6), déjà dans les versions
+  figées. Le logarithme et la standardisation ne changent rien pour des
+  arbres, qui ne regardent que l'ordre des valeurs.
+- **Données** : entraînement retenu (4 836 832 lignes, 4 954 cas) pour
+  apprendre ; validation (1 900 970 lignes, 1 988 cas) pour mesurer, pour
+  l'arrêt précoce et pour les choix (section 24). Test non lu.
+- **Déséquilibre (environ 1 cas pour 1 000)** : trois options, du plus simple
+  au plus complexe — aucun traitement ; poids des cas (`scale_pos_weight` =
+  nombre de transactions normales par cas) ; sous-échantillonnage (tous les
+  cas, 10 % des transactions normales tirées au hasard). LightGBM par défaut,
+  graine 42, une fois par option.
+- **Règle de choix du déséquilibre, version définitive, fixée avant toute
+  mesure** (`choose_imbalance` dans `src/aml_xai/supervised.py`) : bootstrap
+  apparié sur la validation. 200 tirages (graine 42) de comptes émetteurs
+  entiers, avec remise ; un compte tiré deux fois compte deux fois (poids des
+  lignes). Dans chaque tirage, les PR-AUC des options sont calculées sur les
+  mêmes lignes. On part de « aucun » ; « poids » le remplace seulement s'il est
+  strictement meilleur dans au moins 95 % des tirages ; puis le
+  sous-échantillonnage est comparé de la même façon à l'option retenue à ce
+  moment. Sinon, on garde la plus simple.
+- **Pourquoi cette règle remplace la première** : la première version
+  comparait l'écart des moyennes à 2 écarts types sur 5 graines. Or LightGBM
+  par défaut ne tire au hasard ni lignes ni variables : il ne dépend presque
+  pas de la graine, et cet écart type ne mesurait pas la vraie incertitude.
+  Le bootstrap mesure l'incertitude qui compte : celle due aux comptes qui
+  composent la validation. **Changement décidé et codé avant toute mesure de
+  l'étape 4**, à une exception près : un essai de durée de LightGBM par
+  défaut, sans traitement, avait affiché une PR-AUC de validation de 0,38.
+  Aucune autre option n'avait été mesurée, donc rien ne permettait de
+  comparer les options. Tests : PR-AUC pondérée identique à celle de
+  scikit-learn, poids par comptes entiers, option nettement meilleure
+  retenue, options identiques → la plus simple, ordre des comparaisons.
+- **SMOTE écarté** : il fabriquerait des transactions impossibles (types de
+  paiement ou compteurs « entre deux ») et n'est pas dans les versions
+  figées.
+- **Effet des poids et du sous-échantillonnage** : ils faussent la
+  probabilité mais pas l'ordre des transactions ; la PR-AUC et le budget k
+  (étape 5) ne regardent que l'ordre.
+- **Deux versions** : par défaut (100 arbres, 31 feuilles, vitesse 0,1) ;
+  réglée (feuilles 15, 31 ou 63 × vitesse 0,05 ou 0,1, jusqu'à 2 000 arbres,
+  arrêt précoce après 50 arbres sans progrès de la PR-AUC de validation).
+- **Courbe d'apprentissage** : LightGBM par défaut avec le traitement retenu,
+  appris sur 1, 5, 10, 25 et 100 % des comptes émetteurs de l'entraînement
+  (5 tirages sous 100 %), avec le nombre de cas utilisés à chaque point, pour
+  dire « avec N cas, le modèle supervisé dépasse LOF sans étiquette ».
+- **Point à 10 % ajouté avant la relance** : les premiers résultats (voir
+  ci-dessous, archivés) laissaient le seuil entre environ 280 et 1 200 cas ;
+  un point à 10 % des comptes (environ 500 cas) le situe mieux. C'est une
+  mesure de plus, pas un réglage ; il a été ajouté avant de relancer, sans
+  connaître ses résultats.
+- **Erreur de mesure, trouvée et corrigée** : la première exécution notait
+  les transactions avec la probabilité de LightGBM et de la régression
+  logistique. Quand le modèle est très sûr, la probabilité est arrondie à
+  1,0 exactement : les transactions concernées deviennent ex æquo et leur
+  ordre est perdu. Avec les poids, 208 476 transactions de validation
+  valaient exactement 1,0 (les 5 000 premières toutes ex æquo) ; sans
+  traitement, 1 118. Sur le modèle par défaut sans traitement, la PR-AUC
+  passe de 0,3785 (probabilité) à 0,4110 (score brut).
+  - **Correction** : classement par le score brut (log-odds de LightGBM,
+    `decision_function` de la régression logistique), qui donne le même ordre
+    sans arrondi (`ranking_scores`). Chaque calcul enregistre les ex æquo en
+    tête et s'arrête si plus de 1 % des 5 000 premières transactions sont ex
+    æquo au maximum. Tests : mécanisme de la saturation, score brut renvoyé,
+    arrêt en cas d'ex æquo.
+  - **Arrêt précoce non touché** : la PR-AUC interne de LightGBM est calculée
+    sur le score brut (0,410958 à 100 arbres, identique à scikit-learn sur le
+    score brut, contre 0,378463 sur la probabilité).
+  - **Méthodes non supervisées non touchées** : dans les 39 fichiers de
+    scores des grilles, au plus une ligne au score maximal, et au moins 4 793
+    valeurs distinctes parmi les 5 000 premières
+    (`reports/mesures/ex_aequo_non_supervise.json`).
+  - **Résultats de la première exécution** : déplacés hors du dépôt, non
+    supprimés ; toute l'étape 4 est recalculée.
+- **Mesures** (validation, scores bruts ; `reports/mesures/supervise.jsonl`,
+  `desequilibre.json`, `supervise_tableau.json`) :
+  - **Déséquilibre : « aucun » retenu.** Ni les poids ni le
+    sous-échantillonnage ne battent « aucun » dans un seul des 200 tirages
+    (écart médian − 0,399 et − 0,081). PR-AUC (intervalle à 95 % du
+    bootstrap) : aucun 0,411 (0,372 à 0,448), sous-échantillonnage 0,331
+    (0,294 à 0,362), poids 0,012 (0,009 à 0,014). Avec un poids d'environ
+    976 par cas, le modèle par défaut se trompe massivement en tête de
+    classement, tout en gardant une ROC-AUC de 0,886.
+  - **Tableau comparatif** (hasard = 0,00105) :
+
+    | Méthode | Étiquettes utilisées | PR-AUC | Fois le hasard | ROC-AUC |
+    |---|---|---|---|---|
+    | Isolation Forest, sans étiquette | aucune | 0,0042 | 4 | 0,771 |
+    | Isolation Forest, réglée | validation (réglage) | 0,0052 | 5 | 0,808 |
+    | Autoencodeur | aucune | 0,0151 | 14 | 0,847 |
+    | **LOF, sans étiquette** | aucune | **0,0330** | 32 | 0,828 |
+    | LOF, réglé | validation (réglage) | 0,0444 | 42 | 0,834 |
+    | Régression logistique (contrôle) | entraînement | 0,0273 | 26 | 0,912 |
+    | **LightGBM par défaut** | entraînement | **0,4110** | 393 | 0,901 |
+    | LightGBM réglé (63 feuilles, vitesse 0,05, 29 arbres) | entraînement + validation (arrêt précoce) | 0,5756 | 550 | 0,948 |
+
+    LOF sans étiquette atteint 8 % de la PR-AUC de LightGBM par défaut. La
+    régression logistique, malgré les étiquettes, fait moins bien que LOF
+    sans étiquette : sans combinaison non linéaire des variables, les
+    étiquettes ne suffisent pas. L'arrêt précoce s'arrête entre 14 et
+    94 arbres : au-delà, la PR-AUC de validation baisse.
+  - **Courbe d'apprentissage** (LightGBM par défaut, sans traitement ;
+    5 tirages de comptes sous 100 %) :
+
+    | Comptes | Cas utilisés | PR-AUC (min à max) | Dépasse LOF sans étiquette (0,0330) | Dépasse LOF réglé (0,0444) |
+    |---|---|---|---|---|
+    | 1 % | 30 à 79 | 0,002 à 0,050 | 1 sur 5 | 1 sur 5 |
+    | 5 % | 240 à 280 | 0,014 à 0,059 | 2 sur 5 | 1 sur 5 |
+    | 10 % | 431 à 538 | 0,044 à 0,120 | **5 sur 5** | 4 sur 5 |
+    | 25 % | 1 211 à 1 305 | 0,182 à 0,264 | 5 sur 5 | 5 sur 5 |
+    | 100 % | 4 954 | 0,411 | oui | oui |
+
+    **Avec environ 450 à 550 cas étiquetés, LightGBM dépasse LOF sans
+    étiquette à chaque tirage** ; avec environ 250 cas, seulement 2 fois
+    sur 5. Le point à 1 % est très instable (un tirage de 79 cas atteint
+    0,050 par chance).
+  - **Contrôle de saturation** : dans les 31 calculs, une seule ligne au
+    score maximal. Les modèles à peu d'arbres ont moins de valeurs
+    distinctes en tête (1 356 parmi les 5 000 premières pour 14 arbres) :
+    c'est le nombre limité de combinaisons de feuilles, pas un arrondi.
+  - **Limite** : la version réglée est choisie sur la validation (section
+    24) ; la version par défaut et la courbe ne le sont pas.
