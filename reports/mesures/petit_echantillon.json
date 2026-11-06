@@ -1,0 +1,485 @@
+{
+  "part_des_comptes": 0.1,
+  "repetitions": 20,
+  "methodes": {
+    "autoencodeur": {
+      "choix_grille_complete": "autoencodeur|goulot=8|graine=42",
+      "fois_meme_choix": 20,
+      "pr_auc_moyenne_reste": {
+        "choisi": 0.015133,
+        "grille_complete": 0.015133,
+        "par_defaut": 0.015133
+      },
+      "choix": {
+        "autoencodeur|goulot=8|graine=42": 20
+      },
+      "cas_petit_echantillon_min_max": [
+        155,
+        235
+      ],
+      "tirages": [
+        {
+          "cas_petit_echantillon": 155,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.013341,
+          "pr_auc_reste_grille_complete": 0.013341,
+          "pr_auc_reste_par_defaut": 0.013341
+        },
+        {
+          "cas_petit_echantillon": 181,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.016252,
+          "pr_auc_reste_grille_complete": 0.016252,
+          "pr_auc_reste_par_defaut": 0.016252
+        },
+        {
+          "cas_petit_echantillon": 194,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.01449,
+          "pr_auc_reste_grille_complete": 0.01449,
+          "pr_auc_reste_par_defaut": 0.01449
+        },
+        {
+          "cas_petit_echantillon": 217,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015485,
+          "pr_auc_reste_grille_complete": 0.015485,
+          "pr_auc_reste_par_defaut": 0.015485
+        },
+        {
+          "cas_petit_echantillon": 168,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.014402,
+          "pr_auc_reste_grille_complete": 0.014402,
+          "pr_auc_reste_par_defaut": 0.014402
+        },
+        {
+          "cas_petit_echantillon": 235,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015635,
+          "pr_auc_reste_grille_complete": 0.015635,
+          "pr_auc_reste_par_defaut": 0.015635
+        },
+        {
+          "cas_petit_echantillon": 176,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015357,
+          "pr_auc_reste_grille_complete": 0.015357,
+          "pr_auc_reste_par_defaut": 0.015357
+        },
+        {
+          "cas_petit_echantillon": 222,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015442,
+          "pr_auc_reste_grille_complete": 0.015442,
+          "pr_auc_reste_par_defaut": 0.015442
+        },
+        {
+          "cas_petit_echantillon": 173,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.014536,
+          "pr_auc_reste_grille_complete": 0.014536,
+          "pr_auc_reste_par_defaut": 0.014536
+        },
+        {
+          "cas_petit_echantillon": 191,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015145,
+          "pr_auc_reste_grille_complete": 0.015145,
+          "pr_auc_reste_par_defaut": 0.015145
+        },
+        {
+          "cas_petit_echantillon": 188,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.01576,
+          "pr_auc_reste_grille_complete": 0.01576,
+          "pr_auc_reste_par_defaut": 0.01576
+        },
+        {
+          "cas_petit_echantillon": 179,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.01601,
+          "pr_auc_reste_grille_complete": 0.01601,
+          "pr_auc_reste_par_defaut": 0.01601
+        },
+        {
+          "cas_petit_echantillon": 209,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015189,
+          "pr_auc_reste_grille_complete": 0.015189,
+          "pr_auc_reste_par_defaut": 0.015189
+        },
+        {
+          "cas_petit_echantillon": 207,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.014316,
+          "pr_auc_reste_grille_complete": 0.014316,
+          "pr_auc_reste_par_defaut": 0.014316
+        },
+        {
+          "cas_petit_echantillon": 168,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015633,
+          "pr_auc_reste_grille_complete": 0.015633,
+          "pr_auc_reste_par_defaut": 0.015633
+        },
+        {
+          "cas_petit_echantillon": 230,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.012904,
+          "pr_auc_reste_grille_complete": 0.012904,
+          "pr_auc_reste_par_defaut": 0.012904
+        },
+        {
+          "cas_petit_echantillon": 208,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015817,
+          "pr_auc_reste_grille_complete": 0.015817,
+          "pr_auc_reste_par_defaut": 0.015817
+        },
+        {
+          "cas_petit_echantillon": 231,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.016576,
+          "pr_auc_reste_grille_complete": 0.016576,
+          "pr_auc_reste_par_defaut": 0.016576
+        },
+        {
+          "cas_petit_echantillon": 202,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015366,
+          "pr_auc_reste_grille_complete": 0.015366,
+          "pr_auc_reste_par_defaut": 0.015366
+        },
+        {
+          "cas_petit_echantillon": 232,
+          "choix": "autoencodeur|goulot=8|graine=42",
+          "pr_auc_reste_choisi": 0.015014,
+          "pr_auc_reste_grille_complete": 0.015014,
+          "pr_auc_reste_par_defaut": 0.015014
+        }
+      ]
+    },
+    "isolation_forest": {
+      "choix_grille_complete": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+      "fois_meme_choix": 14,
+      "pr_auc_moyenne_reste": {
+        "choisi": 0.005079,
+        "grille_complete": 0.005273,
+        "par_defaut": 0.004238
+      },
+      "choix": {
+        "isolation_forest|n_estimators=100|max_samples=1024|max_features=0.5|graine=42": 1,
+        "isolation_forest|n_estimators=100|max_samples=256|max_features=1.0|graine=42": 1,
+        "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42": 14,
+        "isolation_forest|n_estimators=100|max_samples=4096|max_features=1.0|graine=42": 2,
+        "isolation_forest|n_estimators=300|max_samples=4096|max_features=0.5|graine=42": 2
+      },
+      "cas_petit_echantillon_min_max": [
+        155,
+        235
+      ],
+      "tirages": [
+        {
+          "cas_petit_echantillon": 155,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005222,
+          "pr_auc_reste_grille_complete": 0.005222,
+          "pr_auc_reste_par_defaut": 0.004296
+        },
+        {
+          "cas_petit_echantillon": 181,
+          "choix": "isolation_forest|n_estimators=100|max_samples=256|max_features=1.0|graine=42",
+          "pr_auc_reste_choisi": 0.00395,
+          "pr_auc_reste_grille_complete": 0.005307,
+          "pr_auc_reste_par_defaut": 0.00395
+        },
+        {
+          "cas_petit_echantillon": 194,
+          "choix": "isolation_forest|n_estimators=300|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005148,
+          "pr_auc_reste_grille_complete": 0.005338,
+          "pr_auc_reste_par_defaut": 0.004242
+        },
+        {
+          "cas_petit_echantillon": 217,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005423,
+          "pr_auc_reste_grille_complete": 0.005423,
+          "pr_auc_reste_par_defaut": 0.004586
+        },
+        {
+          "cas_petit_echantillon": 168,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005356,
+          "pr_auc_reste_grille_complete": 0.005356,
+          "pr_auc_reste_par_defaut": 0.00433
+        },
+        {
+          "cas_petit_echantillon": 235,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005221,
+          "pr_auc_reste_grille_complete": 0.005221,
+          "pr_auc_reste_par_defaut": 0.004236
+        },
+        {
+          "cas_petit_echantillon": 176,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005321,
+          "pr_auc_reste_grille_complete": 0.005321,
+          "pr_auc_reste_par_defaut": 0.004269
+        },
+        {
+          "cas_petit_echantillon": 222,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005265,
+          "pr_auc_reste_grille_complete": 0.005265,
+          "pr_auc_reste_par_defaut": 0.004226
+        },
+        {
+          "cas_petit_echantillon": 173,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.00529,
+          "pr_auc_reste_grille_complete": 0.00529,
+          "pr_auc_reste_par_defaut": 0.004232
+        },
+        {
+          "cas_petit_echantillon": 191,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005322,
+          "pr_auc_reste_grille_complete": 0.005322,
+          "pr_auc_reste_par_defaut": 0.004236
+        },
+        {
+          "cas_petit_echantillon": 188,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005237,
+          "pr_auc_reste_grille_complete": 0.005237,
+          "pr_auc_reste_par_defaut": 0.004176
+        },
+        {
+          "cas_petit_echantillon": 179,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005388,
+          "pr_auc_reste_grille_complete": 0.005388,
+          "pr_auc_reste_par_defaut": 0.004316
+        },
+        {
+          "cas_petit_echantillon": 209,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.00515,
+          "pr_auc_reste_grille_complete": 0.00515,
+          "pr_auc_reste_par_defaut": 0.00423
+        },
+        {
+          "cas_petit_echantillon": 207,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005155,
+          "pr_auc_reste_grille_complete": 0.005155,
+          "pr_auc_reste_par_defaut": 0.004212
+        },
+        {
+          "cas_petit_echantillon": 168,
+          "choix": "isolation_forest|n_estimators=100|max_samples=1024|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.004711,
+          "pr_auc_reste_grille_complete": 0.005287,
+          "pr_auc_reste_par_defaut": 0.004232
+        },
+        {
+          "cas_petit_echantillon": 230,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=1.0|graine=42",
+          "pr_auc_reste_choisi": 0.004198,
+          "pr_auc_reste_grille_complete": 0.004914,
+          "pr_auc_reste_par_defaut": 0.003953
+        },
+        {
+          "cas_petit_echantillon": 208,
+          "choix": "isolation_forest|n_estimators=300|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005122,
+          "pr_auc_reste_grille_complete": 0.00534,
+          "pr_auc_reste_par_defaut": 0.004251
+        },
+        {
+          "cas_petit_echantillon": 231,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.005301,
+          "pr_auc_reste_grille_complete": 0.005301,
+          "pr_auc_reste_par_defaut": 0.004295
+        },
+        {
+          "cas_petit_echantillon": 202,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=0.5|graine=42",
+          "pr_auc_reste_choisi": 0.00536,
+          "pr_auc_reste_grille_complete": 0.00536,
+          "pr_auc_reste_par_defaut": 0.00435
+        },
+        {
+          "cas_petit_echantillon": 232,
+          "choix": "isolation_forest|n_estimators=100|max_samples=4096|max_features=1.0|graine=42",
+          "pr_auc_reste_choisi": 0.004446,
+          "pr_auc_reste_grille_complete": 0.005268,
+          "pr_auc_reste_par_defaut": 0.004144
+        }
+      ]
+    },
+    "lof": {
+      "choix_grille_complete": "lof|n_neighbors=10|echantillon=100000|graine=42",
+      "fois_meme_choix": 20,
+      "pr_auc_moyenne_reste": {
+        "choisi": 0.044263,
+        "grille_complete": 0.044263,
+        "par_defaut": 0.032957
+      },
+      "choix": {
+        "lof|n_neighbors=10|echantillon=100000|graine=42": 20
+      },
+      "cas_petit_echantillon_min_max": [
+        155,
+        235
+      ],
+      "tirages": [
+        {
+          "cas_petit_echantillon": 155,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.045357,
+          "pr_auc_reste_grille_complete": 0.045357,
+          "pr_auc_reste_par_defaut": 0.033403
+        },
+        {
+          "cas_petit_echantillon": 181,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.045665,
+          "pr_auc_reste_grille_complete": 0.045665,
+          "pr_auc_reste_par_defaut": 0.034073
+        },
+        {
+          "cas_petit_echantillon": 194,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.04394,
+          "pr_auc_reste_grille_complete": 0.04394,
+          "pr_auc_reste_par_defaut": 0.032668
+        },
+        {
+          "cas_petit_echantillon": 217,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.045247,
+          "pr_auc_reste_grille_complete": 0.045247,
+          "pr_auc_reste_par_defaut": 0.033738
+        },
+        {
+          "cas_petit_echantillon": 168,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.04465,
+          "pr_auc_reste_grille_complete": 0.04465,
+          "pr_auc_reste_par_defaut": 0.033161
+        },
+        {
+          "cas_petit_echantillon": 235,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.044806,
+          "pr_auc_reste_grille_complete": 0.044806,
+          "pr_auc_reste_par_defaut": 0.033445
+        },
+        {
+          "cas_petit_echantillon": 176,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.044994,
+          "pr_auc_reste_grille_complete": 0.044994,
+          "pr_auc_reste_par_defaut": 0.033671
+        },
+        {
+          "cas_petit_echantillon": 222,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.043046,
+          "pr_auc_reste_grille_complete": 0.043046,
+          "pr_auc_reste_par_defaut": 0.032025
+        },
+        {
+          "cas_petit_echantillon": 173,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.044362,
+          "pr_auc_reste_grille_complete": 0.044362,
+          "pr_auc_reste_par_defaut": 0.032936
+        },
+        {
+          "cas_petit_echantillon": 191,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.045908,
+          "pr_auc_reste_grille_complete": 0.045908,
+          "pr_auc_reste_par_defaut": 0.034207
+        },
+        {
+          "cas_petit_echantillon": 188,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.045588,
+          "pr_auc_reste_grille_complete": 0.045588,
+          "pr_auc_reste_par_defaut": 0.033792
+        },
+        {
+          "cas_petit_echantillon": 179,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.044336,
+          "pr_auc_reste_grille_complete": 0.044336,
+          "pr_auc_reste_par_defaut": 0.033058
+        },
+        {
+          "cas_petit_echantillon": 209,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.045354,
+          "pr_auc_reste_grille_complete": 0.045354,
+          "pr_auc_reste_par_defaut": 0.033685
+        },
+        {
+          "cas_petit_echantillon": 207,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.041295,
+          "pr_auc_reste_grille_complete": 0.041295,
+          "pr_auc_reste_par_defaut": 0.031061
+        },
+        {
+          "cas_petit_echantillon": 168,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.044583,
+          "pr_auc_reste_grille_complete": 0.044583,
+          "pr_auc_reste_par_defaut": 0.033331
+        },
+        {
+          "cas_petit_echantillon": 230,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.043444,
+          "pr_auc_reste_grille_complete": 0.043444,
+          "pr_auc_reste_par_defaut": 0.032307
+        },
+        {
+          "cas_petit_echantillon": 208,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.043668,
+          "pr_auc_reste_grille_complete": 0.043668,
+          "pr_auc_reste_par_defaut": 0.032533
+        },
+        {
+          "cas_petit_echantillon": 231,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.043013,
+          "pr_auc_reste_grille_complete": 0.043013,
+          "pr_auc_reste_par_defaut": 0.031848
+        },
+        {
+          "cas_petit_echantillon": 202,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.043531,
+          "pr_auc_reste_grille_complete": 0.043531,
+          "pr_auc_reste_par_defaut": 0.032638
+        },
+        {
+          "cas_petit_echantillon": 232,
+          "choix": "lof|n_neighbors=10|echantillon=100000|graine=42",
+          "pr_auc_reste_choisi": 0.042471,
+          "pr_auc_reste_grille_complete": 0.042471,
+          "pr_auc_reste_par_defaut": 0.031557
+        }
+      ]
+    }
+  },
+  "comptes_emetteurs": 114351
+}

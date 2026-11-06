@@ -66,12 +66,15 @@ def model_from_settings(method: str, settings: dict, seed: int = SEED):
     raise ValueError(f"Méthode inconnue : {method}")
 
 
-def training_rows(method: str, n_rows: int, settings: dict) -> np.ndarray | None:
-    """Échantillon d'apprentissage (graine fixe), ou None pour tout l'entraînement."""
+def training_rows(method: str, n_rows: int, settings: dict, seed: int = SEED) -> np.ndarray | None:
+    """Échantillon d'apprentissage tiré avec `seed`, ou None pour tout l'entraînement.
+
+    Pour LOF, la graine ne change que ce tirage : c'est sa seule part de hasard.
+    """
     if method == "lof":
-        return sample_rows(n_rows, settings["echantillon"])
+        return sample_rows(n_rows, settings["echantillon"], seed)
     if method == "autoencodeur":
-        return sample_rows(n_rows)
+        return sample_rows(n_rows, seed=seed)
     return None
 
 

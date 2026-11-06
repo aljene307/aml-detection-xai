@@ -5,7 +5,13 @@
   écrit dès qu'il est terminé (une ligne JSON) ; une relance reprend après le
   dernier réglage écrit. Ordre : autoencodeur, Isolation Forest, contrôle des
   graines, puis LOF (le plus long) ;
-- tableau : versions par défaut et réglées, écart, variation due aux graines.
+- tableau : versions par défaut et réglées, écart, variation due aux graines ;
+- petit_echantillon : contrôle, règle fixée avant la mesure. 20 fois, on tire
+  10 % des comptes émetteurs de la validation, on choisit le réglage avec leurs
+  seules transactions, puis on le mesure sur les 90 % restantes. On compte les
+  fois où le choix est celui de la grille complète ;
+- graines_lof : contrôle, 4 autres tirages de l'échantillon de LOF pour les
+  versions par défaut et réglée (environ 45 minutes, reprise possible).
 
 Le test n'est jamais lu.
 
@@ -23,7 +29,7 @@ import numpy as np
 import pyarrow.parquet as pq
 from sklearn.metrics import average_precision_score, roc_auc_score
 
-from aml_xai.config import MEASURES_DIR, PARQUET_PATH, PROCESSED_DIR, SEED, TARGET, TIMESTAMP
+from aml_xai.config import ACCOUNT_COLUMNS, MEASURES_DIR, PARQUET_PATH, PROCESSED_DIR, SEED, TARGET, TIMESTAMP
 from aml_xai.matrix import load_matrix
 from aml_xai.measure import available_ram_mb, peak_memory_mb
 from aml_xai.split import model_periods
@@ -43,6 +49,9 @@ SCORES_DIR = PROCESSED_DIR / "scores_grilles"
 MIN_FREE_RAM_MB = 1500
 ABORT_FREE_RAM_MB = 500
 ORDER = ["autoencodeur", "isolation_forest", "lof"]
+# Contrôle « petit échantillon d'étiquettes »
+SMALL_SHARE = 0.10
+SMALL_REPEATS = 20
 
 
 def key(method: str, settings: dict, seed: int) -> str:
@@ -64,17 +73,25 @@ def append_result(result: dict) -> None:
         os.fsync(f.fileno())
 
 
-def validation_labels(n_rows: int) -> np.ndarray:
+def validation_column(name: str, n_rows: int) -> np.ndarray:
     periods = model_periods()
     table = pq.read_table(
         PARQUET_PATH,
-        columns=[TARGET],
+        columns=[name],
         filters=[(TIMESTAMP, ">=", periods["fin_entrainement"]), (TIMESTAMP, "<", periods["fin_validation"])],
     )
-    labels = table.column(TARGET).to_numpy().astype(np.int8)
-    if len(labels) != n_rows:
-        raise RuntimeError("Les étiquettes ne correspondent pas à la matrice de validation.")
-    return labels
+    values = table.column(name).to_numpy()
+    if len(values) != n_rows:
+        raise RuntimeError("La colonne ne correspond pas à la matrice de validation.")
+    return values
+
+
+def validation_labels(n_rows: int) -> np.ndarray:
+    return validation_column(TARGET, n_rows).astype(np.int8)
+
+
+def scores_path(k: str):
+    return SCORES_DIR / f"{k.replace('|', '__').replace('=', '-')}.npy"
 
 
 def run_setting(method: str, settings: dict, seed: int, labels: np.ndarray) -> dict:
@@ -82,7 +99,7 @@ def run_setting(method: str, settings: dict, seed: int, labels: np.ndarray) -> d
     if free < ABORT_FREE_RAM_MB:
         sys.exit(f"Arrêt : {free:.0f} Mo disponibles. Relancer la même commande pour reprendre.")
     train = load_matrix(MATRIX_PATHS["entrainement"])
-    rows = training_rows(method, len(train), settings)
+    rows = training_rows(method, len(train), settings, seed)
     data = np.asarray(train if rows is None else train[rows], dtype=np.float32)
     model = model_from_settings(method, settings, seed)
     start = time.perf_counter()
@@ -95,7 +112,7 @@ def run_setting(method: str, settings: dict, seed: int, labels: np.ndarray) -> d
     score_s = time.perf_counter() - start
     SCORES_DIR.mkdir(parents=True, exist_ok=True)
     k = key(method, settings, seed)
-    np.save(SCORES_DIR / f"{k.replace('|', '__').replace('=', '-')}.npy", scores)
+    np.save(scores_path(k), scores)
     result = {
         "cle": k,
         "methode": method,
@@ -130,14 +147,14 @@ def jobs(results: dict):
                     yield method, settings, seed
 
 
-def case_grids() -> None:
+def case_grids(job_list=None) -> None:
     free = available_ram_mb()
     if free < MIN_FREE_RAM_MB:
         sys.exit(f"Arrêt : seulement {free:.0f} Mo disponibles, {MIN_FREE_RAM_MB} requis.")
     labels = validation_labels(len(load_matrix(MATRIX_PATHS["validation"])))
     results = done_results()
     print(f"{len(results)} réglages déjà terminés, reprise après eux.", flush=True)
-    for method, settings, seed in jobs(results):
+    for method, settings, seed in (job_list or jobs)(results):
         k = key(method, settings, seed)
         if k in results:
             continue
@@ -161,16 +178,26 @@ def case_table() -> None:
             "reglages_essayes": sum(r["methode"] == method and r["graine"] == SEED for r in results.values()),
         }
     seeds = {}
-    for name, settings in [("par_defaut", DEFAULT_SETTINGS["isolation_forest"]),
-                           ("reglee", table["isolation_forest"]["reglee"]["reglage"])]:
-        values = [results[key("isolation_forest", settings, s)]["pr_auc"] for s in CONTROL_SEEDS]
-        seeds[name] = {"pr_auc": values, "min": min(values), "max": max(values), "ecart_type": round(float(np.std(values)), 6)}
+    for method in ["isolation_forest", "lof"]:
+        if not all(key(method, DEFAULT_SETTINGS[method], s) in results for s in CONTROL_SEEDS):
+            continue
+        seeds[method] = {}
+        for name, settings in [("par_defaut", DEFAULT_SETTINGS[method]), ("reglee", table[method]["reglee"]["reglage"])]:
+            values = [results[key(method, settings, s)]["pr_auc"] for s in CONTROL_SEEDS]
+            seeds[method][name] = {
+                "pr_auc": values,
+                "moyenne": round(float(np.mean(values)), 6),
+                "min": min(values),
+                "max": max(values),
+                "ecart_type": round(float(np.std(values)), 6),
+            }
+        seeds[method]["ecart_des_moyennes"] = round(seeds[method]["reglee"]["moyenne"] - seeds[method]["par_defaut"]["moyenne"], 6)
     second = max(["lof", "autoencodeur"], key=lambda m: table[m]["reglee"]["pr_auc"])
     labels_rate = float(validation_labels(len(load_matrix(MATRIX_PATHS["validation"]))).mean())
     out = {
         "taux_validation": round(labels_rate, 6),
         "methodes": table,
-        "graines_isolation_forest": seeds,
+        "graines": seeds,
         "deuxieme_methode_sans_etiquette": "lof",
         "deuxieme_methode_reglee": second,
     }
@@ -178,11 +205,68 @@ def case_table() -> None:
     print(json.dumps(out, indent=2, ensure_ascii=False))
 
 
+def case_small_sample() -> None:
+    n_rows = len(load_matrix(MATRIX_PATHS["validation"]))
+    labels = validation_labels(n_rows)
+    senders = validation_column(ACCOUNT_COLUMNS[0], n_rows)
+    accounts = np.unique(senders)
+    results = done_results()
+    out = {"part_des_comptes": SMALL_SHARE, "repetitions": SMALL_REPEATS, "methodes": {}}
+    for method in ORDER:
+        grid = [key(method, s, SEED) for s in GRIDS[method]]
+        scores = {k: np.load(scores_path(k)) for k in grid}
+        full_choice = best(results, method)["cle"]
+        default = key(method, DEFAULT_SETTINGS[method], SEED)
+        draws = []
+        for repeat in range(SMALL_REPEATS):
+            rng = np.random.default_rng(repeat)
+            chosen_accounts = rng.choice(accounts, size=round(SMALL_SHARE * len(accounts)), replace=False)
+            small = np.isin(senders, chosen_accounts)
+            rest = ~small
+            choice = max(grid, key=lambda k: average_precision_score(labels[small], scores[k][small]))
+            rest_ap = {name: float(average_precision_score(labels[rest], scores[k][rest]))
+                       for name, k in [("choisi", choice), ("grille_complete", full_choice), ("par_defaut", default)]}
+            draws.append({"cas_petit_echantillon": int(labels[small].sum()), "choix": choice,
+                          **{f"pr_auc_reste_{n}": round(v, 6) for n, v in rest_ap.items()}})
+        del scores
+        gc.collect()
+        mean = {n: round(float(np.mean([d[f"pr_auc_reste_{n}"] for d in draws])), 6)
+                for n in ["choisi", "grille_complete", "par_defaut"]}
+        out["methodes"][method] = {
+            "choix_grille_complete": full_choice,
+            "fois_meme_choix": sum(d["choix"] == full_choice for d in draws),
+            "pr_auc_moyenne_reste": mean,
+            "choix": {c: sum(d["choix"] == c for d in draws) for c in sorted({d["choix"] for d in draws})},
+            "cas_petit_echantillon_min_max": [min(d["cas_petit_echantillon"] for d in draws),
+                                              max(d["cas_petit_echantillon"] for d in draws)],
+            "tirages": draws,
+        }
+    out["comptes_emetteurs"] = len(accounts)
+    (MEASURES_DIR / "petit_echantillon.json").write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+    summary = {m: {k: v for k, v in r.items() if k != "tirages"} for m, r in out["methodes"].items()}
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+
+
+def lof_seed_jobs(results: dict):
+    """Autres tirages de l'échantillon de LOF, versions par défaut et réglée."""
+    tuned = best(results, "lof")["reglage"]
+    for settings in [DEFAULT_SETTINGS["lof"], tuned]:
+        for seed in CONTROL_SEEDS[1:]:
+            yield "lof", settings, seed
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cas", choices=["grilles", "tableau"], required=True)
+    parser.add_argument("--cas", choices=["grilles", "tableau", "petit_echantillon", "graines_lof"], required=True)
     args = parser.parse_args()
-    case_grids() if args.cas == "grilles" else case_table()
+    if args.cas == "grilles":
+        case_grids()
+    elif args.cas == "graines_lof":
+        case_grids(lof_seed_jobs)
+    elif args.cas == "tableau":
+        case_table()
+    else:
+        case_small_sample()
 
 
 if __name__ == "__main__":

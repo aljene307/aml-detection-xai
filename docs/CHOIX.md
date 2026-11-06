@@ -102,6 +102,7 @@ complétée quand l'étape correspondante aura produit ses chiffres.
 - **Vérification** : les réglages par défaut recalculés dans la grille
   redonnent exactement les scores de l'essai de faisabilité (0 ligne
   différente pour les trois méthodes).
+- **Contrôles du réglage** : section 23.
 - **À compléter** : précision@k et rappel@k (étape 5), test (étape 7).
 - **Alternative écartée** : présenter seulement la version réglée, ce qui
   surestimerait la performance d'une approche « non supervisée ».
@@ -569,3 +570,59 @@ depuis le début du jeu, car un écart ne peut pas remonter avant le 07/10/2022.
   coûteuse à appliquer dans l'API, et elle efface l'écart entre une valeur
   forte et une valeur extrême) ; une matrice différente par méthode
   (comparaison moins équitable).
+
+## 23. Contrôles du réglage et messages pour l'oral
+
+Deux contrôles, sans effet sur les choix, avec des règles fixées avant les
+mesures. Le test n'est pas lu.
+
+- **Contrôle 1 : le gain du réglage de LOF dépasse-t-il le hasard du
+  tirage ?** LOF n'a pas d'autre hasard que le tirage de son échantillon de
+  100 000 lignes. Quatre autres tirages (graines 1 à 4) pour la version par
+  défaut (20 voisines) et la version réglée (10 voisines)
+  (`reports/mesures/grilles.jsonl`, `grilles_tableau.json`) :
+
+  | LOF | PR-AUC des 5 tirages | Moyenne | Écart type |
+  |---|---|---|---|
+  | Sans étiquette (20 voisines) | 0,0330 à 0,0369 | 0,0347 | 0,0013 |
+  | Réglée (10 voisines) | 0,0444 à 0,0538 | 0,0477 | 0,0032 |
+
+  Les plages ne se recouvrent pas : le plus mauvais tirage réglé (0,0444)
+  dépasse le meilleur tirage par défaut (0,0369). Pour chaque tirage, le
+  réglage gagne entre + 0,011 et + 0,017. Gain moyen + 0,013 (+ 37 %),
+  environ dix fois l'écart type des tirages par défaut : **le gain est réel**.
+  La graine 42 retenue était le tirage le moins favorable pour les deux
+  versions. Correction faite avant ce contrôle : la graine n'était pas
+  transmise au tirage de l'échantillon, qui aurait donné cinq fois le même
+  résultat ; les résultats de la graine 42 ne changent pas (test ajouté).
+- **Contrôle 2 : un petit échantillon d'étiquettes suffit-il pour régler ?**
+  20 fois, on tire 10 % des comptes émetteurs de la validation (155 à 235 cas
+  selon le tirage), on choisit le réglage avec leurs seules transactions, puis
+  on le mesure sur les 90 % restantes (`reports/mesures/petit_echantillon.json`) :
+
+  | Méthode | Même choix que la grille complète | PR-AUC sur les 90 % : choix du petit échantillon / grille complète / par défaut |
+  |---|---|---|
+  | LOF | 20 fois sur 20 | 0,0443 / 0,0443 / 0,0330 |
+  | Autoencodeur | 20 fois sur 20 | 0,0151 / 0,0151 / 0,0151 |
+  | Isolation Forest | 14 fois sur 20 | 0,0051 / 0,0053 / 0,0042 |
+
+  Environ 200 cas étiquetés suffisent pour retrouver le réglage. Quand Isolation
+  Forest choisit autrement, c'est entre réglages presque équivalents.
+- **Limite** : ces gains sont mesurés sur la validation qui a servi à choisir ;
+  le test (étape 7) dira s'ils tiennent.
+
+**Trois messages pour l'oral** (méthodes non supervisées, validation) :
+
+1. **Sans étiquette, LOF fait environ 30 fois mieux que le hasard** : PR-AUC
+   0,033 (0,035 en moyenne sur 5 tirages) contre 0,00105 pour un score au
+   hasard.
+2. **Régler avec les étiquettes rapporte peu** : + 0,013 de PR-AUC pour LOF
+   (réel, au-delà du hasard du tirage, et retrouvé avec environ 200 cas),
+   + 0,0015 pour Isolation Forest, rien pour l'autoencodeur. En valeur
+   relative, + 37 % pour LOF : « peu » s'entend par rapport au point 3.
+3. **Le choix de la méthode compte bien plus que son réglage** : en moyenne
+   sur 5 graines, LOF fait environ 10 fois mieux qu'Isolation Forest, aussi
+   bien en version par défaut qu'en version réglée. Le meilleur Isolation
+   Forest réglé (0,0052) reste 6 fois sous LOF sans étiquette (0,033). La
+   règle sans étiquette a choisi LOF sur le seul coût : bon choix, mais par
+   coïncidence, puisqu'elle ne regardait pas la performance.

@@ -172,3 +172,31 @@ def test_grid_resumes_after_the_last_written_setting(tmp_path, monkeypatch):
     tune.append_result({"cle": "autre", "pr_auc": 0.2})
     assert tune.done_results() == {first["cle"]: first, "autre": {"cle": "autre", "pr_auc": 0.2}}
     assert first["cle"] == "lof|n_neighbors=10|echantillon=50000|graine=42"
+
+
+def test_lof_seed_control_lists_eight_new_draws():
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "scripts" / "tune_unsupervised.py"
+    spec = importlib.util.spec_from_file_location("tune_unsupervised", path)
+    tune = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tune)
+    tuned = {"n_neighbors": 10, "echantillon": 100_000}
+    results = {
+        "a": {"methode": "lof", "graine": 42, "reglage": DEFAULT_SETTINGS["lof"], "pr_auc": 0.03, "cle": "a"},
+        "b": {"methode": "lof", "graine": 42, "reglage": tuned, "pr_auc": 0.04, "cle": "b"},
+    }
+    jobs = list(tune.lof_seed_jobs(results))
+    assert len(jobs) == 8
+    assert [j[1] for j in jobs] == [DEFAULT_SETTINGS["lof"]] * 4 + [tuned] * 4
+    assert {j[2] for j in jobs} == {1, 2, 3, 4}
+
+
+def test_lof_seed_changes_the_sample():
+    settings = {"n_neighbors": 20, "echantillon": 500}
+    a = training_rows("lof", 10_000, settings)
+    np.testing.assert_array_equal(a, training_rows("lof", 10_000, settings, 42))
+    np.testing.assert_array_equal(a, sample_rows(10_000, 500))
+    assert not np.array_equal(a, training_rows("lof", 10_000, settings, 1))
+    assert training_rows("isolation_forest", 10_000, {}, 1) is None
