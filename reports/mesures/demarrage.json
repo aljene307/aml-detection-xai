@@ -48,10 +48,10 @@
       "21-30": 0.0002
     },
     "em_ecart_precedent_s": {
-      "0-7": 0.3322,
-      "7-14": 0.033,
-      "14-21": 0.0158,
-      "21-30": 0.0115
+      "0-7": 0.0462,
+      "7-14": 0.0012,
+      "14-21": 0.0022,
+      "21-30": 0.0007
     },
     "em_nb_distincts_24h": {
       "0-7": 0.002,
@@ -84,10 +84,10 @@
       "21-30": 0.0085
     },
     "re_ecart_precedent_s": {
-      "0-7": 2.7811,
-      "7-14": 1.7902,
-      "14-21": 1.1037,
-      "21-30": 0.8227
+      "0-7": 1.4641,
+      "7-14": 0.6287,
+      "14-21": 0.2958,
+      "21-30": 0.0276
     },
     "re_nb_distincts_30j": {
       "0-7": 0.3783,
@@ -100,19 +100,18 @@
     "em_nb_1h": 0.0025,
     "em_nb_24h": 0.0025,
     "em_ratio_montant_30j": 0.0042,
-    "em_ecart_precedent_s": 0.0084,
+    "em_ecart_precedent_s": 0.0022,
     "em_nb_distincts_24h": 0.0044,
     "em_nb_distincts_30j": 0.0071,
     "re_nb_1h": 0.0017,
     "re_nb_24h": 0.0021,
     "re_ratio_montant_30j": 0.0035,
-    "re_ecart_precedent_s": 0.2961,
+    "re_ecart_precedent_s": 0.0027,
     "re_nb_distincts_30j": 0.0036
   },
   "decision": {
     "tranches_differentes": {
       "0-7": [
-        "em_ecart_precedent_s",
         "em_nb_distincts_30j",
         "re_ratio_montant_30j",
         "re_ecart_precedent_s",
@@ -124,13 +123,11 @@
       ],
       "14-21": [
         "re_ecart_precedent_s"
-      ],
-      "21-30": [
-        "re_ecart_precedent_s"
       ]
     },
+    "jour_regle_psi": 21,
     "exclure_avant_jour": 30
   },
-  "duree_s": 76.28,
-  "pic_memoire_mo": 1436
+  "duree_s": 54.14,
+  "pic_memoire_mo": 1398
 }

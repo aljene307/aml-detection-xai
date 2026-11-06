@@ -38,6 +38,7 @@ from aml_xai.config import (
 )
 from aml_xai.features import (
     FREQUENCY_COLUMNS,
+    GAP_CAP_S,
     SIDES,
     apply_frequency_maps,
     fit_frequency_maps,
@@ -46,11 +47,20 @@ from aml_xai.features import (
 )
 from aml_xai.measure import measure
 from aml_xai.split import assign_periods, period_report, split_cutoffs
-from aml_xai.startup import STARTUP_SLICES, startup_decision, startup_report, with_missing
+from aml_xai.startup import (
+    STARTUP_SLICES,
+    decile_edges,
+    psi,
+    startup_decision,
+    startup_report,
+    with_missing,
+)
 
 CHUNKS_PATH = PROCESSED_DIR / "features_morceaux.parquet"
+BEFORE_CAP_PATH = PROCESSED_DIR / "features_avant_plafond.parquet"
 SPEARMAN_SAMPLE = 1_000_000
 DAY_S = 86_400
+GAP_PSI_STABLE = 0.10
 
 
 def cutoffs_of_dataset() -> tuple[pd.Timestamp, pd.Timestamp]:
@@ -181,7 +191,79 @@ def case_chunks(r: dict) -> None:
     r["toutes_identiques"] = not any(r["lignes_differentes_par_colonne"].values())
 
 
+def case_gaps(r: dict) -> None:
+    """Dérive des écarts, avec et sans plafond (docs/CHOIX.md, section 21).
+
+    Lit l'entraînement et la validation, jamais le test.
+    """
+    startup = json.loads((MEASURES_DIR / "demarrage.json").read_text(encoding="utf-8"))
+    timestamps = pd.read_parquet(PARQUET_PATH, columns=[TIMESTAMP])[TIMESTAMP]
+    cutoffs = split_cutoffs(timestamps)
+    fit_start = timestamps.min() + pd.Timedelta(days=startup["decision"]["exclure_avant_jour"])
+    del timestamps
+    columns = [f"{side}_ecart_precedent_s" for side in SIDES]
+    df = pd.read_parquet(FEATURES_PATH, columns=[TIMESTAMP, *columns], filters=[(TIMESTAMP, "<", cutoffs[1])])
+    # Écarts non plafonnés : copie du fichier d'avant le plafond, mêmes lignes dans le même ordre
+    before = pd.read_parquet(BEFORE_CAP_PATH, columns=[TIMESTAMP, *columns], filters=[(TIMESTAMP, "<", cutoffs[1])])
+    if not before[TIMESTAMP].equals(df[TIMESTAMP]):
+        raise RuntimeError("Les deux fichiers n'ont pas les mêmes lignes.")
+    ts = df[TIMESTAMP]
+    reference = ((ts >= fit_start) & (ts < cutoffs[0])).to_numpy()
+    validation = (ts >= cutoffs[0]).to_numpy()
+    weeks = ((ts - fit_start).dt.total_seconds() // (7 * DAY_S)).to_numpy()
+    r["lignes_reference"] = int(reference.sum())
+    r["lignes_validation"] = int(validation.sum())
+    r["seuil_stable"] = GAP_PSI_STABLE
+    for name in columns:
+        for label, values in {
+            "sans_plafond": before[name].to_numpy(),
+            "plafond_30j": df[name].to_numpy(),
+        }.items():
+            ref = values[reference]
+            edges = decile_edges(ref)
+
+            def slice_psi(mask):
+                return psi(ref, values[mask], edges)
+
+            ref_weeks = [w for w in np.unique(weeks[reference]) if (reference & (weeks == w)).sum() and _full_week(ts, reference, weeks, w)]
+            valid_weeks = [w for w in np.unique(weeks[validation]) if _full_week(ts, validation, weeks, w)]
+            entry = {
+                "psi_temoins_max": round(max(slice_psi(reference & (weeks == w)) for w in ref_weeks), 4),
+                "psi_validation": round(slice_psi(validation), 4),
+                "psi_semaines_validation_max": round(max(slice_psi(validation & (weeks == w)) for w in valid_weeks), 4),
+                "part_au_plafond_reference_pct": round(100 * float((ref >= GAP_CAP_S).mean()), 2),
+                "part_au_plafond_validation_pct": round(100 * float((values[validation] >= GAP_CAP_S).mean()), 2),
+            }
+            entry["stable"] = max(entry["psi_temoins_max"], entry["psi_validation"], entry["psi_semaines_validation_max"]) < GAP_PSI_STABLE
+            r.setdefault(name, {})[label] = entry
+    r["plafond_garde"] = all(r[name]["plafond_30j"]["stable"] for name in columns)
+
+
+def _full_week(ts: pd.Series, mask: np.ndarray, weeks: np.ndarray, week: float) -> bool:
+    """Semaine entièrement couverte par la période (les bords partiels sont écartés)."""
+    days = ts[mask & (weeks == week)]
+    return len(days) > 0 and (days.max() - days.min()) > pd.Timedelta(days=6.9)
+
+
+def case_cap(r: dict) -> None:
+    """Essai réel : le plafond ne change que les écarts, et exactement de min(écart, 30 j)."""
+    names = pq.ParquetFile(FEATURES_PATH).schema_arrow.names
+    if names != pq.ParquetFile(BEFORE_CAP_PATH).schema_arrow.names:
+        raise RuntimeError("Les deux fichiers n'ont pas les mêmes colonnes.")
+    r["lignes_differentes_par_colonne"] = {}
+    for name in names:
+        new = pd.read_parquet(FEATURES_PATH, columns=[name])[name].to_numpy()
+        old = pd.read_parquet(BEFORE_CAP_PATH, columns=[name])[name].to_numpy()
+        if name.endswith("ecart_precedent_s"):
+            r[f"{name}_lignes_plafonnees"] = int((old > GAP_CAP_S).sum())
+            old = np.minimum(old, GAP_CAP_S).astype(old.dtype)
+        r["lignes_differentes_par_colonne"][name] = int((new != old).sum())
+    r["toutes_identiques"] = not any(r["lignes_differentes_par_colonne"].values())
+
+
 CASES = {
+    "plafond": (case_cap, MEASURES_DIR / "plafond_reel.json"),
+    "ecarts": (case_gaps, MEASURES_DIR / "ecarts.json"),
     "morceaux": (case_chunks, MEASURES_DIR / "morceaux_reel.json"),
     "contreparties": (case_counterparties, MEASURES_DIR / "contreparties.json"),
     "demarrage": (case_startup, MEASURES_DIR / "demarrage.json"),

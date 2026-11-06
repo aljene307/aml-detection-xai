@@ -27,7 +27,9 @@ WINDOW_30D_S = 30 * DAY_S
 
 # Valeurs quand l'historique est vide (docs/CHOIX.md, section 18)
 NEUTRAL_RATIO = 1.0
-NO_PREVIOUS_GAP_S = 365 * DAY_S
+# Plafond de l'écart, valeur aussi sans transaction précédente (section 21) :
+# au-delà de 30 jours, l'écart observable dépendrait de la date
+GAP_CAP_S = WINDOW_30D_S
 
 TRANSACTION_FEATURES = [
     "log_montant",
@@ -170,8 +172,8 @@ def account_history(
 
     has_previous = np.zeros(len(key), dtype=bool)
     has_previous[end > 0] = account_s[end[end > 0] - 1] == account_s[end > 0]
-    gap = np.full(len(key), float(NO_PREVIOUS_GAP_S))
-    gap[has_previous] = t_s[has_previous] - t_s[end[has_previous] - 1]
+    gap = np.full(len(key), float(GAP_CAP_S))
+    gap[has_previous] = np.minimum(t_s[has_previous] - t_s[end[has_previous] - 1], GAP_CAP_S)
 
     sorted_values = {
         "nb_1h": end - window_start(HOUR_S),

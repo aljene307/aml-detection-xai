@@ -1,0 +1,44 @@
+{
+  "lignes_reference": 4836832,
+  "lignes_validation": 1900970,
+  "seuil_stable": 0.1,
+  "em_ecart_precedent_s": {
+    "sans_plafond": {
+      "psi_temoins_max": 0.0022,
+      "psi_validation": 0.0011,
+      "psi_semaines_validation_max": 0.0026,
+      "part_au_plafond_reference_pct": 4.54,
+      "part_au_plafond_validation_pct": 5.31,
+      "stable": true
+    },
+    "plafond_30j": {
+      "psi_temoins_max": 0.0022,
+      "psi_validation": 0.0011,
+      "psi_semaines_validation_max": 0.0026,
+      "part_au_plafond_reference_pct": 4.54,
+      "part_au_plafond_validation_pct": 5.31,
+      "stable": true
+    }
+  },
+  "re_ecart_precedent_s": {
+    "sans_plafond": {
+      "psi_temoins_max": 0.054,
+      "psi_validation": 0.0008,
+      "psi_semaines_validation_max": 0.0019,
+      "part_au_plafond_reference_pct": 16.07,
+      "part_au_plafond_validation_pct": 16.03,
+      "stable": true
+    },
+    "plafond_30j": {
+      "psi_temoins_max": 0.0027,
+      "psi_validation": 0.0003,
+      "psi_semaines_validation_max": 0.0012,
+      "part_au_plafond_reference_pct": 16.07,
+      "part_au_plafond_validation_pct": 16.03,
+      "stable": true
+    }
+  },
+  "plafond_garde": true,
+  "duree_s": 27.33,
+  "pic_memoire_mo": 1004
+}

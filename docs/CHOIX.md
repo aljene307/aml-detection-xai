@@ -407,13 +407,74 @@ premier mois sont différentes. Pour les tranches 0-7 et 7-14, plusieurs
 variables dépassent le seuil (par exemple `em_nb_distincts_30j` : PSI de 1,24
 puis 0,69). Jusqu'au jour 30, `re_ecart_precedent_s` le dépasse aussi (PSI de
 0,82 pour la tranche 21-30, contre 0,30 au plus pour les témoins).
-**Décision : les 30 premiers jours (avant le 06/11/2022 10:35:19, soit
-15,19 % des lignes d'entraînement) sont exclus de l'apprentissage.** Ces
-lignes continuent de nourrir l'historique. Les fréquences du codage sont
-apprises sur les 4 836 832 lignes restantes ; aucune valeur de la validation
-ou du test n'est inconnue.
+**Décision retenue (validée) : les 30 premiers jours sont exclus de
+l'apprentissage** (avant le 06/11/2022 10:35:19, soit 866 079 lignes, 15,19 % de
+l'entraînement). Ces lignes continuent de nourrir l'historique. Les fréquences
+du codage sont apprises sur les 4 836 832 lignes restantes ; aucune valeur de la
+validation ou du test n'est inconnue.
 
-**Constat à garder pour l'étape 3** : même dans la référence, le temps depuis la
+- **Ce qu'aurait donné la règle initiale** : appliquée de nouveau après le
+  plafond des écarts (section 21), la règle PSI ne trouve plus la tranche 21-30
+  différente (plus grand PSI : 0,030, pour `em_nb_distincts_30j`). Elle aurait
+  donc exclu **21 jours** seulement.
+- **Pourquoi on retient 30 jours** : toutes les fenêtres d'historique durent au
+  plus 30 jours (moyenne, contreparties, écart plafonné). Avant le 30e jour,
+  elles sont donc incomplètes pour tous les comptes, **par construction**. Ce
+  choix découle de la décision du plafond. Il n'utilise ni les étiquettes ni une
+  mesure de performance. La mesure va dans le même sens : pour l'écart
+  plafonné du destinataire, le plus grand PSI des témoins vaut 0,003 avec une
+  référence à partir du jour 30, contre 0,043 à partir du jour 21.
+- **Dans le code** : `startup_decision` renvoie le résultat de la règle PSI
+  (`jour_regle_psi` = 21) et la décision retenue (`exclure_avant_jour` =
+  max(règle, 30) = 30).
+
+## 21. Plafond de 30 jours sur le temps depuis la transaction précédente
+
+- **Problème** : le jeu commence le 07/10/2022, donc au jour 50 aucun écart ne
+  peut dépasser 50 jours (censure). La distribution des écarts glisse avec la
+  date, et donc entre l'entraînement, la validation et le test, sans aucun
+  changement de comportement.
+- **Proposition** : écart = min(écart, 30 jours), et 30 jours quand il n'existe
+  aucune transaction précédente (au lieu de 365 jours).
+- **Raison de la valeur** : 30 jours est la plus longue fenêtre déjà utilisée.
+  À partir du jour 30, un écart de 30 jours au plus est observable pour toutes
+  les transactions, et l'apprentissage commence justement au jour 30
+  (section 20) : l'écart plafonné ne dépend plus de la date. Au-delà de
+  30 jours, l'indicateur « sans historique » donne déjà l'information.
+- **Règle fixée avant les mesures** : le plafond est gardé si, pour l'émetteur
+  et le destinataire, le PSI de l'écart plafonné reste sous 0,10 (seuil usuel
+  de stabilité) pour chaque tranche témoin de 7 jours de l'entraînement retenu,
+  pour la validation entière et pour chacune de ses semaines. Le test n'est pas
+  lu. Les variables ayant changé, la règle de démarrage (section 20) est
+  ensuite appliquée de nouveau, telle quelle.
+- **Alternatives écartées** : 7 jours (perd l'information entre 7 et
+  30 jours) ; logarithme (change l'échelle sans supprimer la censure) ; plafond
+  plus long (encore censuré pour une partie de l'apprentissage).
+- **Mesures** (`reports/mesures/ecarts.json`, référence = entraînement retenu à
+  partir du jour 30, PSI le plus élevé) :
+
+  | Variable | | Témoins | Validation | Semaines de validation |
+  |---|---|---|---|---|
+  | `re_ecart_precedent_s` | sans plafond | **0,054** | 0,001 | 0,002 |
+  | `re_ecart_precedent_s` | plafond 30 j | **0,003** | 0,0003 | 0,001 |
+  | `em_ecart_precedent_s` | sans plafond | 0,002 | 0,001 | 0,003 |
+  | `em_ecart_precedent_s` | plafond 30 j | 0,002 | 0,001 | 0,003 |
+
+  Avec une référence à partir du jour 21 (règle initiale, section 20), les
+  témoins du destinataire valaient 0,273 sans plafond et 0,043 avec.
+
+  **Plafond gardé (validé)** : tous les PSI plafonnés sont sous 0,10. La dérive
+  venait des écarts de plus de 30 jours du destinataire. Côté émetteur, rien ne
+  change : tous ses déciles sont sous 30 jours. Limite : le PSI par déciles
+  voit peu la queue de la distribution.
+- **Vérifications** : 53 tests réussis ; sur le jeu réel, le nouveau fichier ne
+  diffère de l'ancien que sur les écarts, qui valent exactement min(ancien,
+  30 jours) (488 176 lignes plafonnées pour l'émetteur, 1 637 336 pour le
+  destinataire, `reports/mesures/plafond_reel.json`) ; calcul en 2 groupes
+  identique au calcul en 8 groupes ; recalcul sans lire le futur identique sur
+  les 5 702 911 lignes d'entraînement.
+
+**Constat à l'origine de la section 21** : même dans la référence, le temps depuis la
 transaction précédente du destinataire varie plus que les autres variables
 (PSI des témoins jusqu'à 0,30). Cette variable dépend aussi du temps écoulé
 depuis le début du jeu, car un écart ne peut pas remonter avant le 07/10/2022.

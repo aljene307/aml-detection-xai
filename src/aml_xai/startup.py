@@ -6,9 +6,12 @@ aux étiquettes.
 
 import numpy as np
 
-from aml_xai.features import NO_PREVIOUS_GAP_S, SIDES
+from aml_xai.features import DAY_S, SIDES, WINDOW_30D_S
 
 REFERENCE_START_DAY = 30
+# Plus longue fenêtre d'historique (moyenne, contreparties, écart plafonné) :
+# avant ce jour, elles sont incomplètes pour tous les comptes, par construction
+LONGEST_WINDOW_DAYS = WINDOW_30D_S // DAY_S
 STARTUP_SLICES = [(0, 7), (7, 14), (14, 21), (21, 30)]
 CONTROL_DAYS = 7
 PSI_STRONG_CHANGE = 0.25
@@ -17,14 +20,16 @@ PSI_EPSILON = 1e-4
 
 
 def with_missing(features: dict[str, np.ndarray]) -> dict[str, np.ndarray]:
-    """Remet une absence de valeur là où une valeur neutre a été placée."""
+    """Remet une absence de valeur là où une valeur neutre a été placée.
+
+    L'écart plafonné n'a pas de valeur neutre : le plafond est une vraie
+    mesure (« 30 jours ou plus »), il reste donc tel quel.
+    """
     output = dict(features)
     for side in SIDES:
-        ratio, gap = f"{side}_ratio_montant_30j", f"{side}_ecart_precedent_s"
+        ratio = f"{side}_ratio_montant_30j"
         if ratio in output:
             output[ratio] = np.where(output[f"{side}_sans_historique_30j"] == 1, np.nan, output[ratio])
-        if gap in output:
-            output[gap] = np.where(output[gap] == NO_PREVIOUS_GAP_S, np.nan, output[gap])
     return output
 
 
@@ -86,7 +91,11 @@ def startup_report(days: np.ndarray, features: dict[str, np.ndarray]) -> dict:
 
 
 def startup_decision(report: dict) -> dict:
-    """Applique la règle : quelles tranches diffèrent, et à partir de quel jour apprendre."""
+    """Applique la règle : quelles tranches diffèrent, et à partir de quel jour apprendre.
+
+    La décision retenue n'est jamais avant la fin de la plus longue fenêtre
+    (docs/CHOIX.md, section 20), quel que soit le résultat de la règle PSI.
+    """
     different = {}
     for name, slices in report["psi"].items():
         limit = max(PSI_STRONG_CHANGE, report["psi_temoins_max"][name])
@@ -96,5 +105,6 @@ def startup_decision(report: dict) -> dict:
     last_stop = max((int(label.split("-")[1]) for label in different), default=0)
     return {
         "tranches_differentes": different,
-        "exclure_avant_jour": last_stop,
+        "jour_regle_psi": last_stop,
+        "exclure_avant_jour": max(last_stop, LONGEST_WINDOW_DAYS),
     }

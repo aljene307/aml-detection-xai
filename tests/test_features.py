@@ -9,7 +9,7 @@ from aml_xai.features import (
     DAY_S,
     FREQUENCY_COLUMNS,
     NEUTRAL_RATIO,
-    NO_PREVIOUS_GAP_S,
+    GAP_CAP_S,
     WINDOW_30D_S,
     apply_frequency_maps,
     fit_frequency_maps,
@@ -75,7 +75,7 @@ def brute_force(df, account_column, other_column):
         out["sans_historique_30j"].append(empty)
         ratio = NEUTRAL_RATIO if empty else cents[i] * float(in_30d.sum()) / cents[in_30d].sum()
         out["ratio_montant_30j"].append(ratio)
-        out["ecart_precedent_s"].append(t[i] - t[same].max() if same.any() else NO_PREVIOUS_GAP_S)
+        out["ecart_precedent_s"].append(min(t[i] - t[same].max(), GAP_CAP_S) if same.any() else GAP_CAP_S)
     return {name: np.array(values, dtype=np.float32) for name, values in out.items()}
 
 
@@ -96,7 +96,7 @@ def test_exemple_a_la_main_ex_aequo():
     out = history_features(df)
     assert out["em_nb_1h"].tolist() == [0, 0, 2]
     assert out["em_nb_24h"].tolist() == [0, 0, 2]
-    assert out["em_ecart_precedent_s"].tolist() == [NO_PREVIOUS_GAP_S, NO_PREVIOUS_GAP_S, 1_800]
+    assert out["em_ecart_precedent_s"].tolist() == [GAP_CAP_S, GAP_CAP_S, 1_800]
     assert out["em_sans_historique_30j"].tolist() == [1, 1, 0]
     # Moyenne antérieure = (100 + 300) / 2 = 200, sans la transaction actuelle : 600 / 200 = 3
     assert out["em_ratio_montant_30j"].tolist() == [NEUTRAL_RATIO, NEUTRAL_RATIO, 3]
@@ -116,13 +116,14 @@ def test_montants_a_nombreuses_decimales():
     assert history_features(df)["em_ratio_montant_30j"][1] == 1
 
 
-def test_compte_inactif_garde_son_vrai_ecart():
-    gap = 40 * DAY_S
-    df = transactions([(0, 1, 2, 10), (gap, 1, 2, 500)])
+def test_ecart_plafonne_a_30_jours():
+    # Inactif 40 jours : plafonné à 30 ; 29 jours : vrai écart
+    df = transactions([(0, 1, 2, 10), (40 * DAY_S, 1, 2, 500), (69 * DAY_S, 1, 2, 20)])
     out = history_features(df)
-    assert out["em_sans_historique_30j"].tolist() == [1, 1]
-    assert out["em_ratio_montant_30j"].tolist() == [NEUTRAL_RATIO, NEUTRAL_RATIO]
-    assert out["em_ecart_precedent_s"].tolist() == [NO_PREVIOUS_GAP_S, gap]
+    assert out["em_sans_historique_30j"].tolist() == [1, 1, 0]
+    # Variables en float32 : 20 / 500 y vaut float32(0,04)
+    assert out["em_ratio_montant_30j"].tolist() == [NEUTRAL_RATIO, NEUTRAL_RATIO, np.float32(20 / 500)]
+    assert out["em_ecart_precedent_s"].tolist() == [GAP_CAP_S, GAP_CAP_S, 29 * DAY_S]
 
 
 def test_emetteur_et_destinataire_separes():
@@ -371,11 +372,11 @@ def test_with_missing_restaure_les_absences():
         {
             "em_sans_historique_30j": np.array([1.0, 0.0]),
             "em_ratio_montant_30j": np.array([1.0, 1.0]),
-            "em_ecart_precedent_s": np.array([float(NO_PREVIOUS_GAP_S), 5.0]),
+            "em_ecart_precedent_s": np.array([float(GAP_CAP_S), 5.0]),
         }
     )
     assert np.isnan(out["em_ratio_montant_30j"][0]) and out["em_ratio_montant_30j"][1] == 1
-    assert np.isnan(out["em_ecart_precedent_s"][0]) and out["em_ecart_precedent_s"][1] == 5
+    assert out["em_ecart_precedent_s"].tolist() == [GAP_CAP_S, 5]  # le plafond reste une mesure
 
 
 def decision_for(slices, control):
@@ -384,13 +385,21 @@ def decision_for(slices, control):
 
 def test_regle_de_decision_du_demarrage():
     # Aucune tranche forte : on n'exclut rien
-    assert decision_for({"0-7": 0.2, "7-14": 0.1}, 0.05)["exclure_avant_jour"] == 0
+    assert decision_for({"0-7": 0.2, "7-14": 0.1}, 0.05)["jour_regle_psi"] == 0
     # Forte et au-dessus des témoins : exclue jusqu'à la fin de la dernière tranche différente
     decision = decision_for({"0-7": 0.9, "7-14": 0.3, "14-21": 0.1, "21-30": 0.1}, 0.05)
-    assert decision["exclure_avant_jour"] == 14
+    assert decision["jour_regle_psi"] == 14
     assert decision["tranches_differentes"] == {"0-7": ["v"], "7-14": ["v"]}
     # Forte, mais pas plus que la variation normale des témoins : pas d'exclusion
-    assert decision_for({"0-7": 0.3}, 0.4)["exclure_avant_jour"] == 0
+    assert decision_for({"0-7": 0.3}, 0.4)["jour_regle_psi"] == 0
+
+
+def test_demarrage_jamais_avant_la_plus_longue_fenetre():
+    # Règle PSI à 0 ou 14 jours : décision retenue à 30 jours, la plus longue fenêtre
+    assert decision_for({"0-7": 0.2}, 0.05)["exclure_avant_jour"] == 30
+    assert decision_for({"0-7": 0.9, "7-14": 0.9}, 0.05)["exclure_avant_jour"] == 30
+    # Une règle PSI plus tardive l'emporterait
+    assert decision_for({"0-7": 0.9, "60-67": 0.9}, 0.05)["exclure_avant_jour"] == 67
 
 
 def test_rapport_de_demarrage_sans_etiquette():
@@ -401,7 +410,7 @@ def test_rapport_de_demarrage_sans_etiquette():
     report = startup_report(days, {"stable": stable, "decalee": shifted})
     assert report["nb_temoins"] == 9  # débuts 30, 37, …, 86 ; le suivant finirait après le jour 99
     decision = startup_decision(report)
-    assert decision["exclure_avant_jour"] == 14
+    assert decision["jour_regle_psi"] == 14
     assert set(decision["tranches_differentes"]) == {"0-7", "7-14"}
     assert "stable" not in decision["tranches_differentes"]["0-7"]
 
