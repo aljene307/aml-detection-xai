@@ -127,3 +127,23 @@ def save_matrix(matrix: np.ndarray, path: Path) -> None:
 def load_matrix(path: Path) -> np.ndarray:
     """Lecture sans tout charger en mémoire (seules les pages lues sont chargées)."""
     return np.load(path, mmap_mode="r")
+
+
+def one_hot(raw: pd.DataFrame, maps: dict) -> tuple[np.ndarray, list[str]]:
+    """Contrôle seulement (docs/CHOIX.md, section 19) : une colonne 0/1 par valeur.
+
+    Les valeurs sont celles apprises sur l'entraînement (clés de `maps`) ; une
+    valeur inconnue donne des zéros. Pas de standardisation des colonnes 0/1.
+    """
+    names = [f"{column}={value}" for column in maps for value in maps[column]]
+    out = np.zeros((len(raw), len(names)), dtype=np.float32)
+    start = 0
+    for column, shares in maps.items():
+        position = {value: start + i for i, value in enumerate(shares)}
+        values = raw[column].astype("category")
+        table = np.array([position.get(str(c), -1) for c in values.cat.categories], dtype=np.int64)
+        target = table[values.cat.codes.to_numpy()]
+        known = target >= 0
+        out[np.flatnonzero(known), target[known]] = 1.0
+        start += len(shares)
+    return out, names

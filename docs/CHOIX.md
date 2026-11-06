@@ -411,6 +411,24 @@ hypothèses pour le choix des variables, pas des résultats de modèle.
   Elle ne sert donc que de contrôle, comme les réglages de la section 5. **La
   version principale reste le codage par fréquence, quel que soit le résultat
   de cette comparaison.**
+- **Résultat du contrôle** (`reports/mesures/one_hot.json`, versions par
+  défaut) : one-hot = 69 colonnes 0/1 non standardisées à la place des
+  5 fréquences (87 colonnes au lieu de 23). Mêmes lignes d'apprentissage pour
+  les deux codages (100 000 pour LOF et l'autoencodeur, 1 million pour
+  Isolation Forest, car 87 colonnes sur tout l'entraînement pèseraient
+  1,7 Go), mesure sur les mêmes 20 % des comptes émetteurs de la validation
+  (379 578 lignes, 387 cas) :
+
+  | Méthode | PR-AUC fréquence | PR-AUC one-hot |
+  |---|---|---|
+  | LOF | 0,0399 | 0,0303 |
+  | Isolation Forest | 0,0038 | 0,0027 |
+  | Autoencodeur | 0,0174 | 0,0173 |
+
+  Le codage par fréquence fait au moins aussi bien partout : la limite notée
+  plus haut ne coûte rien de mesurable ici. Pic de mémoire du contrôle :
+  2 149 Mo, au-dessus de l'objectif de 1,5 Go (calcul allé au bout, sans effet
+  sur les résultats ; à réduire s'il doit être relancé).
 - **Alternatives écartées** : one-hot comme version principale (environ
   69 colonnes de plus) ; codage par taux de blanchiment (utilise les étiquettes).
 
@@ -626,3 +644,21 @@ mesures. Le test n'est pas lu.
    Forest réglé (0,0052) reste 6 fois sous LOF sans étiquette (0,033). La
    règle sans étiquette a choisi LOF sur le seul coût : bon choix, mais par
    coïncidence, puisqu'elle ne regardait pas la performance.
+
+## 24. Limite : les scores de validation sont optimistes
+
+- **Constat** : la validation sert à plusieurs choix qui utilisent ses
+  étiquettes : le réglage des méthodes non supervisées (grilles de LOF,
+  d'Isolation Forest et de l'autoencodeur), l'arrêt précoce de LightGBM, le
+  choix du traitement du déséquilibre et le seuil de l'étape 5.
+- **Conséquence** : chaque choix retient ce qui marche le mieux sur ces lignes
+  précises, y compris par chance. Les scores de validation des versions
+  réglées sont donc **optimistes** : ils mesurent la qualité du choix sur les
+  données qui ont servi à le faire.
+- **Ce qui limite l'effet** : des grilles petites (3 à 12 réglages), non
+  agrandies après coup ; les contrôles de la section 23 (gain de LOF au-delà
+  du hasard du tirage, réglage retrouvé avec 10 % des comptes).
+- **Mesure honnête** : seul le test (étape 7), lu une seule fois après tous
+  les choix, donne une mesure non biaisée. Les versions « sans étiquette »
+  ne sont pas réglées sur la validation : leurs scores de validation sont
+  déjà honnêtes, à la dérive dans le temps près.

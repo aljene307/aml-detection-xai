@@ -1,0 +1,50 @@
+{
+  "lignes_mesure": 379578,
+  "cas_mesure": 387,
+  "colonnes": {
+    "frequence": 23,
+    "one_hot": 87
+  },
+  "methodes": {
+    "autoencodeur": {
+      "lignes_apprentissage": 100000,
+      "frequence": {
+        "pr_auc": 0.017442,
+        "roc_auc": 0.861227,
+        "duree_s": 5.1
+      },
+      "one_hot": {
+        "pr_auc": 0.017337,
+        "roc_auc": 0.831917,
+        "duree_s": 5.7
+      }
+    },
+    "isolation_forest": {
+      "lignes_apprentissage": 1000000,
+      "frequence": {
+        "pr_auc": 0.003848,
+        "roc_auc": 0.780198,
+        "duree_s": 3.6
+      },
+      "one_hot": {
+        "pr_auc": 0.002679,
+        "roc_auc": 0.694297,
+        "duree_s": 3.7
+      }
+    },
+    "lof": {
+      "lignes_apprentissage": 100000,
+      "frequence": {
+        "pr_auc": 0.039862,
+        "roc_auc": 0.856982,
+        "duree_s": 118.8
+      },
+      "one_hot": {
+        "pr_auc": 0.030282,
+        "roc_auc": 0.858431,
+        "duree_s": 218.1
+      }
+    }
+  },
+  "pic_memoire_mo": 2149
+}

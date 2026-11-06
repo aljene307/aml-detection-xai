@@ -10,6 +10,10 @@
   10 % des comptes émetteurs de la validation, on choisit le réglage avec leurs
   seules transactions, puis on le mesure sur les 90 % restantes. On compte les
   fois où le choix est celui de la grille complète ;
+- one_hot : contrôle (docs/CHOIX.md, section 19), codage one-hot contre codage
+  par fréquence, versions par défaut, mêmes lignes d'apprentissage pour les
+  deux codages, mesurés sur les mêmes 20 % des comptes émetteurs de la
+  validation ;
 - graines_lof : contrôle, 4 autres tirages de l'échantillon de LOF pour les
   versions par défaut et réglée (environ 45 minutes, reprise possible).
 
@@ -29,8 +33,20 @@ import numpy as np
 import pyarrow.parquet as pq
 from sklearn.metrics import average_precision_score, roc_auc_score
 
-from aml_xai.config import ACCOUNT_COLUMNS, MEASURES_DIR, PARQUET_PATH, PROCESSED_DIR, SEED, TARGET, TIMESTAMP
-from aml_xai.matrix import load_matrix
+import pandas as pd
+
+from aml_xai.config import (
+    ACCOUNT_COLUMNS,
+    FREQUENCY_MAPS_PATH,
+    MEASURES_DIR,
+    PARQUET_PATH,
+    PROCESSED_DIR,
+    SEED,
+    TARGET,
+    TIMESTAMP,
+)
+from aml_xai.features import FREQUENCY_COLUMNS, frequency_feature, model_feature_names
+from aml_xai.matrix import load_matrix, one_hot
 from aml_xai.measure import available_ram_mb, peak_memory_mb
 from aml_xai.split import model_periods
 from aml_xai.unsupervised import (
@@ -39,7 +55,9 @@ from aml_xai.unsupervised import (
     GRIDS,
     anomaly_scores,
     fit,
+    default_model,
     model_from_settings,
+    sample_rows,
     training_rows,
 )
 
@@ -52,6 +70,10 @@ ORDER = ["autoencodeur", "isolation_forest", "lof"]
 # Contrôle « petit échantillon d'étiquettes »
 SMALL_SHARE = 0.10
 SMALL_REPEATS = 20
+# Contrôle one-hot : Isolation Forest apprend sur un échantillon (87 colonnes
+# sur tout l'entraînement pèseraient 1,7 Go) ; mesure sur 20 % des comptes
+ONE_HOT_FOREST_ROWS = 1_000_000
+ONE_HOT_VALID_SHARE = 0.20
 
 
 def key(method: str, settings: dict, seed: int) -> str:
@@ -247,6 +269,64 @@ def case_small_sample() -> None:
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 
 
+def case_one_hot() -> None:
+    free = available_ram_mb()
+    if free < MIN_FREE_RAM_MB:
+        sys.exit(f"Arrêt : seulement {free:.0f} Mo disponibles, {MIN_FREE_RAM_MB} requis.")
+    maps = json.loads(FREQUENCY_MAPS_PATH.read_text(encoding="utf-8"))
+    periods = model_periods()
+    train, valid = load_matrix(MATRIX_PATHS["entrainement"]), load_matrix(MATRIX_PATHS["validation"])
+    frequency_names = {frequency_feature(c) for c in FREQUENCY_COLUMNS}
+    keep = [j for j, name in enumerate(model_feature_names()) if name not in frequency_names]
+
+    def raw(start, end):
+        return pd.read_parquet(PARQUET_PATH, columns=FREQUENCY_COLUMNS, filters=[(TIMESTAMP, ">=", start), (TIMESTAMP, "<", end)])
+
+    raw_train = raw(periods["debut"], periods["fin_entrainement"])
+    raw_valid = raw(periods["fin_entrainement"], periods["fin_validation"])
+    if len(raw_train) != len(train) or len(raw_valid) != len(valid):
+        raise RuntimeError("Les colonnes catégorielles ne correspondent pas aux matrices.")
+    labels = validation_labels(len(valid))
+    senders = validation_column(ACCOUNT_COLUMNS[0], len(valid))
+    accounts = np.unique(senders)
+    chosen = np.random.default_rng(SEED).choice(accounts, size=round(ONE_HOT_VALID_SHARE * len(accounts)), replace=False)
+    subset = np.flatnonzero(np.isin(senders, chosen))
+    y = labels[subset]
+
+    def matrices(source, raw_part, rows):
+        base = np.asarray(source[rows], dtype=np.float32)
+        dummies, _ = one_hot(raw_part.iloc[rows], maps)
+        return {"frequence": base, "one_hot": np.hstack([base[:, keep], dummies])}
+
+    valid_versions = matrices(valid, raw_valid, subset)
+    out = {
+        "lignes_mesure": len(subset),
+        "cas_mesure": int(y.sum()),
+        "colonnes": {k: v.shape[1] for k, v in valid_versions.items()},
+        "methodes": {},
+    }
+    for method in ORDER:
+        rows = sample_rows(len(train), ONE_HOT_FOREST_ROWS) if method == "isolation_forest" else training_rows(
+            method, len(train), DEFAULT_SETTINGS[method])
+        train_versions = matrices(train, raw_train, rows)
+        out["methodes"][method] = {"lignes_apprentissage": len(rows)}
+        for name in ["frequence", "one_hot"]:
+            start = time.perf_counter()
+            model = fit(default_model(method), train_versions[name])  # sans étiquettes
+            scores = anomaly_scores(model, valid_versions[name])
+            out["methodes"][method][name] = {
+                "pr_auc": round(float(average_precision_score(y, scores)), 6),
+                "roc_auc": round(float(roc_auc_score(y, scores)), 6),
+                "duree_s": round(time.perf_counter() - start, 1),
+            }
+            print(method, name, out["methodes"][method][name], flush=True)
+        del train_versions
+        gc.collect()
+    out["pic_memoire_mo"] = round(peak_memory_mb())
+    (MEASURES_DIR / "one_hot.json").write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(json.dumps(out, indent=2, ensure_ascii=False))
+
+
 def lof_seed_jobs(results: dict):
     """Autres tirages de l'échantillon de LOF, versions par défaut et réglée."""
     tuned = best(results, "lof")["reglage"]
@@ -257,7 +337,7 @@ def lof_seed_jobs(results: dict):
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--cas", choices=["grilles", "tableau", "petit_echantillon", "graines_lof"], required=True)
+    parser.add_argument("--cas", choices=["grilles", "tableau", "petit_echantillon", "one_hot", "graines_lof"], required=True)
     args = parser.parse_args()
     if args.cas == "grilles":
         case_grids()
@@ -265,6 +345,8 @@ def main() -> None:
         case_grids(lof_seed_jobs)
     elif args.cas == "tableau":
         case_table()
+    elif args.cas == "one_hot":
+        case_one_hot()
     else:
         case_small_sample()
 

@@ -200,3 +200,13 @@ def test_lof_seed_changes_the_sample():
     np.testing.assert_array_equal(a, sample_rows(10_000, 500))
     assert not np.array_equal(a, training_rows("lof", 10_000, settings, 1))
     assert training_rows("isolation_forest", 10_000, {}, 1) is None
+
+
+def test_one_hot_uses_learned_values_and_zeros_for_unknown():
+    from aml_xai.matrix import one_hot
+
+    maps = {"Payment_type": {"Cash": 0.6, "ACH": 0.4}, "Payment_currency": {"Euro": 1.0}}
+    raw = pd.DataFrame({"Payment_type": ["ACH", "Cash", "Cheque"], "Payment_currency": ["Euro", "Yen", "Euro"]})
+    out, names = one_hot(raw, maps)
+    assert names == ["Payment_type=Cash", "Payment_type=ACH", "Payment_currency=Euro"]
+    np.testing.assert_array_equal(out, [[0, 1, 1], [1, 0, 0], [0, 0, 1]])
