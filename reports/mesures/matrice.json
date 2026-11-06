@@ -1,0 +1,64 @@
+{
+  "lignes": {
+    "entrainement": 4836832,
+    "validation": 1900970
+  },
+  "asymetrie": {
+    "em_nb_1h": {
+      "avant": 1.93,
+      "apres_log": 1.2
+    },
+    "em_nb_24h": {
+      "avant": 2.32,
+      "apres_log": 0.85
+    },
+    "em_ratio_montant_30j": {
+      "avant": 513.61,
+      "apres_log": 2.82
+    },
+    "em_ecart_precedent_s": {
+      "avant": 3.56,
+      "apres_log": -0.15
+    },
+    "em_nb_distincts_24h": {
+      "avant": 1.51,
+      "apres_log": 0.84
+    },
+    "em_nb_distincts_30j": {
+      "avant": 0.4,
+      "apres_log": -0.62
+    },
+    "re_nb_1h": {
+      "avant": 2.09,
+      "apres_log": 1.32
+    },
+    "re_nb_24h": {
+      "avant": 2.49,
+      "apres_log": 0.89
+    },
+    "re_ratio_montant_30j": {
+      "avant": 1178.85,
+      "apres_log": 3.7
+    },
+    "re_ecart_precedent_s": {
+      "avant": 0.99,
+      "apres_log": -0.28
+    },
+    "re_nb_distincts_30j": {
+      "avant": 1.5,
+      "apres_log": 0.96
+    }
+  },
+  "moyenne_max_abs": 0.0,
+  "ecart_type_min_max": [
+    1.0,
+    1.0
+  ],
+  "periodes": {
+    "debut": "2022-11-06 10:35:19",
+    "fin_entrainement": "2023-04-16 21:10:37",
+    "fin_validation": "2023-06-19 22:08:52"
+  },
+  "duree_s": 17.12,
+  "pic_memoire_mo": 1320
+}

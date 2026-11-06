@@ -1,0 +1,13 @@
+{
+  "methode": "isolation_forest",
+  "echantillon": null,
+  "lignes_apprentissage": 4836832,
+  "apprentissage_s": 3.7,
+  "taille_modele_mo": 1.3,
+  "notation_estimee_s": 14.9,
+  "notation_s": 13.9,
+  "lignes_notees": 1900970,
+  "scores_finis": true,
+  "duree_s": 17.82,
+  "pic_memoire_mo": 1201
+}

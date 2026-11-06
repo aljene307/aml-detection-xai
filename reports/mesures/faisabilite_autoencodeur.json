@@ -1,0 +1,15 @@
+{
+  "methode": "autoencodeur",
+  "echantillon": 100000,
+  "lignes_apprentissage": 100000,
+  "apprentissage_s": 9.0,
+  "iterations": 21,
+  "converge": true,
+  "taille_modele_mo": 0.0,
+  "notation_estimee_s": 0.8,
+  "notation_s": 0.8,
+  "lignes_notees": 1900970,
+  "scores_finis": true,
+  "duree_s": 12.06,
+  "pic_memoire_mo": 435
+}

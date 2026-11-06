@@ -1,0 +1,13 @@
+{
+  "methode": "lof",
+  "echantillon": 100000,
+  "lignes_apprentissage": 100000,
+  "apprentissage_s": 23.4,
+  "taille_modele_mo": 17.2,
+  "notation_estimee_s": 544.8,
+  "notation_s": 612.9,
+  "lignes_notees": 1900970,
+  "scores_finis": true,
+  "duree_s": 637.08,
+  "pic_memoire_mo": 501
+}

@@ -81,12 +81,40 @@ complétée quand l'étape correspondante aura produit ses chiffres.
 
 ## 6. Deuxième méthode non supervisée
 
-- **Choix** : à mesurer entre LOF et un autoencodeur (MLP de scikit-learn).
+- **Choix** : **LOF** (Local Outlier Factor, 20 voisines), choisi par une règle
+  de coût sans étiquettes, entre LOF et un autoencodeur (MLP de scikit-learn,
+  23 → 8 → 23).
 - **Raison** : ces deux méthodes donnent un score continu et restent légères.
   Un autoencodeur scikit-learn évite PyTorch, trop lourd pour les 512 Mo de
-  Render.
-- **Mesures** : à compléter (temps d'entraînement, mémoire, PR-AUC de
-  validation).
+  Render. Choisir avec la PR-AUC de validation utiliserait les étiquettes :
+  pour la version « sans étiquette », le choix repose donc sur le coût.
+- **Règle fixée avant les mesures** (`scripts/train_unsupervised.py`) : une
+  méthode est faisable si elle apprend en moins de 15 min, note toute la
+  validation (1,9 M de lignes) en moins de 15 min, reste sous 1,5 Go de pic
+  et donne un modèle de moins de 100 Mo. Si les deux sont faisables, LOF (un
+  seul réglage principal, alors que l'autoencodeur oblige à inventer une
+  architecture) ; sinon, celle qui est faisable.
+- **Protocole** : versions par défaut ; LOF et l'autoencodeur apprennent sur
+  le même échantillon de 100 000 lignes tirées au hasard (graine 42), ce qui
+  ne fausse aucune variable puisqu'elles sont calculées sur l'historique
+  complet (section 7) ; Isolation Forest apprend sur tout l'entraînement
+  retenu. Un processus par méthode, pour un pic de mémoire propre.
+- **Mesures** (`reports/mesures/faisabilite*.json`) :
+
+  | Méthode | Lignes apprises | Apprentissage | Notation validation | Pic | Modèle |
+  |---|---|---|---|---|---|
+  | Isolation Forest | 4 836 832 | 3,7 s | 13,9 s | 1 201 Mo | 1,3 Mo |
+  | LOF | 100 000 | 23,4 s | **612,9 s** | 501 Mo | 17,2 Mo |
+  | Autoencodeur | 100 000 | 9,0 s | 0,8 s | 435 Mo | < 0,1 Mo |
+
+  Les trois sont faisables ; la règle donne **LOF**. LOF passe de justesse sur
+  la notation et est environ 750 fois plus lent que l'autoencodeur : la règle
+  ne départageait pas sur la vitesse, et elle n'est pas modifiée après coup.
+  Pour l'API, noter une transaction reste instantané.
+- **Version réglée** (section 5) : petites grilles sur la PR-AUC de
+  validation, pour LOF (10, 20, 50 ou 100 voisines ; échantillon de 50 000
+  ou 100 000 lignes, 200 000 dépasserait la limite de notation) et pour
+  l'autoencodeur (goulot de 4, 8 ou 12).
 - **Alternatives écartées** : One-Class SVM (son coût de calcul grandit très
   vite avec le nombre de lignes) ; DBSCAN (pas de score continu, seulement
   une étiquette « bruit »).
@@ -482,3 +510,33 @@ validation ou du test n'est inconnue.
 transaction précédente du destinataire varie plus que les autres variables
 (PSI des témoins jusqu'à 0,30). Cette variable dépend aussi du temps écoulé
 depuis le début du jeu, car un écart ne peut pas remonter avant le 07/10/2022.
+
+## 22. Matrice d'entrée : logarithme puis standardisation
+
+- **Choix** : une même matrice pour toutes les méthodes. `log(1 + x)` sur les
+  11 variables à longue traîne (compteurs, contreparties distinctes, rapports
+  de montant, écarts), puis standardisation (moyenne 0, écart type 1) de
+  toutes les variables. Paramètres appris sur l'entraînement retenu
+  (4 836 832 lignes, à partir du 06/11/2022), sans étiquettes, enregistrés dans
+  `models/transformation.json`.
+- **Raison** : LOF et l'autoencodeur reposent sur des distances et des
+  erreurs, donc sur l'échelle des variables. Isolation Forest aussi est
+  concerné par la longue traîne : il coupe au hasard entre le minimum et le
+  maximum, et presque toutes ses coupes tomberaient dans la zone vide des
+  valeurs énormes. Une matrice commune garde la comparaison équitable.
+- **Mesures** (`reports/mesures/matrice.json`, asymétrie sur l'entraînement
+  retenu) : `re_ratio_montant_30j` 1 178,9 → 3,7 ; `em_ratio_montant_30j`
+  513,6 → 2,8 ; `em_ecart_precedent_s` 3,6 → −0,15 ; les compteurs passent de
+  1,5 à 2,5 environ à moins de 1,4 (sauf `em_nb_distincts_30j`, déjà peu
+  asymétrique : 0,4 → −0,6).
+- **Mémoire** : une première version lisait toute la table puis la recopiait
+  (pic de 2 690 Mo). La matrice est maintenant construite colonne par colonne
+  (lire, transformer, écrire) : pic de 1 320 Mo, matrices identiques à la
+  première version (0 valeur différente sur l'entraînement et la validation).
+  Les matrices (`data/processed/`, non commitées) sont lues sans tout charger
+  en mémoire. La matrice du test n'est pas construite avant l'étape 7.
+- **Alternatives écartées** : standardiser sans logarithme (quelques valeurs
+  énormes écraseraient les autres) ; une transformation par rangs (plus
+  coûteuse à appliquer dans l'API, et elle efface l'écart entre une valeur
+  forte et une valeur extrême) ; une matrice différente par méthode
+  (comparaison moins équitable).
