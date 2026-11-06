@@ -74,8 +74,35 @@ complétée quand l'étape correspondante aura produit ses chiffres.
 - **Raison** : choisir des réglages avec la PR-AUC de validation utilise déjà
   les étiquettes. Mesurer l'écart montre ce que ce réglage apporte, et donc
   ce qu'on perdrait dans une situation réellement sans étiquette.
-- **Mesures** : à compléter (PR-AUC, précision@k et rappel@k des deux
-  versions, sur la validation puis sur le test).
+- **Mesures sur la validation** (`reports/mesures/grilles.jsonl`, un réglage
+  par ligne ; `grilles_tableau.json`). Hasard = taux de la validation,
+  0,00105 :
+
+  | Méthode | Version | Réglage | PR-AUC | ROC-AUC |
+  |---|---|---|---|---|
+  | Isolation Forest | sans étiquette | 100 arbres, 256 lignes, 100 % des variables | 0,0042 | 0,771 |
+  | Isolation Forest | réglée (12 essais) | 100 arbres, 4 096 lignes, 50 % des variables | 0,0052 | 0,808 |
+  | LOF | sans étiquette | 20 voisines, 100 000 lignes | 0,0330 | 0,828 |
+  | LOF | réglée (8 essais) | 10 voisines, 100 000 lignes | 0,0444 | 0,834 |
+  | Autoencodeur | sans étiquette | goulot de 8 | 0,0151 | 0,847 |
+  | Autoencodeur | réglée (3 essais) | goulot de 8 (déjà le meilleur) | 0,0151 | 0,847 |
+
+  Graines d'Isolation Forest (5 graines) : sans étiquette 0,0028 à 0,0042
+  (moyenne 0,0034, écart type 0,0005) ; réglée 0,0041 à 0,0052 (moyenne
+  0,0049, écart type 0,0004). Les plages se recouvrent à peine : gain réel
+  mais minuscule. La graine 42 est par hasard la meilleure des cinq pour la
+  version par défaut.
+- **Constats** : les meilleurs réglages sont au bord des grilles (10 voisines,
+  4 096 lignes par arbre) ; la grille n'est pas agrandie après coup, pour ne
+  pas chercher un bon score par chance sur la validation. LOF fait mieux avec
+  100 000 lignes qu'avec 50 000 pour les 4 nombres de voisines ; 200 000
+  dépasserait la limite de notation. Les durées varient du simple au double
+  avec la charge du PC (même réglage de LOF : 300 s dans la grille, 613 s
+  pendant la faisabilité).
+- **Vérification** : les réglages par défaut recalculés dans la grille
+  redonnent exactement les scores de l'essai de faisabilité (0 ligne
+  différente pour les trois méthodes).
+- **À compléter** : précision@k et rappel@k (étape 5), test (étape 7).
 - **Alternative écartée** : présenter seulement la version réglée, ce qui
   surestimerait la performance d'une approche « non supervisée ».
 
@@ -114,7 +141,9 @@ complétée quand l'étape correspondante aura produit ses chiffres.
 - **Version réglée** (section 5) : petites grilles sur la PR-AUC de
   validation, pour LOF (10, 20, 50 ou 100 voisines ; échantillon de 50 000
   ou 100 000 lignes, 200 000 dépasserait la limite de notation) et pour
-  l'autoencodeur (goulot de 4, 8 ou 12).
+  l'autoencodeur (goulot de 4, 8 ou 12). Résultat : la version réglée
+  choisit aussi LOF (PR-AUC 0,0444 contre 0,0151 pour le meilleur
+  autoencodeur), avec 10 voisines (section 5).
 - **Alternatives écartées** : One-Class SVM (son coût de calcul grandit très
   vite avec le nombre de lignes) ; DBSCAN (pas de score continu, seulement
   une étiquette « bruit »).

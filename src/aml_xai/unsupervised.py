@@ -34,6 +34,47 @@ def default_model(method: str, seed: int = SEED):
     raise ValueError(f"Méthode inconnue : {method}")
 
 
+# Version réglée (docs/CHOIX.md, sections 5 et 6) : petites grilles fixées
+# avant les mesures. Chacune contient les réglages par défaut.
+DEFAULT_SETTINGS = {
+    "isolation_forest": {"n_estimators": 100, "max_samples": 256, "max_features": 1.0},
+    "lof": {"n_neighbors": 20, "echantillon": SAMPLE_ROWS},
+    "autoencodeur": {"goulot": BOTTLENECK},
+}
+GRIDS = {
+    "isolation_forest": [
+        {"n_estimators": n, "max_samples": s, "max_features": f}
+        for n in (100, 300)
+        for s in (256, 1024, 4096)
+        for f in (0.5, 1.0)
+    ],
+    "lof": [{"n_neighbors": k, "echantillon": e} for k in (10, 20, 50, 100) for e in (50_000, 100_000)],
+    "autoencodeur": [{"goulot": g} for g in (4, 8, 12)],
+}
+# Contrôle : variation due au hasard d'Isolation Forest (sans effet sur les choix)
+CONTROL_SEEDS = [SEED, 1, 2, 3, 4]
+
+
+def model_from_settings(method: str, settings: dict, seed: int = SEED):
+    """Modèle d'un réglage de la grille."""
+    if method == "isolation_forest":
+        return IsolationForest(**settings, random_state=seed, n_jobs=-1)
+    if method == "lof":
+        return LocalOutlierFactor(n_neighbors=settings["n_neighbors"], novelty=True, n_jobs=-1)
+    if method == "autoencodeur":
+        return MLPRegressor(hidden_layer_sizes=(settings["goulot"],), random_state=seed)
+    raise ValueError(f"Méthode inconnue : {method}")
+
+
+def training_rows(method: str, n_rows: int, settings: dict) -> np.ndarray | None:
+    """Échantillon d'apprentissage (graine fixe), ou None pour tout l'entraînement."""
+    if method == "lof":
+        return sample_rows(n_rows, settings["echantillon"])
+    if method == "autoencodeur":
+        return sample_rows(n_rows)
+    return None
+
+
 def needs_sample(method: str) -> bool:
     return method in ("lof", "autoencodeur")
 

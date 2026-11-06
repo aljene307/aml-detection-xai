@@ -1,9 +1,20 @@
 """Séparation chronologique 60 / 20 / 20 et effectifs par période."""
 
+import json
+
 import numpy as np
 import pandas as pd
 
-from aml_xai.config import ACCOUNT_COLUMNS, TARGET, TIMESTAMP, TRAIN_FRAC, TYPOLOGY, VALID_FRAC
+from aml_xai.config import (
+    ACCOUNT_COLUMNS,
+    MEASURES_DIR,
+    PARQUET_PATH,
+    TARGET,
+    TIMESTAMP,
+    TRAIN_FRAC,
+    TYPOLOGY,
+    VALID_FRAC,
+)
 from aml_xai.data import train_cutoff
 
 PERIODS = ["entrainement", "validation", "test"]
@@ -66,3 +77,13 @@ def period_report(df: pd.DataFrame) -> dict:
         for typology, row in table.iterrows()
     }
     return report
+
+
+def model_periods() -> dict[str, pd.Timestamp]:
+    """Bornes des lignes des modèles : apprentissage à partir du jour retenu
+    (docs/CHOIX.md, section 20), fin de l'entraînement, fin de la validation."""
+    startup = json.loads((MEASURES_DIR / "demarrage.json").read_text(encoding="utf-8"))
+    timestamps = pd.read_parquet(PARQUET_PATH, columns=[TIMESTAMP])[TIMESTAMP]
+    train_end, valid_end = split_cutoffs(timestamps)
+    fit_start = timestamps.min() + pd.Timedelta(days=startup["decision"]["exclure_avant_jour"])
+    return {"debut": fit_start, "fin_entrainement": train_end, "fin_validation": valid_end}

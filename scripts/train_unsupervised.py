@@ -21,13 +21,12 @@ import time
 
 import joblib
 import numpy as np
-import pandas as pd
 from scipy.stats import skew
 
-from aml_xai.config import FREQUENCY_MAPS_PATH, MEASURES_DIR, MODELS_DIR, PARQUET_PATH, PROCESSED_DIR, TIMESTAMP
+from aml_xai.config import FREQUENCY_MAPS_PATH, MEASURES_DIR, MODELS_DIR, PROCESSED_DIR
 from aml_xai.matrix import LOG_FEATURES, build_matrix, load_matrix, period_columns, period_size, save_matrix
 from aml_xai.measure import available_ram_mb, measure, peak_memory_mb
-from aml_xai.split import split_cutoffs
+from aml_xai.split import model_periods
 from aml_xai.unsupervised import (
     METHODS,
     SAMPLE_ROWS,
@@ -54,14 +53,6 @@ MAX_MODEL_MB = 100
 STOP_FACTOR = 2
 
 
-def period_bounds() -> dict[str, pd.Timestamp]:
-    startup = json.loads((MEASURES_DIR / "demarrage.json").read_text(encoding="utf-8"))
-    timestamps = pd.read_parquet(PARQUET_PATH, columns=[TIMESTAMP])[TIMESTAMP]
-    train_end, valid_end = split_cutoffs(timestamps)
-    fit_start = timestamps.min() + pd.Timedelta(days=startup["decision"]["exclure_avant_jour"])
-    return {"debut": fit_start, "fin_entrainement": train_end, "fin_validation": valid_end}
-
-
 def with_raw_skewness(columns, out: dict):
     """Laisse passer les colonnes en notant l'asymétrie brute des variables à longue traîne."""
     for name, values in columns:
@@ -71,7 +62,7 @@ def with_raw_skewness(columns, out: dict):
 
 
 def case_matrix(r: dict) -> None:
-    bounds = period_bounds()
+    bounds = model_periods()
     maps = json.loads(FREQUENCY_MAPS_PATH.read_text(encoding="utf-8"))
     start, end = bounds["debut"], bounds["fin_entrainement"]
     raw_skew = {}

@@ -1,0 +1,99 @@
+{
+  "taux_validation": 0.001046,
+  "methodes": {
+    "autoencodeur": {
+      "sans_etiquette": {
+        "reglage": {
+          "goulot": 8
+        },
+        "pr_auc": 0.015149,
+        "roc_auc": 0.847283,
+        "duree_s": 2.6
+      },
+      "reglee": {
+        "reglage": {
+          "goulot": 8
+        },
+        "pr_auc": 0.015149,
+        "roc_auc": 0.847283,
+        "duree_s": 2.6
+      },
+      "ecart_pr_auc": 0.0,
+      "reglages_essayes": 3
+    },
+    "isolation_forest": {
+      "sans_etiquette": {
+        "reglage": {
+          "n_estimators": 100,
+          "max_samples": 256,
+          "max_features": 1.0
+        },
+        "pr_auc": 0.00418,
+        "roc_auc": 0.771117,
+        "duree_s": 18.1
+      },
+      "reglee": {
+        "reglage": {
+          "n_estimators": 100,
+          "max_samples": 4096,
+          "max_features": 0.5
+        },
+        "pr_auc": 0.005239,
+        "roc_auc": 0.807622,
+        "duree_s": 48.7
+      },
+      "ecart_pr_auc": 0.001059,
+      "reglages_essayes": 12
+    },
+    "lof": {
+      "sans_etiquette": {
+        "reglage": {
+          "n_neighbors": 20,
+          "echantillon": 100000
+        },
+        "pr_auc": 0.033047,
+        "roc_auc": 0.827636,
+        "duree_s": 299.9
+      },
+      "reglee": {
+        "reglage": {
+          "n_neighbors": 10,
+          "echantillon": 100000
+        },
+        "pr_auc": 0.044436,
+        "roc_auc": 0.833865,
+        "duree_s": 320.9
+      },
+      "ecart_pr_auc": 0.011389,
+      "reglages_essayes": 8
+    }
+  },
+  "graines_isolation_forest": {
+    "par_defaut": {
+      "pr_auc": [
+        0.00418,
+        0.003341,
+        0.002837,
+        0.002919,
+        0.003476
+      ],
+      "min": 0.002837,
+      "max": 0.00418,
+      "ecart_type": 0.00048
+    },
+    "reglee": {
+      "pr_auc": [
+        0.005239,
+        0.005078,
+        0.00501,
+        0.004137,
+        0.004795
+      ],
+      "min": 0.004137,
+      "max": 0.005239,
+      "ecart_type": 0.000385
+    }
+  },
+  "deuxieme_methode_sans_etiquette": "lof",
+  "deuxieme_methode_reglee": "lof"
+}

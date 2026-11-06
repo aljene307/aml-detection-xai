@@ -6,6 +6,10 @@ import pytest
 from aml_xai.features import model_feature_names
 from aml_xai.matrix import LOG_FEATURES, fit_transform_params, transform
 from aml_xai.unsupervised import (
+    DEFAULT_SETTINGS,
+    GRIDS,
+    model_from_settings,
+    training_rows,
     METHODS,
     anomaly_scores,
     default_model,
@@ -133,3 +137,38 @@ def test_column_by_column_build_matches_fit_then_transform():
         build_matrix(((c, df[c].to_numpy()) for c in df.columns[::-1]), len(df), params)
     with pytest.raises(ValueError):
         build_matrix(((c, df[c].to_numpy()) for c in df.columns[:-1]), len(df), params)
+
+
+def test_each_grid_contains_the_default_settings():
+    for method in METHODS:
+        assert DEFAULT_SETTINGS[method] in GRIDS[method]
+    assert [len(GRIDS[m]) for m in METHODS] == [12, 8, 3]
+
+
+@pytest.mark.parametrize("method", METHODS)
+def test_default_settings_give_the_default_model_scores(method, small_matrix):
+    settings = dict(DEFAULT_SETTINGS[method])
+    if method == "lof":
+        settings["echantillon"] = len(small_matrix)
+    rows = training_rows(method, len(small_matrix), settings)
+    data = small_matrix if rows is None else small_matrix[rows]
+    a = anomaly_scores(fit(default_model(method), data), small_matrix)
+    b = anomaly_scores(fit(model_from_settings(method, settings), data), small_matrix)
+    np.testing.assert_array_equal(a, b)
+
+
+def test_grid_resumes_after_the_last_written_setting(tmp_path, monkeypatch):
+    import importlib.util
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / "scripts" / "tune_unsupervised.py"
+    spec = importlib.util.spec_from_file_location("tune_unsupervised", path)
+    tune = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(tune)
+    monkeypatch.setattr(tune, "RESULTS_PATH", tmp_path / "grilles.jsonl")
+    assert tune.done_results() == {}
+    first = {"cle": tune.key("lof", {"n_neighbors": 10, "echantillon": 50_000}, 42), "pr_auc": 0.1}
+    tune.append_result(first)
+    tune.append_result({"cle": "autre", "pr_auc": 0.2})
+    assert tune.done_results() == {first["cle"]: first, "autre": {"cle": "autre", "pr_auc": 0.2}}
+    assert first["cle"] == "lof|n_neighbors=10|echantillon=50000|graine=42"
