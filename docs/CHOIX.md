@@ -112,7 +112,8 @@ complétée quand l'étape correspondante aura produit ses chiffres.
   |---|---|---|
   | Tout le jeu chargé, un seul morceau | 48 s | 3 291 Mo |
   | Tout le jeu chargé, découpé en 4 morceaux | 32 s | 2 242 Mo |
-  | **8 groupes de comptes lus un par un (retenu)** | 51 s | **1 368 Mo** |
+  | 2 groupes de comptes lus un par un | 28 s | 2 107 Mo |
+  | **8 groupes de comptes lus un par un (retenu)** | 47 s | **1 384 Mo** |
 
   Pour tenir dans environ 1,5 Go pendant que le navigateur reste ouvert, le
   calcul retenu ne lit que les lignes du groupe de comptes en cours (filtre à
@@ -120,7 +121,10 @@ complétée quand l'étape correspondante aura produit ses chiffres.
   la mémoire entre deux groupes. Les variables de la transaction sont
   calculées par lots d'un million de lignes, sur les seules colonnes utiles.
   **Résultat identique au calcul complet** : 0 ligne différente sur les
-  17 colonnes et les 9 504 852 lignes (`reports/mesures/morceaux_reel.json`).
+  17 colonnes et les 9 504 852 lignes (`reports/mesures/morceaux_reel.json`
+  dans le commit `b2fc38f`). Après le plafond (section 21), ce fichier contient
+  la comparaison du calcul en 2 groupes avec le calcul en 8 groupes : 0 ligne
+  différente sur les 20 colonnes.
 - **Alternative écartée** : échantillonnage aléatoire des lignes avant le
   calcul des variables.
 
