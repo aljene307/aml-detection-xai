@@ -792,3 +792,28 @@ mesures. Le test n'est pas lu.
     c'est le nombre limité de combinaisons de feuilles, pas un arrondi.
   - **Limite** : la version réglée est choisie sur la validation (section
     24) ; la version par défaut et la courbe ne le sont pas.
+
+## 26. Limite pour l'oral : l'écart entre LightGBM et LOF est peut-être surestimé
+
+- **Constat** : LightGBM fait environ 12 fois mieux que LOF sans étiquette
+  (section 25). Une partie de cet écart peut venir des **artefacts du
+  générateur** plutôt que d'un vrai comportement de blanchiment. Un modèle
+  supervisé apprend tout ce qui sépare les classes, artefacts compris ; une
+  méthode non supervisée ne cherche que ce qui est rare.
+- **Artefacts concernés** (section 17) :
+  - **plafond des montants** : aucune transaction normale au-dessus de
+    999 946,47 ; tous les cas `Over-Invoicing` au-dessus de 1,26 M.
+    `log_montant` permet à LightGBM d'apprendre ce seuil exact ; LOF ne voit
+    qu'un montant rare ;
+  - **rythme mensuel** : aucune variable « jour du mois » n'est donnée aux
+    modèles. LightGBM ne peut le capter qu'indirectement, par exemple à
+    travers les compteurs sur 30 jours ; l'effet attendu est donc plus faible
+    que pour le plafond ;
+  - **montants à nombreuses décimales** : aucune variable n'en est tirée ;
+    seul le montant arrondi entre dans les modèles.
+- **Vérification prévue à l'étape 5** : analyse par typologie. Pour chaque
+  typologie, rappel de LightGBM et de LOF au même budget d'alertes. Si
+  l'écart vient surtout d'`Over-Invoicing` (ou d'une typologie liée à un
+  artefact), on recalcule l'écart sans elle. Les cas `Over-Invoicing` sont
+  peu nombreux (10 dans le test, section 15) : leur poids dans la PR-AUC
+  globale sera mesuré, pas supposé.
