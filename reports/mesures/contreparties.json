@@ -1,0 +1,32 @@
+{
+  "lignes_entrainement": 5702911,
+  "lignes_echantillon_correlation": 1000000,
+  "variables": {
+    "em_nb_distincts_24h": {
+      "spearman_avec_compteur": 0.9097,
+      "lignes_ou_distinct_differe_pct": 45.58,
+      "moyenne_compteur": 25.45,
+      "moyenne_distincts": 4.16
+    },
+    "em_nb_distincts_30j": {
+      "spearman_avec_compteur": 0.9268,
+      "lignes_ou_distinct_differe_pct": 89.92,
+      "moyenne_compteur": 45.7,
+      "moyenne_distincts": 12.71
+    },
+    "re_nb_distincts_24h": {
+      "spearman_avec_compteur": 0.9741,
+      "lignes_ou_distinct_differe_pct": 44.46,
+      "moyenne_compteur": 21.28,
+      "moyenne_distincts": 3.37
+    },
+    "re_nb_distincts_30j": {
+      "spearman_avec_compteur": 0.8855,
+      "lignes_ou_distinct_differe_pct": 64.33,
+      "moyenne_compteur": 24.01,
+      "moyenne_distincts": 4.29
+    }
+  },
+  "duree_s": 1.19,
+  "pic_memoire_mo": 813
+}

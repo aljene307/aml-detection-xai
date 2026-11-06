@@ -1,0 +1,22 @@
+{
+  "lignes_comparees": 5702911,
+  "colonnes_comparees": 13,
+  "lignes_differentes_par_colonne": {
+    "em_nb_1h": 0,
+    "em_nb_24h": 0,
+    "em_ratio_montant_30j": 0,
+    "em_ecart_precedent_s": 0,
+    "em_sans_historique_30j": 0,
+    "em_nb_distincts_24h": 0,
+    "em_nb_distincts_30j": 0,
+    "re_nb_1h": 0,
+    "re_nb_24h": 0,
+    "re_ratio_montant_30j": 0,
+    "re_ecart_precedent_s": 0,
+    "re_sans_historique_30j": 0,
+    "re_nb_distincts_30j": 0
+  },
+  "toutes_identiques": true,
+  "duree_s": 19.45,
+  "pic_memoire_mo": 1068
+}

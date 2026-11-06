@@ -1,0 +1,40 @@
+{
+  "lignes_apprentissage": 4836832,
+  "debut_apprentissage": "2022-11-06 10:35:19",
+  "nb_valeurs": {
+    "Payment_currency": 13,
+    "Received_currency": 13,
+    "Sender_bank_location": 18,
+    "Receiver_bank_location": 18,
+    "Payment_type": 7
+  },
+  "lignes_valeur_inconnue": {
+    "freq_Payment_currency": {
+      "entrainement": 0,
+      "validation": 0,
+      "test": 0
+    },
+    "freq_Received_currency": {
+      "entrainement": 0,
+      "validation": 0,
+      "test": 0
+    },
+    "freq_Sender_bank_location": {
+      "entrainement": 0,
+      "validation": 0,
+      "test": 0
+    },
+    "freq_Receiver_bank_location": {
+      "entrainement": 0,
+      "validation": 0,
+      "test": 0
+    },
+    "freq_Payment_type": {
+      "entrainement": 0,
+      "validation": 0,
+      "test": 0
+    }
+  },
+  "duree_s": 1.53,
+  "pic_memoire_mo": 1208
+}

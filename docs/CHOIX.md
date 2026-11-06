@@ -104,8 +104,23 @@ complétée quand l'étape correspondante aura produit ses chiffres.
 - **Mesures** (étape 1, voir section 14) : trois variables par compte
   émetteur calculées sur les 9,5 M de lignes en 5 s, avec un pic de 1,8 Go.
   L'historique complet tient donc en mémoire sur le PC de travail : pas
-  d'échantillonnage nécessaire pour le calcul des variables. Pic avec toutes
-  les variables de l'étape 2 à mesurer.
+  d'échantillonnage nécessaire pour le calcul des variables.
+- **Mesures de l'étape 2** (`reports/mesures/variables.json`, 9,5 M de lignes,
+  toutes les variables) :
+
+  | Calcul | Durée | Pic mémoire |
+  |---|---|---|
+  | Tout le jeu chargé, un seul morceau | 48 s | 3 291 Mo |
+  | Tout le jeu chargé, découpé en 4 morceaux | 32 s | 2 242 Mo |
+  | **8 groupes de comptes lus un par un (retenu)** | 51 s | **1 368 Mo** |
+
+  Pour tenir dans environ 1,5 Go pendant que le navigateur reste ouvert, le
+  calcul retenu ne lit que les lignes du groupe de comptes en cours (filtre à
+  la lecture du Parquet sur les 3 derniers bits du numéro de compte) et libère
+  la mémoire entre deux groupes. Les variables de la transaction sont
+  calculées par lots d'un million de lignes, sur les seules colonnes utiles.
+  **Résultat identique au calcul complet** : 0 ligne différente sur les
+  17 colonnes et les 9 504 852 lignes (`reports/mesures/morceaux_reel.json`).
 - **Alternative écartée** : échantillonnage aléatoire des lignes avant le
   calcul des variables.
 
@@ -236,9 +251,10 @@ complétée quand l'étape correspondante aura produit ses chiffres.
   - Le contrôle des doublons atteint un pic de 3,1 Go : à ne pas relancer
     quand la RAM libre est faible.
 - **Conséquence** : le rappel par typologie sera instable pour les plus
-  petites typologies (environ 11 cas dans le test pour `Over-Invoicing` si
-  elle est répartie uniformément dans le temps, à vérifier à l'étape 2) ;
-  il sera présenté avec les effectifs.
+  petites typologies ; il sera présenté avec les effectifs. Vérification de
+  l'étape 2 (`reports/effectifs_periodes.json`) : `Over-Invoicing` compte
+  26 cas à l'entraînement, 18 à la validation et **10 au test** ; la plus
+  petite typologie suivante, `Bipartite`, en compte 43 au test.
 
 ## 16. Période utilisée par l'exploration
 
@@ -280,6 +296,15 @@ hypothèses pour le choix des variables, pas des résultats de modèle.
   Aucune raison métier évidente, donc probable effet du générateur.
   **Décision validée : pas de variable « jour du mois »**, car elle apprendrait
   le générateur plutôt qu'un comportement de blanchiment.
+- **Montants à nombreuses décimales** (constat de l'étape 2, validé) :
+  1 071 montants du jeu ont plus de deux décimales, par exemple
+  `10753.26726981541`. Sur la période d'entraînement, ces 660 lignes sont
+  **toutes du blanchiment** (11,5 % des cas), surtout `Layered_Fan_Out`,
+  `Cycle`, `Layered_Fan_In` et `Scatter-Gather`. C'est un **artefact du
+  générateur** : **aucune variable n'est tirée de la précision des montants**.
+  Dans les sommes de l'historique, les montants sont arrondis au centime, avec
+  un écart relatif d'au plus 2,3 millionièmes. À rappeler dans l'analyse par
+  typologie.
 - **Variables utiles attendues** : type de paiement (taux de 0,05 % à 0,61 %),
   pays et devise du destinataire, devises différentes (0,322 % contre 0,072 %).
 - **Redondance** : 99,95 % des transactions entre deux pays sont de type
@@ -299,13 +324,96 @@ hypothèses pour le choix des variables, pas des résultats de modèle.
   seules les transactions **strictement antérieures** comptent. Leur ordre dans
   le fichier est arbitraire ; compter l'une d'elles reviendrait à regarder une
   transaction simultanée.
-- **À décider à l'étape 2, avec mesures** :
-  - les compteurs (1 h, 24 h) incluent-ils la transaction actuelle ? Une même
-    règle pour toutes les variables ;
-  - moyenne des 30 derniers jours calculée sans la transaction actuelle ;
-  - traitement de la première transaction d'un compte (aucun historique) ;
-  - effet de démarrage : pendant le premier mois (depuis le 07/10/2022), aucun
-    compte n'a 30 jours d'historique. Mesurer son effet, puis signaler ou
-    exclure cette période de l'entraînement.
+- **Règle unique validée** : toute variable d'historique ne regarde que
+  `[t − fenêtre ; t[`, donc ce qui est strictement antérieur à la seconde de la
+  transaction. La transaction actuelle et ses ex æquo sont exclus partout, y
+  compris de la moyenne des 30 derniers jours.
+- **Historique vide, choix validé** : rapport au montant moyen = 1 (valeur
+  neutre) et indicateur « sans historique » = 1 quand la fenêtre de 30 jours est
+  vide. Le temps depuis la précédente vaut 365 jours (plus que toute la durée du
+  jeu) s'il n'existe aucune transaction antérieure ; un compte inactif depuis
+  plus de 30 jours garde son vrai écart.
 - **Si la mémoire ne suffit pas** : calcul par morceaux de comptes, chaque
   compte gardant tout son historique, et non échantillonnage.
+
+## 19. Codage des colonnes catégorielles
+
+- **Choix validé** : codage par fréquence, appris sur les lignes d'apprentissage
+  seulement, sans étiquettes, puis appliqué tel quel à la validation et au test.
+  Une valeur jamais vue à l'apprentissage reçoit la fréquence 0.
+- **Raison** : aucune étiquette n'est utilisée, et une valeur rare devient un
+  petit nombre, ce qui convient à la recherche d'anomalies.
+- **Limite** : deux valeurs de même fréquence deviennent presque identiques pour
+  le modèle.
+- **Contrôle** : la comparaison avec le codage one-hot utilise les étiquettes.
+  Elle ne sert donc que de contrôle, comme les réglages de la section 5. **La
+  version principale reste le codage par fréquence, quel que soit le résultat
+  de cette comparaison.**
+- **Alternatives écartées** : one-hot comme version principale (environ
+  69 colonnes de plus) ; codage par taux de blanchiment (utilise les étiquettes).
+
+## 20. Règles de décision fixées avant les mesures
+
+Ces deux règles ont été écrites avant de calculer les variables de l'étape 2.
+Aucune n'utilise les étiquettes.
+
+### Contreparties distinctes (24 h et 30 jours)
+
+Une contrepartie est l'autre compte de la transaction. Chaque variable candidate
+est gardée si les trois conditions sont vraies :
+
+1. le calcul complet avec les contreparties tient dans la RAM disponible, en
+   morceaux de comptes s'il le faut ;
+2. il ajoute moins de 5 minutes au calcul ;
+3. sa corrélation de Spearman (corrélation des rangs) avec le compteur de la même
+   fenêtre reste sous 0,95 en valeur absolue, sur la période d'entraînement. Au
+   delà, elle répéterait le compteur.
+
+### Effet de démarrage
+
+L'indice de stabilité de population (PSI) mesure l'écart entre deux distributions
+d'une même variable : 0 si elles sont identiques, et plus de 0,25 est le seuil
+usuel d'un changement fort.
+
+1. **Référence** : lignes d'entraînement à partir du 30e jour.
+2. **Tranches testées** : jours 0-7, 7-14, 14-21 et 21-30.
+3. **Témoins** : tranches de 7 jours prises dans la référence, comparées à la
+   référence. Elles donnent, pour chaque variable, la variation normale.
+4. **Mesure** : PSI de chaque variable d'historique, sur les déciles de la
+   référence, l'absence de valeur formant sa propre classe.
+5. **Décision** : une tranche est **différente** si au moins une variable a un
+   PSI supérieur à 0,25 **et** supérieur au plus grand PSI de ses témoins. Toutes
+   les lignes jusqu'à la fin de la dernière tranche différente sont **exclues de
+   l'apprentissage**, mais continuent de nourrir l'historique. Si aucune tranche
+   n'est différente, rien n'est exclu et l'indicateur « sans historique » suffit.
+6. **Sans retour en arrière** : une comparaison de la détection avec et sans ces
+   lignes pourra être affichée comme contrôle. Elle ne change pas la décision.
+
+### Résultats de l'application des deux règles
+
+**Contreparties** (`reports/mesures/contreparties.json`, entraînement,
+corrélation sur 1 M de lignes tirées au hasard). Le calcul avec les
+contreparties atteint un pic de 1 476 Mo et ajoute 5,5 s.
+
+| Variable | Spearman avec le compteur | Décision |
+|---|---|---|
+| `em_nb_distincts_24h` | 0,910 | gardée |
+| `em_nb_distincts_30j` | 0,927 | gardée |
+| `re_nb_distincts_24h` | 0,974 | **écartée** (répète le compteur) |
+| `re_nb_distincts_30j` | 0,886 | gardée |
+
+**Démarrage** (`reports/mesures/demarrage.json`) : les quatre tranches du
+premier mois sont différentes. Pour les tranches 0-7 et 7-14, plusieurs
+variables dépassent le seuil (par exemple `em_nb_distincts_30j` : PSI de 1,24
+puis 0,69). Jusqu'au jour 30, `re_ecart_precedent_s` le dépasse aussi (PSI de
+0,82 pour la tranche 21-30, contre 0,30 au plus pour les témoins).
+**Décision : les 30 premiers jours (avant le 06/11/2022 10:35:19, soit
+15,19 % des lignes d'entraînement) sont exclus de l'apprentissage.** Ces
+lignes continuent de nourrir l'historique. Les fréquences du codage sont
+apprises sur les 4 836 832 lignes restantes ; aucune valeur de la validation
+ou du test n'est inconnue.
+
+**Constat à garder pour l'étape 3** : même dans la référence, le temps depuis la
+transaction précédente du destinataire varie plus que les autres variables
+(PSI des témoins jusqu'à 0,30). Cette variable dépend aussi du temps écoulé
+depuis le début du jeu, car un écart ne peut pas remonter avant le 07/10/2022.

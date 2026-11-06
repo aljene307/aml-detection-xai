@@ -14,6 +14,10 @@ KAGGLE_HANDLE = "berkanoztas/synthetic-transaction-monitoring-dataset-aml"
 KAGGLE_DOWNLOAD_URL = f"https://www.kaggle.com/api/v1/datasets/download/{KAGGLE_HANDLE}"
 CSV_PATH = RAW_DIR / "SAML-D.csv"
 PARQUET_PATH = PROCESSED_DIR / "saml_d.parquet"
+FEATURES_PATH = PROCESSED_DIR / "features.parquet"
+CANDIDATES_PATH = PROCESSED_DIR / "features_candidats.parquet"
+MODELS_DIR = ROOT / "models"
+FREQUENCY_MAPS_PATH = MODELS_DIR / "frequences.json"
 EXPECTED_CSV_BYTES = 996_168_850
 EXPECTED_ROWS = 9_504_852
 

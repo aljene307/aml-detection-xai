@@ -56,9 +56,21 @@ def rate_by_week(df: pd.DataFrame) -> pd.DataFrame:
 
 def currency_differs(df: pd.DataFrame) -> pd.Series:
     """Vrai si la devise envoyée diffère de la devise reçue."""
-    sent = df["Payment_currency"].astype(str)
-    received = df["Received_currency"].astype(str)
-    return (sent != received).rename("devises_differentes")
+    # Comparaison des codes de catégorie : bien moins de mémoire que du texte
+    sent, received = shared_categories(df["Payment_currency"], df["Received_currency"])
+    differs = sent.cat.codes.to_numpy() != received.cat.codes.to_numpy()
+    return pd.Series(differs, index=df.index, name="devises_differentes")
+
+
+def shared_categories(a: pd.Series, b: pd.Series) -> tuple[pd.Series, pd.Series]:
+    """Les deux colonnes avec la même liste de catégories, dans le même ordre.
+
+    Un même code désigne alors la même valeur dans les deux colonnes, même si
+    leurs listes d'origine diffèrent (contenu ou ordre).
+    """
+    a, b = a.astype("category"), b.astype("category")
+    categories = pd.Index(sorted(set(a.cat.categories) | set(b.cat.categories)))
+    return a.cat.set_categories(categories), b.cat.set_categories(categories)
 
 
 def location_differs(df: pd.DataFrame) -> pd.Series:

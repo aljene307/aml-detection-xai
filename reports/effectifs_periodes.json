@@ -1,0 +1,128 @@
+{
+  "debut_validation": "2023-04-16 21:10:37",
+  "debut_test": "2023-06-19 22:08:52",
+  "periodes": {
+    "entrainement": {
+      "lignes": 5702911,
+      "cas": 5742,
+      "taux_pct": 0.1007,
+      "debut": "2022-10-07 10:35:19",
+      "fin": "2023-04-16 21:10:33",
+      "comptes_emetteurs": 203909,
+      "comptes_destinataires": 534635,
+      "lignes_emetteur_connu_entrainement_pct": 100.0,
+      "lignes_destinataire_connu_entrainement_pct": 100.0
+    },
+    "validation": {
+      "lignes": 1900970,
+      "cas": 1988,
+      "taux_pct": 0.1046,
+      "debut": "2023-04-16 21:10:37",
+      "fin": "2023-06-19 22:08:51",
+      "comptes_emetteurs": 114351,
+      "comptes_destinataires": 363452,
+      "lignes_emetteur_connu_entrainement_pct": 77.0,
+      "lignes_destinataire_connu_entrainement_pct": 72.33
+    },
+    "test": {
+      "lignes": 1900971,
+      "cas": 2143,
+      "taux_pct": 0.1127,
+      "debut": "2023-06-19 22:08:52",
+      "fin": "2023-08-23 10:57:12",
+      "comptes_emetteurs": 116109,
+      "comptes_destinataires": 363538,
+      "lignes_emetteur_connu_entrainement_pct": 77.28,
+      "lignes_destinataire_connu_entrainement_pct": 71.54
+    }
+  },
+  "cas_par_typologie": {
+    "Over-Invoicing": {
+      "entrainement": 26,
+      "validation": 18,
+      "test": 10
+    },
+    "Bipartite": {
+      "entrainement": 257,
+      "validation": 83,
+      "test": 43
+    },
+    "Single_large": {
+      "entrainement": 165,
+      "validation": 40,
+      "test": 45
+    },
+    "Cycle": {
+      "entrainement": 234,
+      "validation": 98,
+      "test": 50
+    },
+    "Fan_In": {
+      "entrainement": 187,
+      "validation": 113,
+      "test": 64
+    },
+    "Scatter-Gather": {
+      "entrainement": 190,
+      "validation": 73,
+      "test": 75
+    },
+    "Fan_Out": {
+      "entrainement": 92,
+      "validation": 69,
+      "test": 76
+    },
+    "Behavioural_Change_1": {
+      "entrainement": 207,
+      "validation": 97,
+      "test": 90
+    },
+    "Behavioural_Change_2": {
+      "entrainement": 176,
+      "validation": 75,
+      "test": 94
+    },
+    "Gather-Scatter": {
+      "entrainement": 215,
+      "validation": 39,
+      "test": 100
+    },
+    "Layered_Fan_Out": {
+      "entrainement": 349,
+      "validation": 73,
+      "test": 107
+    },
+    "Layered_Fan_In": {
+      "entrainement": 398,
+      "validation": 102,
+      "test": 156
+    },
+    "Stacked Bipartite": {
+      "entrainement": 240,
+      "validation": 100,
+      "test": 166
+    },
+    "Smurfing": {
+      "entrainement": 541,
+      "validation": 215,
+      "test": 176
+    },
+    "Deposit-Send": {
+      "entrainement": 562,
+      "validation": 174,
+      "test": 209
+    },
+    "Cash_Withdrawal": {
+      "entrainement": 778,
+      "validation": 282,
+      "test": 274
+    },
+    "Structuring": {
+      "entrainement": 1125,
+      "validation": 337,
+      "test": 408
+    }
+  },
+  "duree_s": 9.84,
+  "pic_memoire_mo": 1165
+}

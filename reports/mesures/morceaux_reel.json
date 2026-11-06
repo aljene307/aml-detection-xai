@@ -1,0 +1,25 @@
+{
+  "lignes_differentes_par_colonne": {
+    "transaction_id": 0,
+    "timestamp": 0,
+    "log_montant": 0,
+    "heure_sin": 0,
+    "heure_cos": 0,
+    "jour_semaine": 0,
+    "devises_differentes": 0,
+    "em_nb_1h": 0,
+    "em_nb_24h": 0,
+    "em_ratio_montant_30j": 0,
+    "em_ecart_precedent_s": 0,
+    "em_sans_historique_30j": 0,
+    "re_nb_1h": 0,
+    "re_nb_24h": 0,
+    "re_ratio_montant_30j": 0,
+    "re_ecart_precedent_s": 0,
+    "re_sans_historique_30j": 0
+  },
+  "lignes_comparees": 9504852,
+  "toutes_identiques": true,
+  "duree_s": 3.32,
+  "pic_memoire_mo": 591
+}
