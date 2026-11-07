@@ -96,7 +96,7 @@ def rank_text(share: float) -> str:
     """« parmi les 0,4 % les plus suspectes » (deux chiffres significatifs)."""
     percent = 100 * share
     digits = max(0, 1 - int(np.floor(np.log10(percent)))) if percent < 10 else 0
-    return f"parmi les {f'{percent:.{digits}f}'.replace('.', ',')} % les plus suspectes de la validation"
+    return f"parmi les {f'{percent:.{digits}f}'.replace('.', ',')} % les plus suspectes des transactions de validation"
 
 
 class Service:

@@ -108,8 +108,8 @@ def test_rank_follows_the_score(client):
     s = state["service"]
     low, high = s.rank("lof", 1.0), s.rank("lof", 3.0)
     assert 0 < high < low <= 1
-    assert rank_text(0.0023) == "parmi les 0,23 % les plus suspectes de la validation"
-    assert rank_text(0.32) == "parmi les 32 % les plus suspectes de la validation"
+    assert rank_text(0.0023) == "parmi les 0,23 % les plus suspectes des transactions de validation"
+    assert rank_text(0.32) == "parmi les 32 % les plus suspectes des transactions de validation"
 
 
 @pytest.mark.skipif(not FEATURES_PATH.exists(), reason="variables calculées absentes")
