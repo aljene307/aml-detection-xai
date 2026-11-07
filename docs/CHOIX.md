@@ -1015,3 +1015,109 @@ Règles écrites avant toute mesure de l'étape 6.
 - **Décision pour l'API (étape 8)** : TreeSHAP en direct pour LightGBM ;
   explications de LOF calculées à l'avance pour les exemples (KernelSHAP met
   plusieurs secondes par alerte sur le PC, davantage sur Render).
+
+## 29. Choix figés avant l'ouverture du test (étape 7)
+
+Cette section est commitée et poussée **avant** toute lecture des étiquettes,
+des scores ou des variables du test. L'historique Git prouve ainsi qu'aucun
+choix n'a changé après. Si une erreur était découverte après l'ouverture du
+test, elle serait corrigée visiblement, avec les deux résultats conservés et
+expliqués, jamais remplacée en silence.
+
+### Données
+
+- **Test** : transactions du 19/06/2023 22:08:52 au 23/08/2023 10:57:12
+  (1 900 971 lignes, `reports/effectifs_periodes.json`). Lu **une seule
+  fois**, par un seul script, qui écrit `reports/mesures/test.json`.
+- **Variables** : celles de `data/processed/features.parquet`, calculées sur
+  l'historique complet par la règle `[t − fenêtre ; t[` (section 18) ; codage
+  par fréquence (`models/frequences.json`) et transformation
+  (`models/transformation.json`) appris sur l'entraînement retenu, appliqués
+  tels quels au test. Aucun paramètre n'est réappris sur le test ni sur la
+  validation.
+
+### Modèles et réglages
+
+Tous appris sur l'entraînement retenu seulement (à partir du 06/11/2022,
+4 836 832 lignes), **sans réapprentissage sur entraînement + validation** :
+ce sont exactement les modèles évalués sur la validation.
+
+| Modèle | Réglage figé | Seuil retenu (score de validation) |
+|---|---|---|
+| Isolation Forest, sans étiquette | 100 arbres, 256 lignes par arbre, 100 % des variables, graine 42 | 0.6359087562758536 |
+| Isolation Forest, réglé | 100 arbres, 4 096 lignes par arbre, 50 % des variables, graine 42 | — (PR-AUC seulement) |
+| LOF, sans étiquette | 20 voisines, échantillon de 100 000 lignes (graine 42) | 1.5251219272613525 |
+| LOF, réglé | 10 voisines, échantillon de 100 000 lignes (graine 42) | 1.507451057434082 |
+| Autoencodeur | goulot de 8, échantillon de 100 000 lignes, graine 42 | — (PR-AUC seulement) |
+| LightGBM, par défaut | 100 arbres, 31 feuilles, vitesse 0,1, sans traitement du déséquilibre, graine 42 | -5.200432465566857 |
+| LightGBM, réglé | 63 feuilles, vitesse 0,05, **29 arbres**, sans traitement du déséquilibre, graine 42 | -5.034005813871007 |
+| Régression logistique (contrôle) | `max_iter=1000`, sans traitement | — (PR-AUC seulement) |
+
+- **Scores** : plus haut = plus suspect ; score brut (log-odds) pour
+  LightGBM, `decision_function` pour la régression logistique, score inversé
+  pour LOF et Isolation Forest, erreur de recopie pour l'autoencodeur.
+- **Une alerte** = une transaction dont le score atteint le seuil ci-dessus,
+  appliqué tel quel au test (il n'est pas recalculé).
+- **Contrôle avant d'ouvrir le test** : chaque modèle est réappris (ou relu)
+  et doit redonner **exactement** ses scores de validation, dont les
+  empreintes SHA-256 sont :
+
+  | Fichier de scores de validation (`data/processed/`) | SHA-256 |
+  |---|---|
+  | `scores_grilles/isolation_forest__n_estimators-100__max_samples-256__max_features-1.0__graine-42.npy` | `5c03b5b9b9fb91dc4dce541dde80a90213e82d57992b9767886fd33780e36b22` |
+  | `scores_grilles/isolation_forest__n_estimators-100__max_samples-4096__max_features-0.5__graine-42.npy` | `ce8970f1c7c0bf581485b3a964ebc8c7047bc091ccc276760858f61573df9eff` |
+  | `scores_grilles/lof__n_neighbors-20__echantillon-100000__graine-42.npy` | `36fe100569493a74cfabb3450043f1c0d1669697587bd220fa3bce3f2cd625cc` |
+  | `scores_grilles/lof__n_neighbors-10__echantillon-100000__graine-42.npy` | `c4bb2fdbe9932c301d60d15aa5381a33ad8c1d743d56d4f1ccebdd29d60ac2e8` |
+  | `scores_grilles/autoencodeur__goulot-8__graine-42.npy` | `21688cc6b1524bce80c08fe3fc0bd91a515a2529218b788285648836c0b2d860` |
+  | `scores_supervise/desequilibre__option-aucun__graine-42.npy` | `bcb2ac5700db468e8ca7a5236b75e2445863fdf75dd279fdea319768f1624d02` |
+  | `scores_supervise/grille__option-aucun__num_leaves-63__learning_rate-0.05.npy` | `b134b25d8d4666f4e043c974cbc9c40a0f4e34e7636a757d64bfdd2f4606a470` |
+  | `scores_supervise/logistique__option-aucun.npy` | `48d3f2a704310b2ba97b7140787d3a0235c6bc3fb6bcee7ee4b0ee250abebed7` |
+
+  Matrices : `matrice_entrainement.npy`
+  `298000e532c51f684ccf048eae40f9d1a0bd1e7477a3b604f1015ca78fcf6997`,
+  `matrice_validation.npy`
+  `bbdc59e74280b55a48f1acfd535a76b076e7258ef43157fabac0d88baf7a5700`.
+
+### Fichiers de configuration figés
+
+| Fichier | SHA-256 |
+|---|---|
+| `config/hypotheses.json` | `6ec83b91f1b3ec4ab48bf759fb9f548bed03d13f2c112e94c82cd61998c79219` |
+| `config/codes_motifs.json` | `49f13bd62c486c160af1421a4fc7443d5e8c31cffa283031a67b982c85256db6` |
+| `models/frequences.json` | `7342314390547a5e9962efc436a4ecf1f248de22ecba3d296c5386e939a553bb` |
+| `models/transformation.json` | `63bbada1066dc83d1b85829a8495ba2f0c02a5317a939c4796353f5f2624c6d9` |
+| `models/valeurs_habituelles.json` | `30c9a18193cf65e5e86b12a3b939d2f00263ecc8302a4ed964d15b6ef9ecd8f7` |
+
+- **Hypothèses de coût** : 5 analystes, 7 h par jour, 15 min par alerte,
+  30 £ de l'heure ; 140 alertes par jour ; 7,50 £ par alerte. Coût = somme
+  des montants des blanchiments non détectés + nombre d'alertes × 7,50 £
+  (section 9). Capacité du test = 140 × durée du test en jours.
+- **Codes motifs** : les 13 codes de `config/codes_motifs.json`, au plus 3
+  par alerte, seulement de contribution positive ; phrases avec la valeur
+  habituelle de `models/valeurs_habituelles.json` (section 28).
+
+### Mesures à calculer sur le test
+
+1. **Pour les huit modèles** : PR-AUC, ROC-AUC, rapport au hasard (taux de
+   blanchiment du test).
+2. **Pour les cinq modèles à seuil**, au seuil figé : alertes par jour
+   (comparées aux 140 de la capacité), précision, rappel, F2, MCC, coût
+   total, coût sans `Over-Invoicing`, part du montant détecté ; en
+   complément, les 140 premières transactions de chaque jour. À titre
+   d'information seulement : le seuil qui aurait été de coût minimal sous la
+   capacité sur le test, pour mesurer l'écart avec le seuil figé.
+3. **Écart validation → test** pour chaque mesure, et pour la PR-AUC
+   l'intervalle à 95 % d'un bootstrap par comptes émetteurs (200 tirages,
+   graine 42), pour dire si la baisse dépasse le hasard.
+4. **Typologies** : rappel par typologie au seuil figé, avec l'intervalle de
+   Wilson ; fausses alertes par type normal.
+5. **Nouveauté** : part des alertes et précision pour les émetteurs et
+   destinataires sans historique sur 30 jours ou jamais vus en entraînement.
+6. **Artefacts** : rapport des PR-AUC LightGBM par défaut / LOF sans
+   étiquette, avec et sans `Over-Invoicing` et montants à nombreuses
+   décimales.
+7. **Explications**, mêmes règles qu'en section 28 : additivité ; test de
+   suppression (règle à 90 %, verdict) et second test d'information ;
+   TreeSHAP sur les alertes de LightGBM réglé (suppression sur 500 tirées au
+   hasard, graine 42), KernelSHAP sur 100 alertes de LOF sans étiquette
+   (graine 42).
