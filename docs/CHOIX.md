@@ -1207,9 +1207,9 @@ configuration et matrices identiques aux empreintes figées.
   | LightGBM, réglé | 143,5 | 0,160 | 0,692 | 0,416 | 0,331 | 39,1 M£ | 7,9 M£ |
 
   - **Léger dépassement de la capacité** : les seuils figés donnent de 140,2
-    à 143,5 alertes par jour ; 4 modèles sur 5 dépassent un peu la capacité,
-    jusqu'à +2,5 % pour LightGBM réglé (9 259 alertes pour 9 035 possibles,
-    environ 3 alertes de trop par jour). Un seuil fixé sur une valeur de
+    à 143,5 alertes par jour : les 5 modèles dépassent un peu la capacité
+    (de 9 046 à 9 259 alertes pour 9 035 possibles), jusqu'à +2,5 % pour
+    LightGBM réglé (environ 3 alertes de trop par jour). Un seuil fixé sur une valeur de
     score suit la dérive des scores dans le temps.
   - **Le coût reste dominé par `Over-Invoicing`** : environ 68 % du montant
     blanchi du test (environ 53 M£ sur 79 M£) pour 10 cas. LOF en trouve 8,
@@ -1223,7 +1223,7 @@ configuration et matrices identiques aux empreintes figées.
     test d'information 88,2 % et 80 %.
 - **Attentes écrites avant l'ouverture** (section 29) :
   1. versions réglées en baisse : **en partie** (LightGBM réglé −0,009, LOF
-     réglé +0,0014), sans écart au-delà du hasard ;
+     réglé +0,0013), sans écart au-delà du hasard ;
   2. versions non réglées plus stables : **non vérifiable**, tous les écarts
      restent dans le bruit ; l'optimisme attendu de la validation ne se voit
      pas, les grilles étant petites ;
