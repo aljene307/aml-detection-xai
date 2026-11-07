@@ -1,0 +1,1220 @@
+{
+  "periode": "test",
+  "correction": null,
+  "configuration_identique": true,
+  "matrices_identiques": true,
+  "debut": "2023-06-19 22:08:52",
+  "fin_exclue": "2023-08-23 10:57:13",
+  "jours": 64.53,
+  "lignes": 1900971,
+  "cas": 2143,
+  "taux": 0.001127,
+  "capacite_alertes": 9034.7,
+  "modeles": {
+    "Isolation Forest, sans étiquette": {
+      "pr_auc": 0.00429,
+      "pr_auc_intervalle_95": [
+        0.003725,
+        0.00493
+      ],
+      "roc_auc": 0.774159,
+      "fois_le_hasard": 3.8,
+      "seuil": {
+        "alertes": 9090,
+        "alertes_par_jour": 140.9,
+        "vp": 55,
+        "fp": 9035,
+        "fn": 2088,
+        "vn": 1889793,
+        "precision": 0.006051,
+        "rappel": 0.025665,
+        "f2": 0.01557,
+        "mcc": 0.01017,
+        "cout_total": 77556646.71,
+        "cout_sans_over_invoicing": 24343402.83,
+        "part_montant_detecte": 0.0164,
+        "k_premieres_par_jour": {
+          "vp": 54,
+          "fp": 9186,
+          "fn": 2089,
+          "vn": 1889642,
+          "precision": 0.005844,
+          "rappel": 0.025198,
+          "f2": 0.015158,
+          "mcc": 0.009824
+        },
+        "information_seuil_cout_minimal_sur_la_periode": {
+          "alertes_par_jour": 138.0,
+          "cout_total": 77555244.21
+        },
+        "typologies": {
+          "Behavioural_Change_1": {
+            "cas": 90,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.0409
+          },
+          "Behavioural_Change_2": {
+            "cas": 94,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.0393
+          },
+          "Bipartite": {
+            "cas": 43,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.082
+          },
+          "Gather-Scatter": {
+            "cas": 100,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.037
+          },
+          "Stacked Bipartite": {
+            "cas": 166,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.0226
+          },
+          "Smurfing": {
+            "cas": 176,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.0214
+          },
+          "Over-Invoicing": {
+            "cas": 10,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": -0.0,
+            "ic_haut": 0.2775
+          },
+          "Layered_Fan_Out": {
+            "cas": 107,
+            "detectes": 1,
+            "rappel": 0.0093,
+            "ic_bas": 0.0017,
+            "ic_haut": 0.0511
+          },
+          "Cash_Withdrawal": {
+            "cas": 274,
+            "detectes": 3,
+            "rappel": 0.0109,
+            "ic_bas": 0.0037,
+            "ic_haut": 0.0317
+          },
+          "Fan_Out": {
+            "cas": 76,
+            "detectes": 1,
+            "rappel": 0.0132,
+            "ic_bas": 0.0023,
+            "ic_haut": 0.0708
+          },
+          "Scatter-Gather": {
+            "cas": 75,
+            "detectes": 1,
+            "rappel": 0.0133,
+            "ic_bas": 0.0024,
+            "ic_haut": 0.0717
+          },
+          "Layered_Fan_In": {
+            "cas": 156,
+            "detectes": 3,
+            "rappel": 0.0192,
+            "ic_bas": 0.0066,
+            "ic_haut": 0.055
+          },
+          "Fan_In": {
+            "cas": 64,
+            "detectes": 2,
+            "rappel": 0.0312,
+            "ic_bas": 0.0086,
+            "ic_haut": 0.107
+          },
+          "Deposit-Send": {
+            "cas": 209,
+            "detectes": 8,
+            "rappel": 0.0383,
+            "ic_bas": 0.0195,
+            "ic_haut": 0.0737
+          },
+          "Single_large": {
+            "cas": 45,
+            "detectes": 2,
+            "rappel": 0.0444,
+            "ic_bas": 0.0123,
+            "ic_haut": 0.1483
+          },
+          "Structuring": {
+            "cas": 408,
+            "detectes": 25,
+            "rappel": 0.0613,
+            "ic_bas": 0.0418,
+            "ic_haut": 0.0889
+          },
+          "Cycle": {
+            "cas": 50,
+            "detectes": 9,
+            "rappel": 0.18,
+            "ic_bas": 0.0977,
+            "ic_haut": 0.308
+          }
+        },
+        "fausses_alertes_par_type": {
+          "Normal_Fan_In": 0.4779,
+          "Normal_Plus_Mutual": 0.1901,
+          "Normal_Fan_Out": 0.1708,
+          "Normal_Mutual": 0.086,
+          "Normal_Foward": 0.0356,
+          "Normal_Small_Fan_Out": 0.0218
+        },
+        "nouveaute": {
+          "emetteur_sans_historique_30j": {
+            "part_transactions": 0.055,
+            "part_alertes": 0.6462,
+            "precision_dans_groupe": 0.0049,
+            "precision_hors_groupe": 0.0081,
+            "taux_blanchiment_groupe": 0.0038
+          },
+          "emetteur_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2272,
+            "part_alertes": 0.581,
+            "precision_dans_groupe": 0.0,
+            "precision_hors_groupe": 0.0144,
+            "taux_blanchiment_groupe": 0.0001
+          },
+          "destinataire_sans_historique_30j": {
+            "part_transactions": 0.1601,
+            "part_alertes": 0.2912,
+            "precision_dans_groupe": 0.006,
+            "precision_hors_groupe": 0.0061,
+            "taux_blanchiment_groupe": 0.0014
+          },
+          "destinataire_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2846,
+            "part_alertes": 0.2411,
+            "precision_dans_groupe": 0.0014,
+            "precision_hors_groupe": 0.0075,
+            "taux_blanchiment_groupe": 0.0005
+          }
+        }
+      }
+    },
+    "Isolation Forest, réglé": {
+      "pr_auc": 0.005694,
+      "pr_auc_intervalle_95": [
+        0.00497,
+        0.006574
+      ],
+      "roc_auc": 0.811823,
+      "fois_le_hasard": 5.1
+    },
+    "LOF, sans étiquette": {
+      "pr_auc": 0.03484,
+      "pr_auc_intervalle_95": [
+        0.029877,
+        0.040873
+      ],
+      "roc_auc": 0.833732,
+      "fois_le_hasard": 30.9,
+      "seuil": {
+        "alertes": 9173,
+        "alertes_par_jour": 142.1,
+        "vp": 665,
+        "fp": 8508,
+        "fn": 1478,
+        "vn": 1890320,
+        "precision": 0.072495,
+        "rappel": 0.310313,
+        "f2": 0.187377,
+        "mcc": 0.148096,
+        "cout_total": 29039878.14,
+        "cout_sans_over_invoicing": 13487297.9,
+        "part_montant_detecte": 0.6323,
+        "k_premieres_par_jour": {
+          "vp": 659,
+          "fp": 8581,
+          "fn": 1484,
+          "vn": 1890247,
+          "precision": 0.07132,
+          "rappel": 0.307513,
+          "f2": 0.184988,
+          "mcc": 0.146191
+        },
+        "information_seuil_cout_minimal_sur_la_periode": {
+          "alertes_par_jour": 139.8,
+          "cout_total": 29043014.62
+        },
+        "typologies": {
+          "Behavioural_Change_1": {
+            "cas": 90,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.0409
+          },
+          "Behavioural_Change_2": {
+            "cas": 94,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.0393
+          },
+          "Fan_Out": {
+            "cas": 76,
+            "detectes": 9,
+            "rappel": 0.1184,
+            "ic_bas": 0.0636,
+            "ic_haut": 0.21
+          },
+          "Gather-Scatter": {
+            "cas": 100,
+            "detectes": 23,
+            "rappel": 0.23,
+            "ic_bas": 0.1584,
+            "ic_haut": 0.3215
+          },
+          "Layered_Fan_Out": {
+            "cas": 107,
+            "detectes": 25,
+            "rappel": 0.2336,
+            "ic_bas": 0.1636,
+            "ic_haut": 0.3222
+          },
+          "Stacked Bipartite": {
+            "cas": 166,
+            "detectes": 45,
+            "rappel": 0.2711,
+            "ic_bas": 0.2092,
+            "ic_haut": 0.3433
+          },
+          "Bipartite": {
+            "cas": 43,
+            "detectes": 12,
+            "rappel": 0.2791,
+            "ic_bas": 0.1675,
+            "ic_haut": 0.4269
+          },
+          "Scatter-Gather": {
+            "cas": 75,
+            "detectes": 21,
+            "rappel": 0.28,
+            "ic_bas": 0.191,
+            "ic_haut": 0.3904
+          },
+          "Layered_Fan_In": {
+            "cas": 156,
+            "detectes": 44,
+            "rappel": 0.2821,
+            "ic_bas": 0.2173,
+            "ic_haut": 0.3572
+          },
+          "Cycle": {
+            "cas": 50,
+            "detectes": 15,
+            "rappel": 0.3,
+            "ic_bas": 0.191,
+            "ic_haut": 0.4375
+          },
+          "Structuring": {
+            "cas": 408,
+            "detectes": 129,
+            "rappel": 0.3162,
+            "ic_bas": 0.273,
+            "ic_haut": 0.3628
+          },
+          "Fan_In": {
+            "cas": 64,
+            "detectes": 23,
+            "rappel": 0.3594,
+            "ic_bas": 0.2529,
+            "ic_haut": 0.4818
+          },
+          "Deposit-Send": {
+            "cas": 209,
+            "detectes": 80,
+            "rappel": 0.3828,
+            "ic_bas": 0.3196,
+            "ic_haut": 0.4502
+          },
+          "Smurfing": {
+            "cas": 176,
+            "detectes": 73,
+            "rappel": 0.4148,
+            "ic_bas": 0.3446,
+            "ic_haut": 0.4886
+          },
+          "Cash_Withdrawal": {
+            "cas": 274,
+            "detectes": 129,
+            "rappel": 0.4708,
+            "ic_bas": 0.4125,
+            "ic_haut": 0.5299
+          },
+          "Single_large": {
+            "cas": 45,
+            "detectes": 29,
+            "rappel": 0.6444,
+            "ic_bas": 0.4984,
+            "ic_haut": 0.7678
+          },
+          "Over-Invoicing": {
+            "cas": 10,
+            "detectes": 8,
+            "rappel": 0.8,
+            "ic_bas": 0.4902,
+            "ic_haut": 0.9433
+          }
+        },
+        "fausses_alertes_par_type": {
+          "Normal_Small_Fan_Out": 0.374,
+          "Normal_Fan_In": 0.1261,
+          "Normal_Plus_Mutual": 0.1079,
+          "Normal_Fan_Out": 0.0919,
+          "Normal_Cash_Deposits": 0.0893,
+          "Normal_Cash_Withdrawal": 0.0664
+        },
+        "nouveaute": {
+          "emetteur_sans_historique_30j": {
+            "part_transactions": 0.055,
+            "part_alertes": 0.1484,
+            "precision_dans_groupe": 0.0235,
+            "precision_hors_groupe": 0.081,
+            "taux_blanchiment_groupe": 0.0038
+          },
+          "emetteur_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2272,
+            "part_alertes": 0.1523,
+            "precision_dans_groupe": 0.0057,
+            "precision_hors_groupe": 0.0845,
+            "taux_blanchiment_groupe": 0.0001
+          },
+          "destinataire_sans_historique_30j": {
+            "part_transactions": 0.1601,
+            "part_alertes": 0.2363,
+            "precision_dans_groupe": 0.0235,
+            "precision_hors_groupe": 0.0877,
+            "taux_blanchiment_groupe": 0.0014
+          },
+          "destinataire_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2846,
+            "part_alertes": 0.1794,
+            "precision_dans_groupe": 0.0109,
+            "precision_hors_groupe": 0.086,
+            "taux_blanchiment_groupe": 0.0005
+          }
+        }
+      }
+    },
+    "LOF, réglé": {
+      "pr_auc": 0.045758,
+      "pr_auc_intervalle_95": [
+        0.038935,
+        0.053934
+      ],
+      "roc_auc": 0.83416,
+      "fois_le_hasard": 40.6,
+      "seuil": {
+        "alertes": 9174,
+        "alertes_par_jour": 142.2,
+        "vp": 741,
+        "fp": 8433,
+        "fn": 1402,
+        "vn": 1890395,
+        "precision": 0.080772,
+        "rappel": 0.345777,
+        "f2": 0.208779,
+        "mcc": 0.16528,
+        "cout_total": 28220085.38,
+        "cout_sans_over_invoicing": 12667505.14,
+        "part_montant_detecte": 0.6427,
+        "k_premieres_par_jour": {
+          "vp": 741,
+          "fp": 8499,
+          "fn": 1402,
+          "vn": 1890329,
+          "precision": 0.080195,
+          "rappel": 0.345777,
+          "f2": 0.208006,
+          "mcc": 0.164674
+        },
+        "information_seuil_cout_minimal_sur_la_periode": {
+          "alertes_par_jour": 139.8,
+          "cout_total": 28258555.11
+        },
+        "typologies": {
+          "Behavioural_Change_1": {
+            "cas": 90,
+            "detectes": 0,
+            "rappel": 0.0,
+            "ic_bas": 0.0,
+            "ic_haut": 0.0409
+          },
+          "Behavioural_Change_2": {
+            "cas": 94,
+            "detectes": 1,
+            "rappel": 0.0106,
+            "ic_bas": 0.0019,
+            "ic_haut": 0.0578
+          },
+          "Fan_Out": {
+            "cas": 76,
+            "detectes": 9,
+            "rappel": 0.1184,
+            "ic_bas": 0.0636,
+            "ic_haut": 0.21
+          },
+          "Gather-Scatter": {
+            "cas": 100,
+            "detectes": 25,
+            "rappel": 0.25,
+            "ic_bas": 0.1755,
+            "ic_haut": 0.343
+          },
+          "Bipartite": {
+            "cas": 43,
+            "detectes": 11,
+            "rappel": 0.2558,
+            "ic_bas": 0.1493,
+            "ic_haut": 0.4024
+          },
+          "Cycle": {
+            "cas": 50,
+            "detectes": 13,
+            "rappel": 0.26,
+            "ic_bas": 0.1587,
+            "ic_haut": 0.3955
+          },
+          "Layered_Fan_Out": {
+            "cas": 107,
+            "detectes": 28,
+            "rappel": 0.2617,
+            "ic_bas": 0.1877,
+            "ic_haut": 0.3522
+          },
+          "Scatter-Gather": {
+            "cas": 75,
+            "detectes": 21,
+            "rappel": 0.28,
+            "ic_bas": 0.191,
+            "ic_haut": 0.3904
+          },
+          "Stacked Bipartite": {
+            "cas": 166,
+            "detectes": 51,
+            "rappel": 0.3072,
+            "ic_bas": 0.2421,
+            "ic_haut": 0.3811
+          },
+          "Layered_Fan_In": {
+            "cas": 156,
+            "detectes": 51,
+            "rappel": 0.3269,
+            "ic_bas": 0.2582,
+            "ic_haut": 0.4039
+          },
+          "Structuring": {
+            "cas": 408,
+            "detectes": 153,
+            "rappel": 0.375,
+            "ic_bas": 0.3294,
+            "ic_haut": 0.4229
+          },
+          "Fan_In": {
+            "cas": 64,
+            "detectes": 27,
+            "rappel": 0.4219,
+            "ic_bas": 0.3087,
+            "ic_haut": 0.5439
+          },
+          "Deposit-Send": {
+            "cas": 209,
+            "detectes": 90,
+            "rappel": 0.4306,
+            "ic_bas": 0.3653,
+            "ic_haut": 0.4984
+          },
+          "Smurfing": {
+            "cas": 176,
+            "detectes": 78,
+            "rappel": 0.4432,
+            "ic_bas": 0.3718,
+            "ic_haut": 0.517
+          },
+          "Cash_Withdrawal": {
+            "cas": 274,
+            "detectes": 145,
+            "rappel": 0.5292,
+            "ic_bas": 0.4701,
+            "ic_haut": 0.5875
+          },
+          "Single_large": {
+            "cas": 45,
+            "detectes": 30,
+            "rappel": 0.6667,
+            "ic_bas": 0.5207,
+            "ic_haut": 0.7864
+          },
+          "Over-Invoicing": {
+            "cas": 10,
+            "detectes": 8,
+            "rappel": 0.8,
+            "ic_bas": 0.4902,
+            "ic_haut": 0.9433
+          }
+        },
+        "fausses_alertes_par_type": {
+          "Normal_Small_Fan_Out": 0.3805,
+          "Normal_Plus_Mutual": 0.1215,
+          "Normal_Fan_Out": 0.1,
+          "Normal_Fan_In": 0.0864,
+          "Normal_Cash_Withdrawal": 0.0862,
+          "Normal_Cash_Deposits": 0.0698
+        },
+        "nouveaute": {
+          "emetteur_sans_historique_30j": {
+            "part_transactions": 0.055,
+            "part_alertes": 0.1281,
+            "precision_dans_groupe": 0.0298,
+            "precision_hors_groupe": 0.0883,
+            "taux_blanchiment_groupe": 0.0038
+          },
+          "emetteur_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2272,
+            "part_alertes": 0.1165,
+            "precision_dans_groupe": 0.0103,
+            "precision_hors_groupe": 0.0901,
+            "taux_blanchiment_groupe": 0.0001
+          },
+          "destinataire_sans_historique_30j": {
+            "part_transactions": 0.1601,
+            "part_alertes": 0.256,
+            "precision_dans_groupe": 0.0251,
+            "precision_hors_groupe": 0.0999,
+            "taux_blanchiment_groupe": 0.0014
+          },
+          "destinataire_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2846,
+            "part_alertes": 0.1911,
+            "precision_dans_groupe": 0.0137,
+            "precision_hors_groupe": 0.0966,
+            "taux_blanchiment_groupe": 0.0005
+          }
+        }
+      }
+    },
+    "Autoencodeur": {
+      "pr_auc": 0.013302,
+      "pr_auc_intervalle_95": [
+        0.010391,
+        0.01665
+      ],
+      "roc_auc": 0.844493,
+      "fois_le_hasard": 11.8
+    },
+    "LightGBM, par défaut": {
+      "pr_auc": 0.40575,
+      "pr_auc_intervalle_95": [
+        0.369863,
+        0.441427
+      ],
+      "roc_auc": 0.910186,
+      "fois_le_hasard": 359.9,
+      "seuil": {
+        "alertes": 9046,
+        "alertes_par_jour": 140.2,
+        "vp": 1244,
+        "fp": 7802,
+        "fn": 899,
+        "vn": 1891026,
+        "precision": 0.137519,
+        "rappel": 0.580495,
+        "f2": 0.353048,
+        "mcc": 0.281052,
+        "cout_total": 35010185.19,
+        "cout_sans_over_invoicing": 9915845.95,
+        "part_montant_detecte": 0.5565,
+        "k_premieres_par_jour": {
+          "vp": 1241,
+          "fp": 7999,
+          "fn": 902,
+          "vn": 1890829,
+          "precision": 0.134307,
+          "rappel": 0.579095,
+          "f2": 0.348361,
+          "mcc": 0.277375
+        },
+        "information_seuil_cout_minimal_sur_la_periode": {
+          "alertes_par_jour": 134.2,
+          "cout_total": 35034781.16
+        },
+        "typologies": {
+          "Behavioural_Change_1": {
+            "cas": 90,
+            "detectes": 19,
+            "rappel": 0.2111,
+            "ic_bas": 0.1395,
+            "ic_haut": 0.3063
+          },
+          "Behavioural_Change_2": {
+            "cas": 94,
+            "detectes": 23,
+            "rappel": 0.2447,
+            "ic_bas": 0.1689,
+            "ic_haut": 0.3405
+          },
+          "Fan_Out": {
+            "cas": 76,
+            "detectes": 29,
+            "rappel": 0.3816,
+            "ic_bas": 0.2806,
+            "ic_haut": 0.494
+          },
+          "Layered_Fan_Out": {
+            "cas": 107,
+            "detectes": 43,
+            "rappel": 0.4019,
+            "ic_bas": 0.3139,
+            "ic_haut": 0.4966
+          },
+          "Gather-Scatter": {
+            "cas": 100,
+            "detectes": 42,
+            "rappel": 0.42,
+            "ic_bas": 0.328,
+            "ic_haut": 0.5179
+          },
+          "Fan_In": {
+            "cas": 64,
+            "detectes": 28,
+            "rappel": 0.4375,
+            "ic_bas": 0.3229,
+            "ic_haut": 0.5591
+          },
+          "Cycle": {
+            "cas": 50,
+            "detectes": 23,
+            "rappel": 0.46,
+            "ic_bas": 0.3297,
+            "ic_haut": 0.596
+          },
+          "Layered_Fan_In": {
+            "cas": 156,
+            "detectes": 86,
+            "rappel": 0.5513,
+            "ic_bas": 0.4729,
+            "ic_haut": 0.6272
+          },
+          "Stacked Bipartite": {
+            "cas": 166,
+            "detectes": 93,
+            "rappel": 0.5602,
+            "ic_bas": 0.4842,
+            "ic_haut": 0.6335
+          },
+          "Bipartite": {
+            "cas": 43,
+            "detectes": 25,
+            "rappel": 0.5814,
+            "ic_bas": 0.4333,
+            "ic_haut": 0.7162
+          },
+          "Over-Invoicing": {
+            "cas": 10,
+            "detectes": 6,
+            "rappel": 0.6,
+            "ic_bas": 0.3127,
+            "ic_haut": 0.8318
+          },
+          "Scatter-Gather": {
+            "cas": 75,
+            "detectes": 45,
+            "rappel": 0.6,
+            "ic_bas": 0.4869,
+            "ic_haut": 0.7034
+          },
+          "Deposit-Send": {
+            "cas": 209,
+            "detectes": 129,
+            "rappel": 0.6172,
+            "ic_bas": 0.5498,
+            "ic_haut": 0.6804
+          },
+          "Single_large": {
+            "cas": 45,
+            "detectes": 30,
+            "rappel": 0.6667,
+            "ic_bas": 0.5207,
+            "ic_haut": 0.7864
+          },
+          "Cash_Withdrawal": {
+            "cas": 274,
+            "detectes": 193,
+            "rappel": 0.7044,
+            "ic_bas": 0.6478,
+            "ic_haut": 0.7553
+          },
+          "Structuring": {
+            "cas": 408,
+            "detectes": 293,
+            "rappel": 0.7181,
+            "ic_bas": 0.6726,
+            "ic_haut": 0.7596
+          },
+          "Smurfing": {
+            "cas": 176,
+            "detectes": 137,
+            "rappel": 0.7784,
+            "ic_bas": 0.7115,
+            "ic_haut": 0.8335
+          }
+        },
+        "fausses_alertes_par_type": {
+          "Normal_Small_Fan_Out": 0.2012,
+          "Normal_Plus_Mutual": 0.1698,
+          "Normal_Fan_In": 0.135,
+          "Normal_Mutual": 0.1114,
+          "Normal_Cash_Deposits": 0.1048,
+          "Normal_Foward": 0.0909
+        },
+        "nouveaute": {
+          "emetteur_sans_historique_30j": {
+            "part_transactions": 0.055,
+            "part_alertes": 0.3131,
+            "precision_dans_groupe": 0.041,
+            "precision_hors_groupe": 0.1815,
+            "taux_blanchiment_groupe": 0.0038
+          },
+          "emetteur_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2272,
+            "part_alertes": 0.2288,
+            "precision_dans_groupe": 0.0077,
+            "precision_hors_groupe": 0.176,
+            "taux_blanchiment_groupe": 0.0001
+          },
+          "destinataire_sans_historique_30j": {
+            "part_transactions": 0.1601,
+            "part_alertes": 0.3897,
+            "precision_dans_groupe": 0.0338,
+            "precision_hors_groupe": 0.2038,
+            "taux_blanchiment_groupe": 0.0014
+          },
+          "destinataire_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2846,
+            "part_alertes": 0.2265,
+            "precision_dans_groupe": 0.0444,
+            "precision_hors_groupe": 0.1648,
+            "taux_blanchiment_groupe": 0.0005
+          }
+        }
+      }
+    },
+    "LightGBM, réglé": {
+      "pr_auc": 0.566351,
+      "pr_auc_intervalle_95": [
+        0.534872,
+        0.603288
+      ],
+      "roc_auc": 0.954996,
+      "fois_le_hasard": 502.4,
+      "seuil": {
+        "alertes": 9259,
+        "alertes_par_jour": 143.5,
+        "vp": 1482,
+        "fp": 7777,
+        "fn": 661,
+        "vn": 1891051,
+        "precision": 0.16006,
+        "rappel": 0.691554,
+        "f2": 0.415568,
+        "mcc": 0.331353,
+        "cout_total": 39051162.48,
+        "cout_sans_over_invoicing": 7934503.08,
+        "part_montant_detecte": 0.5052,
+        "k_premieres_par_jour": {
+          "vp": 1482,
+          "fp": 7758,
+          "fn": 661,
+          "vn": 1891070,
+          "precision": 0.16039,
+          "rappel": 0.691554,
+          "f2": 0.416012,
+          "mcc": 0.331696
+        },
+        "information_seuil_cout_minimal_sur_la_periode": {
+          "alertes_par_jour": 140.0,
+          "cout_total": 39051812.87
+        },
+        "typologies": {
+          "Behavioural_Change_1": {
+            "cas": 90,
+            "detectes": 33,
+            "rappel": 0.3667,
+            "ic_bas": 0.2745,
+            "ic_haut": 0.4698
+          },
+          "Layered_Fan_Out": {
+            "cas": 107,
+            "detectes": 44,
+            "rappel": 0.4112,
+            "ic_bas": 0.3226,
+            "ic_haut": 0.5059
+          },
+          "Fan_Out": {
+            "cas": 76,
+            "detectes": 33,
+            "rappel": 0.4342,
+            "ic_bas": 0.3286,
+            "ic_haut": 0.5461
+          },
+          "Cycle": {
+            "cas": 50,
+            "detectes": 26,
+            "rappel": 0.52,
+            "ic_bas": 0.3851,
+            "ic_haut": 0.652
+          },
+          "Gather-Scatter": {
+            "cas": 100,
+            "detectes": 58,
+            "rappel": 0.58,
+            "ic_bas": 0.4821,
+            "ic_haut": 0.672
+          },
+          "Behavioural_Change_2": {
+            "cas": 94,
+            "detectes": 55,
+            "rappel": 0.5851,
+            "ic_bas": 0.4841,
+            "ic_haut": 0.6795
+          },
+          "Over-Invoicing": {
+            "cas": 10,
+            "detectes": 6,
+            "rappel": 0.6,
+            "ic_bas": 0.3127,
+            "ic_haut": 0.8318
+          },
+          "Layered_Fan_In": {
+            "cas": 156,
+            "detectes": 94,
+            "rappel": 0.6026,
+            "ic_bas": 0.5242,
+            "ic_haut": 0.676
+          },
+          "Fan_In": {
+            "cas": 64,
+            "detectes": 40,
+            "rappel": 0.625,
+            "ic_bas": 0.5025,
+            "ic_haut": 0.7333
+          },
+          "Stacked Bipartite": {
+            "cas": 166,
+            "detectes": 110,
+            "rappel": 0.6627,
+            "ic_bas": 0.5878,
+            "ic_haut": 0.7302
+          },
+          "Scatter-Gather": {
+            "cas": 75,
+            "detectes": 51,
+            "rappel": 0.68,
+            "ic_bas": 0.5679,
+            "ic_haut": 0.7746
+          },
+          "Deposit-Send": {
+            "cas": 209,
+            "detectes": 143,
+            "rappel": 0.6842,
+            "ic_bas": 0.6183,
+            "ic_haut": 0.7434
+          },
+          "Bipartite": {
+            "cas": 43,
+            "detectes": 30,
+            "rappel": 0.6977,
+            "ic_bas": 0.5489,
+            "ic_haut": 0.814
+          },
+          "Single_large": {
+            "cas": 45,
+            "detectes": 33,
+            "rappel": 0.7333,
+            "ic_bas": 0.5896,
+            "ic_haut": 0.8404
+          },
+          "Smurfing": {
+            "cas": 176,
+            "detectes": 136,
+            "rappel": 0.7727,
+            "ic_bas": 0.7054,
+            "ic_haut": 0.8284
+          },
+          "Structuring": {
+            "cas": 408,
+            "detectes": 348,
+            "rappel": 0.8529,
+            "ic_bas": 0.8153,
+            "ic_haut": 0.884
+          },
+          "Cash_Withdrawal": {
+            "cas": 274,
+            "detectes": 242,
+            "rappel": 0.8832,
+            "ic_bas": 0.8398,
+            "ic_haut": 0.916
+          }
+        },
+        "fausses_alertes_par_type": {
+          "Normal_Small_Fan_Out": 0.3243,
+          "Normal_Plus_Mutual": 0.2465,
+          "Normal_Mutual": 0.1114,
+          "Normal_Foward": 0.0898,
+          "Normal_Cash_Deposits": 0.0745,
+          "Normal_Cash_Withdrawal": 0.0444
+        },
+        "nouveaute": {
+          "emetteur_sans_historique_30j": {
+            "part_transactions": 0.055,
+            "part_alertes": 0.3515,
+            "precision_dans_groupe": 0.0581,
+            "precision_hors_groupe": 0.2154,
+            "taux_blanchiment_groupe": 0.0038
+          },
+          "emetteur_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2272,
+            "part_alertes": 0.1312,
+            "precision_dans_groupe": 0.0132,
+            "precision_hors_groupe": 0.1822,
+            "taux_blanchiment_groupe": 0.0001
+          },
+          "destinataire_sans_historique_30j": {
+            "part_transactions": 0.1601,
+            "part_alertes": 0.4808,
+            "precision_dans_groupe": 0.0429,
+            "precision_hors_groupe": 0.2686,
+            "taux_blanchiment_groupe": 0.0014
+          },
+          "destinataire_jamais_vu_en_entrainement": {
+            "part_transactions": 0.2846,
+            "part_alertes": 0.1784,
+            "precision_dans_groupe": 0.0878,
+            "precision_hors_groupe": 0.1758,
+            "taux_blanchiment_groupe": 0.0005
+          }
+        }
+      }
+    },
+    "Régression logistique": {
+      "pr_auc": 0.029327,
+      "pr_auc_intervalle_95": [
+        0.024399,
+        0.035194
+      ],
+      "roc_auc": 0.915413,
+      "fois_le_hasard": 26.0
+    }
+  },
+  "artefacts": {
+    "tous_les_cas": {
+      "cas": 2143,
+      "pr_auc_lightgbm": 0.4058,
+      "pr_auc_lof": 0.0348,
+      "rapport": 11.6
+    },
+    "sans_over_invoicing": {
+      "cas": 2133,
+      "pr_auc_lightgbm": 0.4056,
+      "pr_auc_lof": 0.0341,
+      "rapport": 11.9
+    },
+    "sans_montants_a_nombreuses_decimales": {
+      "cas": 1944,
+      "pr_auc_lightgbm": 0.4079,
+      "pr_auc_lof": 0.0326,
+      "rapport": 12.5
+    },
+    "sans_les_deux": {
+      "cas": 1934,
+      "pr_auc_lightgbm": 0.4078,
+      "pr_auc_lof": 0.0317,
+      "rapport": 12.8
+    }
+  },
+  "explications": {
+    "LightGBM, réglé": {
+      "alertes": 9259,
+      "additivite_ecart_max": 6.252776074688882e-13,
+      "importance_globale_groupes": {
+        "MONTANT": 1.2061,
+        "MONTANT_INHABITUEL_EMETTEUR": 1.8677,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 1.2732,
+        "RAFALE_EMETTEUR": 0.0841,
+        "RAFALE_DESTINATAIRE": 0.093,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 5.954,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 4.8743,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 1.9404,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 2.7487,
+        "HORAIRE": 0.6856,
+        "DEVISE": 0.6132,
+        "PAYS": 0.3901,
+        "TYPE_PAIEMENT": 3.1126
+      },
+      "codes_par_typologie": {
+        "Behavioural_Change_1": {
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 33,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 32,
+          "DEVISE": 24
+        },
+        "Behavioural_Change_2": {
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 51,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 47,
+          "DEVISE": 46
+        },
+        "Bipartite": {
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 27,
+          "SOURCES_MULTIPLES_DESTINATAIRE": 21,
+          "REPRISE_OU_NOUVEAU_EMETTEUR": 14
+        },
+        "Cash_Withdrawal": {
+          "TYPE_PAIEMENT": 202,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 128,
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 99
+        },
+        "Cycle": {
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 14,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 13,
+          "MONTANT_INHABITUEL_EMETTEUR": 11
+        },
+        "Deposit-Send": {
+          "TYPE_PAIEMENT": 85,
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 79,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 65
+        },
+        "Fan_In": {
+          "SOURCES_MULTIPLES_DESTINATAIRE": 32,
+          "MONTANT_INHABITUEL_EMETTEUR": 25,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 18
+        },
+        "Fan_Out": {
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 21,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 20,
+          "SOURCES_MULTIPLES_DESTINATAIRE": 17
+        },
+        "Gather-Scatter": {
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 36,
+          "SOURCES_MULTIPLES_DESTINATAIRE": 30,
+          "REPRISE_OU_NOUVEAU_EMETTEUR": 28
+        },
+        "Layered_Fan_In": {
+          "SOURCES_MULTIPLES_DESTINATAIRE": 58,
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 51,
+          "REPRISE_OU_NOUVEAU_EMETTEUR": 49
+        },
+        "Layered_Fan_Out": {
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 30,
+          "REPRISE_OU_NOUVEAU_EMETTEUR": 22,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 21
+        },
+        "Over-Invoicing": {
+          "MONTANT_INHABITUEL_DESTINATAIRE": 5,
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 4,
+          "MONTANT_INHABITUEL_EMETTEUR": 4
+        },
+        "Scatter-Gather": {
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 29,
+          "REPRISE_OU_NOUVEAU_EMETTEUR": 28,
+          "SOURCES_MULTIPLES_DESTINATAIRE": 28
+        },
+        "Single_large": {
+          "MONTANT_INHABITUEL_DESTINATAIRE": 25,
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 25,
+          "MONTANT_INHABITUEL_EMETTEUR": 22
+        },
+        "Smurfing": {
+          "TYPE_PAIEMENT": 136,
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 114,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 77
+        },
+        "Stacked Bipartite": {
+          "CONTREPARTIES_MULTIPLES_EMETTEUR": 77,
+          "SOURCES_MULTIPLES_DESTINATAIRE": 73,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 51
+        },
+        "Structuring": {
+          "SOURCES_MULTIPLES_DESTINATAIRE": 316,
+          "REPRISE_OU_NOUVEAU_DESTINATAIRE": 208,
+          "REPRISE_OU_NOUVEAU_EMETTEUR": 141
+        }
+      },
+      "suppression": {
+        "regle": {
+          "alertes": 500,
+          "part_codes_plus_forts": 0.778,
+          "part_codes_ne_baissent_pas": 0.132,
+          "baisse_mediane_codes": 3.189,
+          "baisse_mediane_hasard": 0.4177,
+          "fidele": false
+        },
+        "apres_resultats": {
+          "alertes": 500,
+          "part_codes_plus_forts": 0.882,
+          "part_codes_ne_baissent_pas": 0.1,
+          "baisse_mediane_codes": 2.702,
+          "baisse_mediane_hasard": -0.2467,
+          "statut": "conçu après les résultats, à titre d'information"
+        }
+      }
+    },
+    "LOF, sans étiquette": {
+      "alertes_expliquees": 100,
+      "duree_par_alerte_s": 2.29,
+      "additivite_ecart_max": 4.440892098500626e-16,
+      "importance_globale_groupes": {
+        "MONTANT": 0.0866,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0437,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0694,
+        "RAFALE_EMETTEUR": 0.1477,
+        "RAFALE_DESTINATAIRE": 0.1612,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.132,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0909,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.1468,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.1738,
+        "HORAIRE": 0.0641,
+        "DEVISE": 0.2644,
+        "PAYS": 0.1935,
+        "TYPE_PAIEMENT": 0.0977
+      },
+      "suppression": {
+        "regle": {
+          "alertes": 100,
+          "part_codes_plus_forts": 0.73,
+          "part_codes_ne_baissent_pas": 0.27,
+          "baisse_mediane_codes": 0.2484,
+          "baisse_mediane_hasard": -0.031,
+          "fidele": false
+        },
+        "apres_resultats": {
+          "alertes": 100,
+          "part_codes_plus_forts": 0.8,
+          "part_codes_ne_baissent_pas": 0.28,
+          "baisse_mediane_codes": 0.2061,
+          "baisse_mediane_hasard": -0.0818,
+          "statut": "conçu après les résultats, à titre d'information"
+        }
+      }
+    }
+  },
+  "tirages_bootstrap": 200,
+  "duree_s": 1052.68,
+  "pic_memoire_mo": 1908
+}
