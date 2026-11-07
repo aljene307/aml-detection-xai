@@ -1,0 +1,57 @@
+{
+  "description": "Codes motifs (docs/CHOIX.md, section 28) : chaque variable du modèle appartient à un seul groupe ; la contribution d'un groupe est la somme de celles de ses variables.",
+  "codes": {
+    "MONTANT": {
+      "libelle": "Montant",
+      "variables": ["log_montant"]
+    },
+    "MONTANT_INHABITUEL_EMETTEUR": {
+      "libelle": "Montant inhabituel pour l'émetteur",
+      "variables": ["em_ratio_montant_30j"]
+    },
+    "MONTANT_INHABITUEL_DESTINATAIRE": {
+      "libelle": "Montant inhabituel pour le destinataire",
+      "variables": ["re_ratio_montant_30j"]
+    },
+    "RAFALE_EMETTEUR": {
+      "libelle": "Rafale d'envois",
+      "variables": ["em_nb_1h", "em_nb_24h"]
+    },
+    "RAFALE_DESTINATAIRE": {
+      "libelle": "Rafale de réceptions",
+      "variables": ["re_nb_1h", "re_nb_24h"]
+    },
+    "CONTREPARTIES_MULTIPLES_EMETTEUR": {
+      "libelle": "Nombreux destinataires différents",
+      "variables": ["em_nb_distincts_24h", "em_nb_distincts_30j"]
+    },
+    "SOURCES_MULTIPLES_DESTINATAIRE": {
+      "libelle": "Nombreux émetteurs différents",
+      "variables": ["re_nb_distincts_30j"]
+    },
+    "REPRISE_OU_NOUVEAU_EMETTEUR": {
+      "libelle": "Émetteur nouveau ou inactif",
+      "variables": ["em_ecart_precedent_s", "em_sans_historique_30j"]
+    },
+    "REPRISE_OU_NOUVEAU_DESTINATAIRE": {
+      "libelle": "Destinataire nouveau ou inactif",
+      "variables": ["re_ecart_precedent_s", "re_sans_historique_30j"]
+    },
+    "HORAIRE": {
+      "libelle": "Moment de la transaction",
+      "variables": ["heure_sin", "heure_cos", "jour_semaine"]
+    },
+    "DEVISE": {
+      "libelle": "Devises",
+      "variables": ["devises_differentes", "freq_Payment_currency", "freq_Received_currency"]
+    },
+    "PAYS": {
+      "libelle": "Pays des banques",
+      "variables": ["freq_Sender_bank_location", "freq_Receiver_bank_location"]
+    },
+    "TYPE_PAIEMENT": {
+      "libelle": "Type de paiement",
+      "variables": ["freq_Payment_type"]
+    }
+  }
+}

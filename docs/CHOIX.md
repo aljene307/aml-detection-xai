@@ -903,3 +903,115 @@ mesures. Le test n'est pas lu.
   tous les choix des étapes 3 à 5 ont été faits sans elles ; les ajouter
   après avoir vu les typologies manquées reviendrait à régler le projet sur
   la validation. C'est une piste de suite, à présenter comme telle.
+
+## 28. Explications SHAP et codes motifs (étape 6)
+
+Règles écrites avant toute mesure de l'étape 6.
+
+- **Modèles expliqués** : LightGBM réglé, par TreeSHAP (exact) ; LOF sans
+  étiquette, par KernelSHAP (approché). SHAP répartit le score d'une
+  transaction entre ses variables : valeur de base + somme des contributions
+  = score.
+- **Sens des contributions, le même pour les deux modèles** : une
+  contribution positive pousse toujours vers « suspect ».
+  - LOF : dans scikit-learn, `score_samples` est plus haut pour les
+    transactions normales. On explique donc le **score inversé**
+    (`−score_samples`), le même que celui de l'évaluation (plus haut = plus
+    suspect). Un test vérifie le sens sur une transaction aberrante.
+  - LightGBM : on explique le **score brut (log-odds)**, pas la probabilité,
+    qui sature à 1,0 (section 25). TreeSHAP est calculé par LightGBM lui-même
+    (`pred_contrib`), sans la bibliothèque SHAP. Dans l'application et l'API,
+    on parlera de « score de risque ».
+- **KernelSHAP sur LOF, réglages fixés avant les mesures** : données de
+  référence = 20 centres de k-moyennes de 10 000 lignes d'entraînement tirées
+  au hasard (graine 42) ; 500 évaluations par alerte ; 100 alertes de LOF
+  tirées au hasard (graine 42) parmi celles du seuil retenu. La durée par
+  alerte est mesurée ; son usage dans l'API sera décidé ensuite.
+- **Codes motifs** (`config/codes_motifs.json`) : 13 groupes de variables ;
+  la contribution d'un groupe est la somme de celles de ses variables. Une
+  alerte affiche **au plus 3 codes**, ceux de plus forte contribution, et
+  **seulement des groupes de contribution positive** : s'il y en a moins de
+  3, on en affiche moins. Chaque code est accompagné d'une phrase avec les
+  vraies valeurs de la transaction.
+- **Fidélité, règles fixées avant les mesures** :
+  1. additivité : écart entre valeur de base + somme des contributions et
+     score du modèle (nul attendu pour TreeSHAP, mesuré pour KernelSHAP) ;
+  2. suppression : pour chaque alerte, les variables de ses codes motifs
+     sont remplacées par leur médiane de l'entraînement, et la baisse du
+     score est comparée à celle obtenue en remplaçant autant de groupes tirés
+     au hasard (graine 42). Explications jugées fidèles si la baisse due aux
+     codes motifs est plus forte dans **au moins 90 %** des alertes. Sur
+     500 alertes de LightGBM tirées au hasard, et sur les 100 alertes de LOF ;
+  3. stabilité (KernelSHAP) : 50 de ces alertes recalculées avec une autre
+     référence (10 000 autres lignes, graine 1) ; part des alertes dont les
+     codes affichés restent les mêmes.
+- **Limites** : SHAP explique le modèle, pas la réalité ; les variables
+  corrélées se partagent le mérite (le regroupement limite l'effet) ;
+  KernelSHAP remplace les variables comme si elles étaient indépendantes et
+  peut évaluer des transactions impossibles.
+- **Phrases** (décidé après avoir lu les premiers exemples, affichage seulement) :
+  chaque phrase donne le sens et la valeur habituelle, médiane de
+  l'entraînement retenu (`models/valeurs_habituelles.json`), par exemple
+  « seulement 1 émetteur différent en 30 jours (habituellement 6) » ; la
+  devise dit « même devise » ou « devise différente ». Raison : une
+  contribution positive peut venir d'une valeur basse, et la phrase sans sens
+  se lisait comme « beaucoup ».
+  Les deux durées d'une phrase sont écrites dans la même unité, celle de la
+  plus courte : « il y a 29 h (habituellement 14 h) ».
+- **Reproductibilité corrigée** : KernelSHAP ignore `random_state` et tire avec
+  le générateur global de numpy ; une première exécution n'était donc pas
+  reproductible. La graine est maintenant fixée avant l'appel (test avec
+  12 variables, pour qu'il y ait vraiment un tirage). Deux exécutions donnent
+  le même fichier de mesures, hors durées.
+- **Mesures** (validation, `reports/mesures/explications.json`) :
+
+  | Mesure | LightGBM réglé (TreeSHAP) | LOF sans étiquette (KernelSHAP) |
+  |---|---|---|
+  | Contrôle du modèle | réappris : scores identiques à l'étape 4 (29 arbres) | scores identiques à la grille |
+  | Alertes expliquées | 8 947 (toutes, au seuil retenu) | 100 (tirées au hasard) |
+  | Durée par alerte | 0,1 ms | 2,2 à 3,5 s selon la charge du PC |
+  | Additivité, écart maximal | 7 × 10⁻¹³ | 2 × 10⁻¹⁵ |
+  | **Suppression, règle (≥ 90 %)** | **75,8 % : non fidèle** | **75 % : non fidèle** |
+  | Baisse médiane : codes / hasard | 2,96 / 0,37 | 0,34 / 0,003 |
+  | Stabilité (autre référence) | — | mêmes codes 92 %, même ordre 84 % |
+
+  **Verdict : selon la règle fixée avant les mesures, les explications ne
+  sont pas jugées fidèles.** C'est une limite à présenter à l'oral. En
+  médiane, retirer les codes motifs fait pourtant baisser le score 8 fois
+  (LightGBM) et 100 fois (LOF) plus que retirer des groupes au hasard.
+- **Diagnostic de l'échec** :
+  1. défaut de la règle elle-même : les groupes « au hasard » étaient tirés
+     parmi les 13, codes motifs compris ; un tirage de 3 en contient au moins
+     un dans 58 % des cas (277 alertes sur 500 pour LightGBM, réussite 68 %
+     dans ces alertes, 85,2 % dans les autres) ;
+  2. vrai défaut de fidélité : dans 15 % des alertes de LightGBM et 17 % de
+     LOF, remplacer les variables des codes par leur médiane ne fait pas
+     baisser le score. SHAP mesure une contribution par rapport à une
+     transaction **moyenne**, le test remplace par la **médiane**, et les
+     arbres combinent les variables : la transaction modifiée peut devenir
+     suspecte autrement.
+- **Second test, conçu après les résultats, à titre d'information** (ne
+  change pas le verdict) : groupes tirés au hasard parmi ceux qui ne sont pas
+  des codes motifs ; remplacement par la référence de SHAP (moyenne de
+  l'entraînement pour LightGBM, moyenne pondérée des 20 centres de référence
+  pour LOF). Les codes font baisser le score plus que le hasard dans
+  **87,4 %** des alertes (LightGBM) et **84 %** (LOF) ; ils ne le font pas
+  baisser dans 10,6 % et 22 % des alertes.
+- **Ce que disent les explications** : LightGBM s'appuie d'abord sur les
+  contreparties distinctes de l'émetteur, les sources distinctes du
+  destinataire et le type de paiement ; les rafales (`em_nb_1h`,
+  `em_nb_24h`) ne servent presque pas. LOF s'appuie sur les devises, les pays
+  et les rafales (combinaisons rares). Les codes par typologie sont
+  cohérents : `Smurfing` → type de paiement (99 %) ; `Over-Invoicing` →
+  montant inhabituel pour l'émetteur (92 %) ; `Structuring` et `Fan_In` →
+  sources multiples du destinataire (90 % et 82 %).
+- **Mémoire** : pic de 1 585 Mo pour le modèle et d'environ 1 700 Mo pour les
+  explications, au-dessus de l'objectif de 1,5 Go malgré la séparation en
+  deux processus et la lecture des seules colonnes utiles.
+- **Note pour l'application (étape 9)** : un score de risque négatif (par
+  exemple −4,56, en log-odds) peut faire croire à un analyste que la
+  transaction n'est pas risquée. L'application affichera aussi le **rang** de
+  l'alerte (par exemple « parmi les 0,5 % les plus suspectes »).
+- **Décision pour l'API (étape 8)** : TreeSHAP en direct pour LightGBM ;
+  explications de LOF calculées à l'avance pour les exemples (KernelSHAP met
+  plusieurs secondes par alerte sur le PC, davantage sur Render).

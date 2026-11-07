@@ -1,0 +1,337 @@
+{
+  "lightgbm": {
+    "scores_identiques_etape_4": true,
+    "arbres": 29,
+    "alertes": 8947,
+    "duree_par_alerte_ms": 0.103,
+    "additivite_ecart_max": 6.821210263296962e-13,
+    "importance_globale_groupes": {
+      "CONTREPARTIES_MULTIPLES_EMETTEUR": 6.3706,
+      "SOURCES_MULTIPLES_DESTINATAIRE": 4.5104,
+      "TYPE_PAIEMENT": 3.8221,
+      "REPRISE_OU_NOUVEAU_DESTINATAIRE": 2.9728,
+      "MONTANT_INHABITUEL_EMETTEUR": 2.1599,
+      "REPRISE_OU_NOUVEAU_EMETTEUR": 1.8353,
+      "MONTANT_INHABITUEL_DESTINATAIRE": 1.4138,
+      "MONTANT": 1.2823,
+      "HORAIRE": 0.8873,
+      "DEVISE": 0.6068,
+      "PAYS": 0.3252,
+      "RAFALE_DESTINATAIRE": 0.1204,
+      "RAFALE_EMETTEUR": 0.0872
+    },
+    "nombre_de_codes": {
+      "3": 8947
+    },
+    "frequence_codes": {
+      "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.6825,
+      "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.5202,
+      "REPRISE_OU_NOUVEAU_EMETTEUR": 0.4514,
+      "DEVISE": 0.344,
+      "SOURCES_MULTIPLES_DESTINATAIRE": 0.256,
+      "MONTANT": 0.2285,
+      "TYPE_PAIEMENT": 0.1749,
+      "MONTANT_INHABITUEL_EMETTEUR": 0.1369,
+      "MONTANT_INHABITUEL_DESTINATAIRE": 0.1113,
+      "HORAIRE": 0.0509,
+      "PAYS": 0.0392,
+      "RAFALE_EMETTEUR": 0.0022,
+      "RAFALE_DESTINATAIRE": 0.002
+    },
+    "codes_par_typologie": {
+      "Behavioural_Change_1": {
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.946,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.919,
+        "DEVISE": 0.73
+      },
+      "Behavioural_Change_2": {
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.95,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.95,
+        "DEVISE": 0.9
+      },
+      "Bipartite": {
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.761,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.717,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.478
+      },
+      "Cash_Withdrawal": {
+        "TYPE_PAIEMENT": 0.818,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.555,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.522
+      },
+      "Cycle": {
+        "MONTANT_INHABITUEL_EMETTEUR": 0.585,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.537,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.537
+      },
+      "Deposit-Send": {
+        "TYPE_PAIEMENT": 0.646,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.487,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.469
+      },
+      "Fan_In": {
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.818,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.545,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.506
+      },
+      "Fan_Out": {
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.676,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.529,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.5
+      },
+      "Gather-Scatter": {
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.654,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.654,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.5
+      },
+      "Layered_Fan_In": {
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.757,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.614,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.514
+      },
+      "Layered_Fan_Out": {
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.7,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.467,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.433
+      },
+      "Over-Invoicing": {
+        "MONTANT_INHABITUEL_EMETTEUR": 0.917,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.75,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.417
+      },
+      "Scatter-Gather": {
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.609,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.478,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.478
+      },
+      "Single_large": {
+        "MONTANT_INHABITUEL_EMETTEUR": 0.652,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.609,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.565
+      },
+      "Smurfing": {
+        "TYPE_PAIEMENT": 0.994,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.894,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.512
+      },
+      "Stacked Bipartite": {
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.732,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.625,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.589
+      },
+      "Structuring": {
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.899,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.586,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.468
+      }
+    },
+    "suppression": {
+      "regle": {
+        "alertes": 500,
+        "part_codes_plus_forts": 0.758,
+        "part_codes_ne_baissent_pas": 0.152,
+        "baisse_mediane_codes": 2.9627,
+        "baisse_mediane_hasard": 0.3658,
+        "fidele": false
+      },
+      "apres_resultats": {
+        "alertes": 500,
+        "part_codes_plus_forts": 0.874,
+        "part_codes_ne_baissent_pas": 0.106,
+        "baisse_mediane_codes": 2.6409,
+        "baisse_mediane_hasard": -0.0724,
+        "statut": "conçu après les résultats, à titre d'information"
+      }
+    }
+  },
+  "lof": {
+    "alertes_expliquees": 100,
+    "duree_par_alerte_s": 3.3,
+    "additivite_ecart_max": 1.7763568394002505e-15,
+    "additivite_ecart_relatif_max": 5.031037244015469e-15,
+    "importance_globale_groupes": {
+      "DEVISE": 0.2623,
+      "PAYS": 0.2424,
+      "RAFALE_EMETTEUR": 0.1952,
+      "REPRISE_OU_NOUVEAU_EMETTEUR": 0.1582,
+      "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.1512,
+      "RAFALE_DESTINATAIRE": 0.1502,
+      "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.1404,
+      "TYPE_PAIEMENT": 0.1097,
+      "MONTANT_INHABITUEL_DESTINATAIRE": 0.1059,
+      "MONTANT": 0.0796,
+      "HORAIRE": 0.0755,
+      "SOURCES_MULTIPLES_DESTINATAIRE": 0.074,
+      "MONTANT_INHABITUEL_EMETTEUR": 0.056
+    },
+    "nombre_de_codes": {
+      "3": 100
+    },
+    "frequence_codes": {
+      "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.43,
+      "REPRISE_OU_NOUVEAU_EMETTEUR": 0.41,
+      "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.39,
+      "MONTANT_INHABITUEL_DESTINATAIRE": 0.28,
+      "RAFALE_EMETTEUR": 0.25,
+      "PAYS": 0.23,
+      "TYPE_PAIEMENT": 0.22,
+      "DEVISE": 0.16,
+      "MONTANT": 0.15,
+      "MONTANT_INHABITUEL_EMETTEUR": 0.15,
+      "SOURCES_MULTIPLES_DESTINATAIRE": 0.12,
+      "RAFALE_DESTINATAIRE": 0.11,
+      "HORAIRE": 0.1
+    },
+    "suppression": {
+      "regle": {
+        "alertes": 100,
+        "part_codes_plus_forts": 0.75,
+        "part_codes_ne_baissent_pas": 0.17,
+        "baisse_mediane_codes": 0.343,
+        "baisse_mediane_hasard": 0.0033,
+        "fidele": false
+      },
+      "apres_resultats": {
+        "alertes": 100,
+        "part_codes_plus_forts": 0.84,
+        "part_codes_ne_baissent_pas": 0.22,
+        "baisse_mediane_codes": 0.2869,
+        "baisse_mediane_hasard": -0.0836,
+        "statut": "conçu après les résultats, à titre d'information"
+      }
+    },
+    "stabilite": {
+      "alertes": 50,
+      "memes_codes_meme_ordre": 0.84,
+      "memes_codes": 0.92
+    }
+  },
+  "exemples": {
+    "lightgbm": [
+      {
+        "transaction_id": 5703474,
+        "blanchiment": 1,
+        "typologie": "Structuring",
+        "score_de_risque": 4.6794,
+        "valeur_de_base": -7.9787,
+        "codes": [
+          {
+            "code": "MONTANT_INHABITUEL_EMETTEUR",
+            "contribution": 5.1759,
+            "phrase": "42,4 fois le montant moyen envoyé sur 30 jours (habituellement 1,0)"
+          },
+          {
+            "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+            "contribution": 3.3163,
+            "phrase": "Réception précédente il y a 29 h (habituellement 14 h)"
+          },
+          {
+            "code": "SOURCES_MULTIPLES_DESTINATAIRE",
+            "contribution": 2.4744,
+            "phrase": "2 émetteurs différents en 30 jours (habituellement 1)"
+          }
+        ]
+      },
+      {
+        "transaction_id": 6774173,
+        "blanchiment": 1,
+        "typologie": "Fan_Out",
+        "score_de_risque": -0.9165,
+        "valeur_de_base": -7.9787,
+        "codes": [
+          {
+            "code": "MONTANT_INHABITUEL_DESTINATAIRE",
+            "contribution": 5.2957,
+            "phrase": "14,8 fois le montant moyen reçu sur 30 jours (habituellement 1,0)"
+          },
+          {
+            "code": "MONTANT_INHABITUEL_EMETTEUR",
+            "contribution": 3.1485,
+            "phrase": "3,1 fois le montant moyen envoyé sur 30 jours (habituellement 1,0)"
+          },
+          {
+            "code": "HORAIRE",
+            "contribution": 0.1019,
+            "phrase": "Le lundi à 22 h 37"
+          }
+        ]
+      },
+      {
+        "transaction_id": 5702919,
+        "blanchiment": 0,
+        "typologie": "Normal_Plus_Mutual",
+        "score_de_risque": -4.5608,
+        "valeur_de_base": -7.9787,
+        "codes": [
+          {
+            "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+            "contribution": 5.201,
+            "phrase": "Réception précédente il y a 271 h (habituellement 14 h)"
+          },
+          {
+            "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+            "contribution": 1.4579,
+            "phrase": "Aucun envoi dans les 30 jours précédents"
+          },
+          {
+            "code": "MONTANT",
+            "contribution": 0.487,
+            "phrase": "Montant de seulement 5 684,22 £ (habituellement 6 120,24 £)"
+          }
+        ]
+      }
+    ],
+    "lof": [
+      {
+        "transaction_id": 5884306,
+        "blanchiment": 1,
+        "typologie": "Structuring",
+        "score_de_risque": 2.1026,
+        "valeur_de_base": 1.174,
+        "codes": [
+          {
+            "code": "SOURCES_MULTIPLES_DESTINATAIRE",
+            "contribution": 0.7159,
+            "phrase": "10 émetteurs différents en 30 jours (habituellement 1)"
+          },
+          {
+            "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+            "contribution": 0.2751,
+            "phrase": "Aucun destinataire différent en 24 h (habituellement 1), 13 destinataires différents en 30 jours (valeur habituelle)"
+          },
+          {
+            "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+            "contribution": 0.1061,
+            "phrase": "Envoi précédent il y a 33 h (habituellement 3,3 h)"
+          }
+        ]
+      },
+      {
+        "transaction_id": 5779503,
+        "blanchiment": 0,
+        "typologie": "Normal_Fan_Out",
+        "score_de_risque": 1.6574,
+        "valeur_de_base": 1.174,
+        "codes": [
+          {
+            "code": "RAFALE_EMETTEUR",
+            "contribution": 0.399,
+            "phrase": "13 envois dans l'heure précédente (habituellement 0), 56 envois sur 24 h (habituellement 2)"
+          },
+          {
+            "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+            "contribution": 0.3528,
+            "phrase": "Aucune réception dans les 30 jours précédents"
+          },
+          {
+            "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+            "contribution": 0.1589,
+            "phrase": "17 destinataires différents en 24 h (habituellement 1), 24 destinataires différents en 30 jours (habituellement 13)"
+          }
+        ]
+      }
+    ]
+  },
+  "duree_s": 539.25,
+  "pic_memoire_mo": 1796
+}
