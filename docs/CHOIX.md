@@ -1171,3 +1171,76 @@ ensuite (section 30) :
   test de suppression (`deletion_test`, `both_tests`) sont passés des scripts
   aux modules partagés, pour que 7b calcule exactement comme les étapes 5
   et 6 ; l'évaluation de l'étape 5 redonne un fichier identique.
+
+## 31. Résultats sur le test (étape 7)
+
+Test ouvert une seule fois (`reports/mesures/test.json`, commit `629019d`,
+sans correction) : 1 900 971 transactions, 2 143 cas (0,113 %), 64,5 jours ;
+configuration et matrices identiques aux empreintes figées.
+
+- **Les 8 modèles** (PR-AUC ; intervalle à 95 % par bootstrap de comptes
+  émetteurs, 200 tirages) :
+
+  | Modèle | Validation | Test | Intervalle à 95 % (test) |
+  |---|---|---|---|
+  | Isolation Forest, sans étiquette | 0,0042 | 0,0043 | 0,0037 à 0,0049 |
+  | Isolation Forest, réglé | 0,0052 | 0,0057 | 0,0050 à 0,0066 |
+  | LOF, sans étiquette | 0,0330 | 0,0348 | 0,0299 à 0,0409 |
+  | LOF, réglé | 0,0444 | 0,0458 | 0,0389 à 0,0539 |
+  | Autoencodeur | 0,0151 | 0,0133 | 0,0104 à 0,0167 |
+  | LightGBM, par défaut | 0,4110 | 0,4057 | 0,3699 à 0,4414 |
+  | LightGBM, réglé | 0,5756 | 0,5664 | 0,5349 à 0,6033 |
+  | Régression logistique | 0,0273 | 0,0293 | 0,0244 à 0,0352 |
+
+  **Aucun écart ne dépasse le hasard** : pour les 8 modèles, la PR-AUC de
+  validation est dans l'intervalle à 95 % du test. Sans étiquette, LOF fait
+  environ 31 fois mieux que le hasard sur le test ; LightGBM réglé environ
+  500 fois.
+- **Au seuil figé** (capacité 140 alertes par jour) :
+
+  | Modèle | Alertes par jour | Précision | Rappel | F2 | MCC | Coût | Coût sans Over-Invoicing |
+  |---|---|---|---|---|---|---|---|
+  | Isolation Forest | 140,9 | 0,006 | 0,026 | 0,016 | 0,010 | 77,6 M£ | 24,3 M£ |
+  | LOF, sans étiquette | 142,1 | 0,072 | 0,310 | 0,187 | 0,148 | 29,0 M£ | 13,5 M£ |
+  | LOF, réglé | 142,2 | 0,081 | 0,346 | 0,209 | 0,165 | 28,2 M£ | 12,7 M£ |
+  | LightGBM, par défaut | 140,2 | 0,138 | 0,580 | 0,353 | 0,281 | 35,0 M£ | 9,9 M£ |
+  | LightGBM, réglé | 143,5 | 0,160 | 0,692 | 0,416 | 0,331 | 39,1 M£ | 7,9 M£ |
+
+  - **Léger dépassement de la capacité** : les seuils figés donnent de 140,2
+    à 143,5 alertes par jour ; 4 modèles sur 5 dépassent un peu la capacité,
+    jusqu'à +2,5 % pour LightGBM réglé (9 259 alertes pour 9 035 possibles,
+    environ 3 alertes de trop par jour). Un seuil fixé sur une valeur de
+    score suit la dérive des scores dans le temps.
+  - **Le coût reste dominé par `Over-Invoicing`** : environ 68 % du montant
+    blanchi du test (environ 53 M£ sur 79 M£) pour 10 cas. LOF en trouve 8,
+    LightGBM 6 : LOF garde le coût le plus bas ; sans cette typologie,
+    LightGBM réglé est le moins coûteux (7,9 M£).
+  - **Artefacts** : rapport des PR-AUC LightGBM par défaut / LOF de 11,6
+    avec tous les cas, 12,8 sans `Over-Invoicing` ni montants à nombreuses
+    décimales ; même conclusion qu'en validation.
+  - **Explications** : additivité exacte ; suppression selon la règle
+    77,8 % (LightGBM) et 73 % (LOF), donc non fidèles selon la règle ; second
+    test d'information 88,2 % et 80 %.
+- **Attentes écrites avant l'ouverture** (section 29) :
+  1. versions réglées en baisse : **en partie** (LightGBM réglé −0,009, LOF
+     réglé +0,0014), sans écart au-delà du hasard ;
+  2. versions non réglées plus stables : **non vérifiable**, tous les écarts
+     restent dans le bruit ; l'optimisme attendu de la validation ne se voit
+     pas, les grilles étant petites ;
+  3. moins de la moitié d'écart sur les 140 alertes par jour : **vérifiée**
+     (+0,1 % à +2,5 %) ;
+  4. coût moins dépendant d'`Over-Invoicing` : **non vérifiée** (sa part du
+     montant passe d'environ 75 % à 68 %, mais elle fait encore de 54 à 80 %
+     du coût et inverse toujours le classement par le coût) ;
+  5. même classement des méthodes : **vérifiée**.
+- **Mémoire** : pic de 1 908 Mo, au-dessus de l'objectif de 1,5 Go (1 361 Mo
+  pendant la répétition sur la validation).
+- **Recommandation opérationnelle** : en production, appliquer la règle « les
+  140 transactions les plus suspectes de chaque jour » plutôt qu'un seuil de
+  score fixe. Elle respecte exactement la capacité chaque jour, quelle que
+  soit la dérive des scores, avec presque les mêmes résultats sur le test
+  (LightGBM réglé : précision 0,160, rappel 0,692, F2 0,416, MCC 0,332 ; LOF
+  sans étiquette : précision 0,071, rappel 0,308). Sur le test, elle donne
+  9 240 alertes : 140 pour chacun des 66 jours de calendrier, dont le
+  premier et le dernier sont partiels ; la capacité de 9 035 est calculée
+  sur 64,5 jours.
