@@ -1335,3 +1335,19 @@ configuration et matrices identiques aux empreintes figées.
   explication de LOF à l'avance ou absente avec un message ; erreurs 422 pour
   un historique incohérent ; 200 000 vraies transactions passent le contrôle
   de cohérence.
+- **Déploiement sur Render** : https://aml-detection-xai-api.onrender.com
+  (service web gratuit, 512 Mo, région Frankfurt, accès de Render limité au
+  seul dépôt `aml-detection-xai`). Construction : `pip install -r
+  requirements-api.txt` ; lancement : `uvicorn api.main:app --host 0.0.0.0
+  --port $PORT` ; contrôle de santé : `/health`. `PYTHON_VERSION` = 3.11.9
+  (3.11.0 sur le PC).
+- **Vérifications sur Render** : `/health` répond `ok` ; les exemples de
+  `/docs` répondent 200 avec les deux modèles (trois codes motifs dans chaque
+  explication) ; les 30 exemples donnent **exactement** les mêmes scores que
+  sur le PC (60 sur 60, écart maximal nul) malgré Linux et Python 3.11.9.
+  **Mémoire mesurée sur Render : 224,9 Mo** au premier appel, 225,6 Mo après
+  environ 80 appels, soit une marge d'environ 286 Mo sous les 512 Mo. Avant
+  le déploiement, un clone neuf avec des fins de ligne LF (comme sous Linux)
+  avait démarré l'API et passé ses tests.
+- **Service gratuit** : mise en veille après 15 minutes sans appel ; le
+  premier appel suivant prend environ une minute.
