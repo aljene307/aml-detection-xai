@@ -1244,3 +1244,64 @@ configuration et matrices identiques aux empreintes figées.
   9 240 alertes : 140 pour chacun des 66 jours de calendrier, dont le
   premier et le dernier sont partiels ; la capacité de 9 035 est calculée
   sur 64,5 jours.
+
+## 32. API (étape 8) : décisions
+
+- **Modèle par défaut : LOF sans étiquette**, pour rester fidèle à la consigne
+  (projet sans étiquettes). LightGBM réglé reste disponible par
+  `?modele=lightgbm`, comme comparaison. Score de LOF : score d'anomalie (plus
+  haut = plus suspect) ; score de LightGBM : score de risque (log-odds).
+- **Rang** : chaque réponse donne le rang de la transaction (par exemple
+  « parmi les 0,4 % les plus suspectes »), calculé par rapport aux scores de
+  **validation** (quantiles enregistrés), jamais par rapport au test.
+- **Variables d'historique** : envoyées par le client (les 13 variables :
+  compteurs sur 1 h et 24 h, rapports de montant sur 30 jours, écarts depuis
+  la transaction précédente, indicateurs sans historique, contreparties
+  distinctes), avec les champs bruts de la transaction. L'API calcule les
+  variables de la transaction, le codage par fréquence et la transformation
+  avec le code de `src/aml_xai/`. **Contrôle de cohérence** (erreur 422 sinon) :
+  compteurs entiers positifs, écart entre 0 et 30 jours, et un compte « sans
+  historique sur 30 jours » doit avoir des compteurs nuls, un rapport de 1 et
+  un écart de 30 jours (section 18).
+- **Exemples** : 30 transactions du test, tirées par une règle fixe
+  (graine 42) : 10 vrais cas alertés par LightGBM de typologies différentes,
+  10 fausses alertes, 5 cas manqués, 5 transactions normales non alertées.
+  Le test étant ouvert et figé, les utiliser ne change aucun résultat.
+- **Modèles dans le dépôt** : LightGBM réglé au format texte de LightGBM ;
+  LOF sans étiquette en joblib (scikit-learn figé) ; tous deux contrôlés par
+  leur SHA-256 au démarrage.
+- **Explication de LOF en direct : version allégée de KernelSHAP, règle fixée
+  avant toute mesure.**
+  - Référence : la version complète (20 transactions de référence, 500
+    tirages, section 28).
+  - Candidates, de la plus coûteuse à la plus légère : L1 = 10 transactions
+    de référence et 200 tirages (5 fois moins d'évaluations) ; L2 = 5
+    transactions de référence et 100 tirages (20 fois moins). Références =
+    centres de k-moyennes des mêmes 10 000 lignes d'entraînement (graine 42).
+  - Mesure sur les 100 mêmes alertes de LOF qu'à la section 28, dans la
+    **validation** (le test n'est pas utilisé pour ce choix).
+  - Une candidate est acceptée si (1) les codes motifs affichés sont les
+    mêmes (même ensemble) que ceux de la version complète dans **au moins
+    90 %** des alertes, et (2) sa durée médiane est d'**au plus 0,5 s** par
+    alerte sur le PC (Render est plusieurs fois plus lent). On retient la
+    plus légère des candidates acceptées.
+  - Si aucune n'est acceptée : explications de LOF calculées à l'avance pour
+    les exemples ; LightGBM expliqué en direct (TreeSHAP).
+- **Mesures** (validation, 100 alertes de LOF, une explication à la fois
+  comme dans l'API ; `reports/mesures/kernel_allege.json`) :
+
+  | Version | Références | Tirages | Mêmes codes que la complète | Même premier code | Durée médiane |
+  |---|---|---|---|---|---|
+  | Complète | 20 | 500 | — | — | 2,56 s |
+  | L1 | 10 | 200 | **30 %** | 81 % | 0,54 s |
+  | L2 | 5 | 100 | **25 %** | 85 % | 0,15 s |
+
+  **Aucune candidate n'est acceptée** : l'accord sur les codes affichés reste
+  très loin des 90 % (et L1 dépasse aussi 0,5 s). Avec moins de références
+  et de tirages, KernelSHAP garde le plus souvent le même premier code, mais
+  les deuxième et troisième codes changent. **On applique le plan de repli** :
+  explications de LOF calculées à l'avance (version complète) pour les
+  30 exemples ; LightGBM expliqué en direct par TreeSHAP. Pour une
+  transaction quelconque, l'API renvoie le score de LOF et son rang, avec un
+  message indiquant que son explication n'est disponible que pour les
+  exemples. Pic de mémoire de la mesure : 318 Mo.

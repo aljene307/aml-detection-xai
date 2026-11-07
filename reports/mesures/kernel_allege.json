@@ -1,0 +1,36 @@
+{
+  "regle": {
+    "accord_minimal": 0.9,
+    "duree_mediane_max_s": 0.5
+  },
+  "complete": {
+    "references": 20,
+    "tirages": 500,
+    "duree_mediane_s": 2.562
+  },
+  "candidates": {
+    "L1": {
+      "references": 10,
+      "tirages": 200,
+      "memes_codes": 0.3,
+      "memes_codes_meme_ordre": 0.15,
+      "meme_premier_code": 0.81,
+      "duree_mediane_s": 0.538,
+      "duree_max_s": 0.701,
+      "acceptee": false
+    },
+    "L2": {
+      "references": 5,
+      "tirages": 100,
+      "memes_codes": 0.25,
+      "memes_codes_meme_ordre": 0.19,
+      "meme_premier_code": 0.85,
+      "duree_mediane_s": 0.15,
+      "duree_max_s": 0.233,
+      "acceptee": false
+    }
+  },
+  "retenue": null,
+  "duree_s": 309.13,
+  "pic_memoire_mo": 318
+}

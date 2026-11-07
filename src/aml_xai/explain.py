@@ -50,15 +50,16 @@ def lof_score(model):
     return lambda x: -model.score_samples(np.asarray(x, dtype=np.float32))
 
 
-def kernel_background(train: np.ndarray, seed: int = SEED):
+def kernel_background(train: np.ndarray, seed: int = SEED, centers: int = KERNEL_BACKGROUND_CENTERS):
     """Référence de KernelSHAP : centres de k-moyennes d'un échantillon de l'entraînement."""
     import shap
 
     rows = np.sort(np.random.default_rng(seed).choice(len(train), KERNEL_BACKGROUND_ROWS, replace=False))
-    return shap.kmeans(np.asarray(train[rows], dtype=np.float64), KERNEL_BACKGROUND_CENTERS)
+    return shap.kmeans(np.asarray(train[rows], dtype=np.float64), centers)
 
 
-def kernel_contributions(score, x: np.ndarray, background, seed: int = SEED) -> tuple[np.ndarray, float]:
+def kernel_contributions(score, x: np.ndarray, background, seed: int = SEED,
+                         samples: int = KERNEL_SAMPLES) -> tuple[np.ndarray, float]:
     """KernelSHAP (approché) : (contributions par variable, valeur de base)."""
     import shap
 
@@ -66,7 +67,7 @@ def kernel_contributions(score, x: np.ndarray, background, seed: int = SEED) -> 
     # KernelSHAP tire ses échantillons avec le générateur global de numpy (il ignore
     # `random_state`) : on le fixe ici pour que les explications soient reproductibles
     np.random.seed(seed)
-    values = explainer.shap_values(np.asarray(x, dtype=np.float64), nsamples=KERNEL_SAMPLES, silent=True)
+    values = explainer.shap_values(np.asarray(x, dtype=np.float64), nsamples=samples, silent=True)
     return np.asarray(values), float(explainer.expected_value)
 
 
