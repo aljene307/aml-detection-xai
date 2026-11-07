@@ -1,0 +1,14 @@
+{
+  "demarrage_s": 3.1,
+  "memoire_demarrage_mo": 206.7,
+  "memoire_apres_appels_mo": 216.7,
+  "pic_mo": 220.5,
+  "appels": 200,
+  "limite_render_mo": 512,
+  "marge_mo": 291.5,
+  "duree_mediane_ms": {
+    "lof": 20.4,
+    "lightgbm": 16.6
+  },
+  "memoire_vue_par_health_mo": 211.9
+}

@@ -45,3 +45,10 @@ def test_test_result_is_written_once(tmp_path):
     (tmp_path / "test_correction_1.json").write_text("{}")
     assert output_path(tmp_path, "autre erreur").name == "test_correction_2.json"
     assert (tmp_path / "test.json").read_text() == "{}"  # le premier est gardé
+
+
+def test_text_fingerprint_ignores_line_endings(tmp_path):
+    (tmp_path / "lf.json").write_bytes(b'{\n  "a": 1\n}\n')
+    (tmp_path / "crlf.json").write_bytes(b'{\r\n  "a": 1\r\n}\r\n')
+    assert sha256_file(tmp_path / "lf.json", normalize_eol=True) == sha256_file(tmp_path / "crlf.json", normalize_eol=True)
+    assert sha256_file(tmp_path / "lf.json") != sha256_file(tmp_path / "crlf.json")

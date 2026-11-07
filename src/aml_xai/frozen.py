@@ -23,7 +23,11 @@ def load_frozen(path: Path = FROZEN_PATH) -> dict:
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
-def sha256_file(path: Path) -> str:
+def sha256_file(path: Path, normalize_eol: bool = False) -> str:
+    """Empreinte d'un fichier. Avec `normalize_eol`, les fins de ligne CRLF comptent comme LF :
+    l'empreinte d'un fichier texte est alors la même sous Windows et sous Linux."""
+    if normalize_eol:
+        return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
     digest = hashlib.sha256()
     with open(path, "rb") as f:
         for block in iter(lambda: f.read(1 << 20), b""):

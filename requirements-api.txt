@@ -32,3 +32,6 @@ anyio==4.15.1
 h11==0.16.0
 click==8.5.0
 typing_extensions==4.16.0
+
+# Mémoire utilisée, affichée par /health
+psutil==7.2.2

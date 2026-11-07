@@ -1305,3 +1305,33 @@ configuration et matrices identiques aux empreintes figées.
   transaction quelconque, l'API renvoie le score de LOF et son rang, avec un
   message indiquant que son explication n'est disponible que pour les
   exemples. Pic de mémoire de la mesure : 318 Mo.
+- **API écrite** (`api/main.py`, `api/schemas.py`, `src/aml_xai/api_service.py`) :
+  6 endpoints (`/health`, `/model/info`, `/score`, `/explain`, `/examples`,
+  `/examples/{id}`). Fichiers lus au démarrage, préparés par
+  `scripts/build_api_artifacts.py` : LOF en joblib (copie exacte du modèle
+  vérifié en 7a), LightGBM au format texte (redonne exactement les scores de
+  validation figés), quantiles des scores de validation pour le rang, les
+  30 exemples avec l'explication de LOF calculée à l'avance, et un manifeste
+  des empreintes contrôlé au démarrage.
+- **Fins de ligne** : Git convertit les fichiers texte selon le système (CRLF
+  sous Windows, LF sous Linux). Les empreintes du manifeste sont donc
+  calculées après normalisation des fins de ligne pour les fichiers texte, et
+  octet par octet pour le joblib : elles sont les mêmes sur le PC et sur
+  Render. Les empreintes de la section 29 sont celles des fichiers du PC ;
+  pour `models/frequences.json`, `transformation.json` et
+  `valeurs_habituelles.json`, écrits en CRLF sous Windows, elles ne se
+  retrouvent qu'avec des fins de ligne CRLF. Leur contenu dans Git est
+  identique depuis le commit `7dc2131` (différence vide), ce qui reste la
+  preuve qu'ils n'ont pas changé.
+- **Mesures de l'API** (`scripts/measure_api_memory.py`, vrai serveur
+  `uvicorn`, `reports/mesures/api_memoire.json`) : démarrage en 3 s ;
+  mémoire de 207 Mo au démarrage, 217 Mo après 200 appels, pic de 221 Mo,
+  soit une marge d'environ 290 Mo sous les 512 Mo de Render (mesure faite
+  sous Windows, à confirmer sur Render) ; réponse médiane de 20 ms (LOF) et
+  17 ms (LightGBM).
+- **Tests** (`tests/test_api.py`) : chaque exemple affiché dans `/docs`, lu
+  dans le schéma OpenAPI, renvoie 200 avec les deux modèles ; les 30 exemples
+  redonnent exactement leurs scores ; additivité de l'explication LightGBM ;
+  explication de LOF à l'avance ou absente avec un message ; erreurs 422 pour
+  un historique incohérent ; 200 000 vraies transactions passent le contrôle
+  de cohérence.

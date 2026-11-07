@@ -1,0 +1,2156 @@
+[
+  {
+    "id": 1,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 8817861,
+    "blanchiment": 1,
+    "typologie": "Behavioural_Change_2",
+    "entree": {
+      "montant": 3583.0,
+      "horodatage": "2023-07-30T21:58:04",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Albanian lek",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "Albania",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 2,
+        "em_ratio_montant_30j": 0.93578040599823,
+        "em_ecart_precedent_s": 11282,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 2,
+        "em_nb_distincts_30j": 13,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0590729713439941,
+      "lightgbm": -4.212828235945377
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.104332,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": 0.0,
+        "RAFALE_DESTINATAIRE": 0.0,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.0,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.135787,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": -0.099532,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.398023,
+        "HORAIRE": -0.276197,
+        "DEVISE": -0.982613,
+        "PAYS": 0.752913,
+        "TYPE_PAIEMENT": 0.123927
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.752913,
+          "phrase": "De UK vers Albania"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.398023,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "TYPE_PAIEMENT",
+          "libelle": "Type de paiement",
+          "contribution": 0.123927,
+          "phrase": "Type de paiement : Cross-border"
+        }
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 8395052,
+    "blanchiment": 1,
+    "typologie": "Bipartite",
+    "entree": {
+      "montant": 8595.26,
+      "horodatage": "2023-07-16T09:09:17",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Credit card",
+      "historique": {
+        "em_nb_1h": 1,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 0.03902316465973854,
+        "em_ecart_precedent_s": 63,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 3,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 14.712872505187988,
+        "re_ecart_precedent_s": 250888,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.99324631690979,
+      "lightgbm": 35.06180196824975
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.138373,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.315307,
+        "RAFALE_EMETTEUR": 0.039752,
+        "RAFALE_DESTINATAIRE": -0.056984,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.09859,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.124002,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.072077,
+        "HORAIRE": 0.02861,
+        "DEVISE": 0.059512,
+        "PAYS": 0.0,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "MONTANT_INHABITUEL_DESTINATAIRE",
+          "libelle": "Montant inhabituel pour le destinataire",
+          "contribution": 0.315307,
+          "phrase": "14,7 fois le montant moyen reçu sur 30 jours (habituellement 1,0)"
+        },
+        {
+          "code": "MONTANT_INHABITUEL_EMETTEUR",
+          "libelle": "Montant inhabituel pour l'émetteur",
+          "contribution": 0.138373,
+          "phrase": "seulement 0,0 fois le montant moyen envoyé sur 30 jours (habituellement 1,0)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.124002,
+          "phrase": "Envoi précédent il y a seulement 1,1 min (habituellement 199 min)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 3,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 8669008,
+    "blanchiment": 1,
+    "typologie": "Cycle",
+    "entree": {
+      "montant": 5008.128484110772,
+      "horodatage": "2023-07-25T20:17:16",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Credit card",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 0.06518743932247162,
+        "em_ecart_precedent_s": 2011136,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 1,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 0.8588168025016785,
+        "re_ecart_precedent_s": 2150216,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.4301882982254028,
+      "lightgbm": 30.574993780204288
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.258357,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.108278,
+        "RAFALE_DESTINATAIRE": -0.128332,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.050553,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.203075,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.106603,
+        "HORAIRE": -0.074104,
+        "DEVISE": 0.0581,
+        "PAYS": -0.109793,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "MONTANT_INHABITUEL_EMETTEUR",
+          "libelle": "Montant inhabituel pour l'émetteur",
+          "contribution": 0.258357,
+          "phrase": "seulement 0,1 fois le montant moyen envoyé sur 30 jours (habituellement 1,0)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.203075,
+          "phrase": "Envoi précédent il y a 559 h (habituellement 3,3 h)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.106603,
+          "phrase": "Réception précédente il y a 597 h (habituellement 14 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 4,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 9171537,
+    "blanchiment": 1,
+    "typologie": "Deposit-Send",
+    "entree": {
+      "montant": 5607.19,
+      "horodatage": "2023-08-11T23:29:01",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Cash Deposit",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 0.7502803206443787,
+        "em_ecart_precedent_s": 1342050,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 1,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.1940467357635498,
+        "re_ecart_precedent_s": 782582,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 2
+      }
+    },
+    "scores_attendus": {
+      "lof": 2.167384624481201,
+      "lightgbm": 6.54680168164177
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.081369,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.099987,
+        "RAFALE_DESTINATAIRE": -0.241077,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.0,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.172909,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.145684,
+        "HORAIRE": 0.178691,
+        "DEVISE": 0.076015,
+        "PAYS": -0.056559,
+        "TYPE_PAIEMENT": 0.736331
+      },
+      "codes_motifs": [
+        {
+          "code": "TYPE_PAIEMENT",
+          "libelle": "Type de paiement",
+          "contribution": 0.736331,
+          "phrase": "Type de paiement : Cash Deposit"
+        },
+        {
+          "code": "HORAIRE",
+          "libelle": "Moment de la transaction",
+          "contribution": 0.178691,
+          "phrase": "Le vendredi à 23 h 29"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.172909,
+          "phrase": "Envoi précédent il y a 373 h (habituellement 3,3 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 5,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 7728464,
+    "blanchiment": 1,
+    "typologie": "Fan_In",
+    "entree": {
+      "montant": 5412.78,
+      "horodatage": "2023-06-23T21:03:22",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Mexican Peso",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "Mexico",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 31.903690338134766,
+        "em_ecart_precedent_s": 65905,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 1,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 0.41190603375434875,
+        "re_ecart_precedent_s": 97994,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 4
+      }
+    },
+    "scores_attendus": {
+      "lof": 2.0055975914001465,
+      "lightgbm": 59.456962725949325
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.015823,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.142546,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.052321,
+        "RAFALE_EMETTEUR": 0.0,
+        "RAFALE_DESTINATAIRE": 0.026059,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.023163,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.076044,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.0,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.072481,
+        "HORAIRE": 0.0,
+        "DEVISE": -0.147644,
+        "PAYS": 0.570798,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.570798,
+          "phrase": "De UK vers Mexico"
+        },
+        {
+          "code": "MONTANT_INHABITUEL_EMETTEUR",
+          "libelle": "Montant inhabituel pour l'émetteur",
+          "contribution": 0.142546,
+          "phrase": "31,9 fois le montant moyen envoyé sur 30 jours (habituellement 1,0)"
+        },
+        {
+          "code": "SOURCES_MULTIPLES_DESTINATAIRE",
+          "libelle": "Nombreux émetteurs différents",
+          "contribution": 0.076044,
+          "phrase": "4 émetteurs différents en 30 jours (habituellement 1)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 6,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 9231964,
+    "blanchiment": 1,
+    "typologie": "Fan_Out",
+    "entree": {
+      "montant": 49664.78,
+      "horodatage": "2023-08-14T00:13:29",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Credit card",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 6.117056369781494,
+        "em_ecart_precedent_s": 203395,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 4,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 4.0000128746032715,
+        "re_ecart_precedent_s": 633707,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 2
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.615309715270996,
+      "lightgbm": 33.42038709023729
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.050077,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.284876,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.098619,
+        "RAFALE_DESTINATAIRE": -0.125386,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.062184,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.041072,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.0,
+        "HORAIRE": 0.144721,
+        "DEVISE": 0.08238,
+        "PAYS": 0.0,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "MONTANT_INHABITUEL_EMETTEUR",
+          "libelle": "Montant inhabituel pour l'émetteur",
+          "contribution": 0.284876,
+          "phrase": "6,1 fois le montant moyen envoyé sur 30 jours (habituellement 1,0)"
+        },
+        {
+          "code": "HORAIRE",
+          "libelle": "Moment de la transaction",
+          "contribution": 0.144721,
+          "phrase": "Le lundi à 0 h 13"
+        },
+        {
+          "code": "DEVISE",
+          "libelle": "Devises",
+          "contribution": 0.08238,
+          "phrase": "Même devise : payé et reçu en UK pounds"
+        }
+      ]
+    }
+  },
+  {
+    "id": 7,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 8735008,
+    "blanchiment": 1,
+    "typologie": "Layered_Fan_Out",
+    "entree": {
+      "montant": 3648.0461187698425,
+      "horodatage": "2023-07-28T05:10:01",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Cheque",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 1.5814640522003174,
+        "em_ecart_precedent_s": 156505,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 2,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 0.28079742193222046,
+        "re_ecart_precedent_s": 548733,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.5277363061904907,
+      "lightgbm": -3.110345992354283
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.30761,
+        "RAFALE_EMETTEUR": -0.102868,
+        "RAFALE_DESTINATAIRE": -0.193638,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.145404,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.053901,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.08069,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.074492,
+        "HORAIRE": -0.076362,
+        "DEVISE": 0.0645,
+        "PAYS": 0.0,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "MONTANT_INHABITUEL_DESTINATAIRE",
+          "libelle": "Montant inhabituel pour le destinataire",
+          "contribution": 0.30761,
+          "phrase": "seulement 0,3 fois le montant moyen reçu sur 30 jours (habituellement 1,0)"
+        },
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.145404,
+          "phrase": "Aucun destinataire différent en 24 h (habituellement 1), seulement 2 destinataires différents en 30 jours (habituellement 13)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.08069,
+          "phrase": "Envoi précédent il y a 43 h (habituellement 3,3 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 8,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 9264612,
+    "blanchiment": 1,
+    "typologie": "Over-Invoicing",
+    "entree": {
+      "montant": 3194040.33,
+      "horodatage": "2023-08-15T06:55:37",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Debit card",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 82.47467041015625,
+        "em_ecart_precedent_s": 7317,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 2,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 365.56878662109375,
+        "re_ecart_precedent_s": 1718196,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 2
+      }
+    },
+    "scores_attendus": {
+      "lof": 3.3932127952575684,
+      "lightgbm": 61.41563651775602
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.71147,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.192145,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 1.004184,
+        "RAFALE_EMETTEUR": 0.013363,
+        "RAFALE_DESTINATAIRE": 0.0,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.048936,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.053576,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.097807,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.060068,
+        "HORAIRE": 0.0,
+        "DEVISE": 0.037657,
+        "PAYS": 0.0,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "MONTANT_INHABITUEL_DESTINATAIRE",
+          "libelle": "Montant inhabituel pour le destinataire",
+          "contribution": 1.004184,
+          "phrase": "365,6 fois le montant moyen reçu sur 30 jours (habituellement 1,0)"
+        },
+        {
+          "code": "MONTANT",
+          "libelle": "Montant",
+          "contribution": 0.71147,
+          "phrase": "Montant de 3 194 040,33 £ (habituellement 6 120,24 £)"
+        },
+        {
+          "code": "MONTANT_INHABITUEL_EMETTEUR",
+          "libelle": "Montant inhabituel pour l'émetteur",
+          "contribution": 0.192145,
+          "phrase": "82,5 fois le montant moyen envoyé sur 30 jours (habituellement 1,0)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 9,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 8562620,
+    "blanchiment": 1,
+    "typologie": "Scatter-Gather",
+    "entree": {
+      "montant": 11814.12,
+      "horodatage": "2023-07-21T21:25:32",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "ACH",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 2.2348406314849854,
+        "em_ecart_precedent_s": 39983,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 3,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.2919716835021973,
+      "lightgbm": -3.765766190784985
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.127615,
+        "RAFALE_DESTINATAIRE": -0.272208,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.180615,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.096277,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": -0.06574,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.474962,
+        "HORAIRE": -0.059785,
+        "DEVISE": 0.084012,
+        "PAYS": 0.0,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.474962,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.180615,
+          "phrase": "1 destinataire différent en 24 h (valeur habituelle), seulement 3 destinataires différents en 30 jours (habituellement 13)"
+        },
+        {
+          "code": "DEVISE",
+          "libelle": "Devises",
+          "contribution": 0.084012,
+          "phrase": "Même devise : payé et reçu en UK pounds"
+        }
+      ]
+    }
+  },
+  {
+    "id": 10,
+    "categorie": "vrai_cas_alerte",
+    "transaction_id": 9154550,
+    "blanchiment": 1,
+    "typologie": "Smurfing",
+    "entree": {
+      "montant": 2901.87,
+      "horodatage": "2023-08-11T12:11:43",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Cash Deposit",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 0.859635055065155,
+        "em_ecart_precedent_s": 67956,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 10,
+        "re_nb_1h": 0,
+        "re_nb_24h": 1,
+        "re_ratio_montant_30j": 1.3950515985488892,
+        "re_ecart_precedent_s": 67956,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 2
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.5720396041870117,
+      "lightgbm": 168.771074851662
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.138603,
+        "RAFALE_DESTINATAIRE": -0.18236,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.068403,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.029907,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.091205,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": -0.009,
+        "HORAIRE": -0.131501,
+        "DEVISE": 0.06543,
+        "PAYS": 0.0,
+        "TYPE_PAIEMENT": 0.604553
+      },
+      "codes_motifs": [
+        {
+          "code": "TYPE_PAIEMENT",
+          "libelle": "Type de paiement",
+          "contribution": 0.604553,
+          "phrase": "Type de paiement : Cash Deposit"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.091205,
+          "phrase": "Envoi précédent il y a 19 h (habituellement 3,3 h)"
+        },
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.068403,
+          "phrase": "1 destinataire différent en 24 h (valeur habituelle), seulement 10 destinataires différents en 30 jours (habituellement 13)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 11,
+    "categorie": "fausse_alerte",
+    "transaction_id": 7728922,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 14790.44,
+      "horodatage": "2023-06-23T21:21:10",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Debit card",
+      "historique": {
+        "em_nb_1h": 1,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 0.588706910610199,
+        "em_ecart_precedent_s": 2651,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 7,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 0.9319882988929749,
+        "re_ecart_precedent_s": 366973,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.3243173360824585,
+      "lightgbm": -4.766525005217311
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.106539,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.044706,
+        "RAFALE_DESTINATAIRE": -0.061173,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.121179,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.0,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.119236,
+        "HORAIRE": -0.046107,
+        "DEVISE": 0.082964,
+        "PAYS": -0.090669,
+        "TYPE_PAIEMENT": -0.036952
+      },
+      "codes_motifs": [
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.121179,
+          "phrase": "1 destinataire différent en 24 h (valeur habituelle), seulement 7 destinataires différents en 30 jours (habituellement 13)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.119236,
+          "phrase": "Réception précédente il y a 102 h (habituellement 14 h)"
+        },
+        {
+          "code": "MONTANT",
+          "libelle": "Montant",
+          "contribution": 0.106539,
+          "phrase": "Montant de 14 790,44 £ (habituellement 6 120,24 £)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 12,
+    "categorie": "fausse_alerte",
+    "transaction_id": 7905343,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 6816.33,
+      "horodatage": "2023-06-29T18:15:43",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Euro",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "Netherlands",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 2,
+        "em_ratio_montant_30j": 1.43430495262146,
+        "em_ecart_precedent_s": 55274,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 2,
+        "em_nb_distincts_30j": 19,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0114130973815918,
+      "lightgbm": -4.113982961322685
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.055757,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": 0.0,
+        "RAFALE_DESTINATAIRE": -0.181565,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.049849,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.199491,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.05942,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.443291,
+        "HORAIRE": 0.081787,
+        "DEVISE": -1.04487,
+        "PAYS": 0.573228,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.573228,
+          "phrase": "De UK vers Netherlands"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.443291,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "HORAIRE",
+          "libelle": "Moment de la transaction",
+          "contribution": 0.081787,
+          "phrase": "Le jeudi à 18 h 15"
+        }
+      ]
+    }
+  },
+  {
+    "id": 13,
+    "categorie": "fausse_alerte",
+    "transaction_id": 8124851,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 957.37,
+      "horodatage": "2023-07-07T08:58:02",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Cheque",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 0.024939777329564095,
+        "em_ecart_precedent_s": 54304,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 1,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.8260577917099,
+      "lightgbm": -4.896235710270101
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.096328,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.153457,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.10058,
+        "RAFALE_DESTINATAIRE": -0.283663,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.346569,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.122436,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.057054,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.43153,
+        "HORAIRE": 0.0,
+        "DEVISE": 0.073792,
+        "PAYS": 0.0,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.43153,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.346569,
+          "phrase": "1 destinataire différent en 24 h (valeur habituelle), seulement 1 destinataire différent en 30 jours (habituellement 13)"
+        },
+        {
+          "code": "MONTANT_INHABITUEL_EMETTEUR",
+          "libelle": "Montant inhabituel pour l'émetteur",
+          "contribution": 0.153457,
+          "phrase": "seulement 0,0 fois le montant moyen envoyé sur 30 jours (habituellement 1,0)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 14,
+    "categorie": "fausse_alerte",
+    "transaction_id": 8295600,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 13371.58,
+      "horodatage": "2023-07-12T22:39:59",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Yen",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "Japan",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 1.2651867866516113,
+        "em_ecart_precedent_s": 12101,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 32,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0228321552276611,
+      "lightgbm": -4.7853716076400135
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": -0.105038,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": 0.0,
+        "RAFALE_DESTINATAIRE": -0.086764,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.152422,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.0,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.214464,
+        "HORAIRE": -0.1181,
+        "DEVISE": -0.991088,
+        "PAYS": 0.65481,
+        "TYPE_PAIEMENT": 0.128119
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.65481,
+          "phrase": "De UK vers Japan"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.214464,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.152422,
+          "phrase": "1 destinataire différent en 24 h (valeur habituelle), 32 destinataires différents en 30 jours (habituellement 13)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 15,
+    "categorie": "fausse_alerte",
+    "transaction_id": 8863680,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 6320.82,
+      "horodatage": "2023-08-01T15:40:02",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Dirham",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UAE",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 0.6668052673339844,
+        "em_ecart_precedent_s": 113026,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 7,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 0.8502010703086853,
+        "re_ecart_precedent_s": 257516,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 0.9996271133422852,
+      "lightgbm": -4.641959298354484
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": -0.08557,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": 0.0,
+        "RAFALE_DESTINATAIRE": -0.176519,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.059006,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.0,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.097006,
+        "HORAIRE": 0.0,
+        "DEVISE": -1.058997,
+        "PAYS": 0.846442,
+        "TYPE_PAIEMENT": 0.144252
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.846442,
+          "phrase": "De UK vers UAE"
+        },
+        {
+          "code": "TYPE_PAIEMENT",
+          "libelle": "Type de paiement",
+          "contribution": 0.144252,
+          "phrase": "Type de paiement : Cross-border"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.097006,
+          "phrase": "Réception précédente il y a 72 h (habituellement 14 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 16,
+    "categorie": "fausse_alerte",
+    "transaction_id": 8979213,
+    "blanchiment": 0,
+    "typologie": "Normal_Plus_Mutual",
+    "entree": {
+      "montant": 21013.77,
+      "horodatage": "2023-08-05T13:18:34",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Euro",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "Italy",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 1.0,
+        "em_ecart_precedent_s": 2592000,
+        "em_sans_historique_30j": 1,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 0,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0104691982269287,
+      "lightgbm": -4.417402724962672
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.085091,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": 0.0,
+        "RAFALE_DESTINATAIRE": 0.0,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": -0.192388,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.097568,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.445141,
+        "HORAIRE": -0.051398,
+        "DEVISE": -1.194445,
+        "PAYS": 0.440907,
+        "TYPE_PAIEMENT": 0.205987
+      },
+      "codes_motifs": [
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.445141,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.440907,
+          "phrase": "De UK vers Italy"
+        },
+        {
+          "code": "TYPE_PAIEMENT",
+          "libelle": "Type de paiement",
+          "contribution": 0.205987,
+          "phrase": "Type de paiement : Cross-border"
+        }
+      ]
+    }
+  },
+  {
+    "id": 17,
+    "categorie": "fausse_alerte",
+    "transaction_id": 9082979,
+    "blanchiment": 0,
+    "typologie": "Normal_Plus_Mutual",
+    "entree": {
+      "montant": 4963.15,
+      "horodatage": "2023-08-08T23:30:36",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Yen",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "Japan",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 1.0,
+        "em_ecart_precedent_s": 2592000,
+        "em_sans_historique_30j": 1,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 0,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0007699728012085,
+      "lightgbm": -4.84921329302179
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.175159,
+        "RAFALE_EMETTEUR": -0.314714,
+        "RAFALE_DESTINATAIRE": -0.243649,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.0,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.483544,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.406343,
+        "HORAIRE": 0.0,
+        "DEVISE": -1.141007,
+        "PAYS": 0.276218,
+        "TYPE_PAIEMENT": 0.184868
+      },
+      "codes_motifs": [
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.483544,
+          "phrase": "Aucun envoi dans les 30 jours précédents"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.406343,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.276218,
+          "phrase": "De UK vers Japan"
+        }
+      ]
+    }
+  },
+  {
+    "id": 18,
+    "categorie": "fausse_alerte",
+    "transaction_id": 9208220,
+    "blanchiment": 0,
+    "typologie": "Normal_Plus_Mutual",
+    "entree": {
+      "montant": 7050.51,
+      "horodatage": "2023-08-13T09:40:03",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Mexican Peso",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "Mexico",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 1.0,
+        "em_ecart_precedent_s": 2592000,
+        "em_sans_historique_30j": 1,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 0,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.3101052045822144,
+        "re_ecart_precedent_s": 910106,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 3
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.3526618480682373,
+      "lightgbm": -4.937359935797266
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.172687,
+        "RAFALE_DESTINATAIRE": -0.135871,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": -0.183556,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.334191,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.0,
+        "HORAIRE": -0.017097,
+        "DEVISE": -0.695324,
+        "PAYS": 0.841257,
+        "TYPE_PAIEMENT": 0.207742
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.841257,
+          "phrase": "De UK vers Mexico"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.334191,
+          "phrase": "Aucun envoi dans les 30 jours précédents"
+        },
+        {
+          "code": "TYPE_PAIEMENT",
+          "libelle": "Type de paiement",
+          "contribution": 0.207742,
+          "phrase": "Type de paiement : Cross-border"
+        }
+      ]
+    }
+  },
+  {
+    "id": 19,
+    "categorie": "fausse_alerte",
+    "transaction_id": 9263889,
+    "blanchiment": 0,
+    "typologie": "Normal_Group",
+    "entree": {
+      "montant": 8319.32,
+      "horodatage": "2023-08-15T05:00:27",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Credit card",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 1.248976469039917,
+        "em_ecart_precedent_s": 560328,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 1,
+        "re_nb_1h": 0,
+        "re_nb_24h": 1,
+        "re_ratio_montant_30j": 1.474401831626892,
+        "re_ecart_precedent_s": 59713,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 10
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0229220390319824,
+      "lightgbm": 2.238699671683408
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": -0.048494,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.090413,
+        "RAFALE_DESTINATAIRE": -0.099459,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": -0.108883,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.277982,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.148759,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": -0.067986,
+        "HORAIRE": -0.110544,
+        "DEVISE": 0.0,
+        "PAYS": -0.052045,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "SOURCES_MULTIPLES_DESTINATAIRE",
+          "libelle": "Nombreux émetteurs différents",
+          "contribution": 0.277982,
+          "phrase": "10 émetteurs différents en 30 jours (habituellement 1)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.148759,
+          "phrase": "Envoi précédent il y a 156 h (habituellement 3,3 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 20,
+    "categorie": "fausse_alerte",
+    "transaction_id": 9458995,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 10194.45,
+      "horodatage": "2023-08-21T18:10:22",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Cheque",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 2.025663137435913,
+        "em_ecart_precedent_s": 378517,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 3,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 0.8678195476531982,
+        "re_ecart_precedent_s": 2316020,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.211168885231018,
+      "lightgbm": -0.4246195219172715
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.113963,
+        "RAFALE_DESTINATAIRE": -0.202218,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.127126,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.138248,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.155413,
+        "HORAIRE": -0.131158,
+        "DEVISE": 0.126944,
+        "PAYS": -0.06323,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.155413,
+          "phrase": "Réception précédente il y a 643 h (habituellement 14 h)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.138248,
+          "phrase": "Envoi précédent il y a 105 h (habituellement 3,3 h)"
+        },
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.127126,
+          "phrase": "Aucun destinataire différent en 24 h (habituellement 1), seulement 3 destinataires différents en 30 jours (habituellement 13)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 21,
+    "categorie": "cas_manque",
+    "transaction_id": 7690478,
+    "blanchiment": 1,
+    "typologie": "Behavioural_Change_2",
+    "entree": {
+      "montant": 517.42,
+      "horodatage": "2023-06-22T15:40:39",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Dirham",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UAE",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 0.1165374144911766,
+        "em_ecart_precedent_s": 99165,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 17,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 0.9979310035705566,
+      "lightgbm": -6.882743585959176
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": 0.0,
+        "RAFALE_DESTINATAIRE": -0.141996,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": -0.109874,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.189517,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.0,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.434225,
+        "HORAIRE": 0.0,
+        "DEVISE": -1.00302,
+        "PAYS": 0.834106,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.834106,
+          "phrase": "De UK vers UAE"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.434225,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        }
+      ]
+    }
+  },
+  {
+    "id": 22,
+    "categorie": "cas_manque",
+    "transaction_id": 7896527,
+    "blanchiment": 1,
+    "typologie": "Scatter-Gather",
+    "entree": {
+      "montant": 3587.5915542820235,
+      "horodatage": "2023-06-29T13:17:27",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "Indian rupee",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "India",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 0.3479464054107666,
+        "em_ecart_precedent_s": 170879,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 12,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 0.23078680038452148,
+        "re_ecart_precedent_s": 2101588,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.1893651485443115,
+      "lightgbm": -7.321446741534343
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.025466,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.064991,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.104456,
+        "RAFALE_EMETTEUR": 0.0,
+        "RAFALE_DESTINATAIRE": -0.195656,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.056418,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.059737,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.128722,
+        "HORAIRE": 0.0,
+        "DEVISE": -0.826778,
+        "PAYS": 0.598002,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 0.598002,
+          "phrase": "De UK vers India"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.128722,
+          "phrase": "Réception précédente il y a 584 h (habituellement 14 h)"
+        },
+        {
+          "code": "MONTANT_INHABITUEL_DESTINATAIRE",
+          "libelle": "Montant inhabituel pour le destinataire",
+          "contribution": 0.104456,
+          "phrase": "seulement 0,2 fois le montant moyen reçu sur 30 jours (habituellement 1,0)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 23,
+    "categorie": "cas_manque",
+    "transaction_id": 8740795,
+    "blanchiment": 1,
+    "typologie": "Layered_Fan_In",
+    "entree": {
+      "montant": 12695.0,
+      "horodatage": "2023-07-28T10:40:55",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "ACH",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 2.5856974124908447,
+        "em_ecart_precedent_s": 298130,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 10,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 0.9957736730575562,
+      "lightgbm": -7.228761561750341
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.11522,
+        "RAFALE_DESTINATAIRE": -0.27711,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.0,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.127331,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.17236,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.439153,
+        "HORAIRE": -0.125714,
+        "DEVISE": 0.0,
+        "PAYS": -0.113091,
+        "TYPE_PAIEMENT": -0.031279
+      },
+      "codes_motifs": [
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.439153,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.17236,
+          "phrase": "Envoi précédent il y a 83 h (habituellement 3,3 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 24,
+    "categorie": "cas_manque",
+    "transaction_id": 8993237,
+    "blanchiment": 1,
+    "typologie": "Fan_In",
+    "entree": {
+      "montant": 7268.02,
+      "horodatage": "2023-08-05T21:46:07",
+      "devise_paiement": "Indian rupee",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "India",
+      "pays_destinataire": "UK",
+      "type_paiement": "Cross-border",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 1.0,
+        "em_ecart_precedent_s": 2592000,
+        "em_sans_historique_30j": 1,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 0,
+        "re_nb_1h": 0,
+        "re_nb_24h": 1,
+        "re_ratio_montant_30j": 0.24612966179847717,
+        "re_ecart_precedent_s": 17912,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 3
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.052557110786438,
+      "lightgbm": -7.242578392393123
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.549982,
+        "RAFALE_DESTINATAIRE": 0.0,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": -0.134406,
+        "SOURCES_MULTIPLES_DESTINATAIRE": 0.0,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.553508,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.130443,
+        "HORAIRE": -0.148249,
+        "DEVISE": -1.165529,
+        "PAYS": 1.192765,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "PAYS",
+          "libelle": "Pays des banques",
+          "contribution": 1.192765,
+          "phrase": "De India vers UK"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.553508,
+          "phrase": "Aucun envoi dans les 30 jours précédents"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.130443,
+          "phrase": "Réception précédente il y a seulement 5,0 h (habituellement 14 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 25,
+    "categorie": "cas_manque",
+    "transaction_id": 9134807,
+    "blanchiment": 1,
+    "typologie": "Cash_Withdrawal",
+    "entree": {
+      "montant": 180.52,
+      "horodatage": "2023-08-10T17:54:04",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Cash Withdrawal",
+      "historique": {
+        "em_nb_1h": 1,
+        "em_nb_24h": 2,
+        "em_ratio_montant_30j": 0.026643656194210052,
+        "em_ecart_precedent_s": 3534,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 2,
+        "em_nb_distincts_30j": 15,
+        "re_nb_1h": 0,
+        "re_nb_24h": 1,
+        "re_ratio_montant_30j": 0.9536689519882202,
+        "re_ecart_precedent_s": 36543,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.09492027759552,
+      "lightgbm": -7.830031833940875
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": -0.039114,
+        "RAFALE_EMETTEUR": -0.026868,
+        "RAFALE_DESTINATAIRE": -0.110188,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": -0.052348,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.129347,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.0,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": -0.031219,
+        "HORAIRE": -0.122261,
+        "DEVISE": 0.0,
+        "PAYS": -0.018244,
+        "TYPE_PAIEMENT": 0.450504
+      },
+      "codes_motifs": [
+        {
+          "code": "TYPE_PAIEMENT",
+          "libelle": "Type de paiement",
+          "contribution": 0.450504,
+          "phrase": "Type de paiement : Cash Withdrawal"
+        }
+      ]
+    }
+  },
+  {
+    "id": 26,
+    "categorie": "normale",
+    "transaction_id": 7749031,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 1122.26,
+      "horodatage": "2023-06-24T15:24:43",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "ACH",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 0.2782094478607178,
+        "em_ecart_precedent_s": 86142,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 25,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.6182318925857544,
+        "re_ecart_precedent_s": 284087,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0292329788208008,
+      "lightgbm": -8.223028841925924
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.093083,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.116218,
+        "RAFALE_DESTINATAIRE": -0.167166,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.109058,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.100306,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.065542,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.074837,
+        "HORAIRE": -0.157598,
+        "DEVISE": 0.053992,
+        "PAYS": 0.0,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.109058,
+          "phrase": "1 destinataire différent en 24 h (valeur habituelle), 25 destinataires différents en 30 jours (habituellement 13)"
+        },
+        {
+          "code": "MONTANT",
+          "libelle": "Montant",
+          "contribution": 0.093083,
+          "phrase": "Montant de seulement 1 122,26 £ (habituellement 6 120,24 £)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.074837,
+          "phrase": "Réception précédente il y a 79 h (habituellement 14 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 27,
+    "categorie": "normale",
+    "transaction_id": 8223143,
+    "blanchiment": 0,
+    "typologie": "Normal_Fan_Out",
+    "entree": {
+      "montant": 8707.36,
+      "horodatage": "2023-07-10T14:08:35",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Cheque",
+      "historique": {
+        "em_nb_1h": 8,
+        "em_nb_24h": 46,
+        "em_ratio_montant_30j": 1.400951862335205,
+        "em_ecart_precedent_s": 206,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 8,
+        "em_nb_distincts_30j": 23,
+        "re_nb_1h": 0,
+        "re_nb_24h": 6,
+        "re_ratio_montant_30j": 1.0047450065612793,
+        "re_ecart_precedent_s": 4330,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0630265474319458,
+      "lightgbm": -8.225345395856632
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": 0.30696,
+        "RAFALE_DESTINATAIRE": -0.05722,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.111647,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.165555,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": -0.114024,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.0,
+        "HORAIRE": -0.11757,
+        "DEVISE": 0.106084,
+        "PAYS": -0.107015,
+        "TYPE_PAIEMENT": -0.074287
+      },
+      "codes_motifs": [
+        {
+          "code": "RAFALE_EMETTEUR",
+          "libelle": "Rafale d'envois",
+          "contribution": 0.30696,
+          "phrase": "8 envois dans l'heure précédente (habituellement 0), 46 envois sur 24 h (habituellement 2)"
+        },
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.111647,
+          "phrase": "8 destinataires différents en 24 h (habituellement 1), 23 destinataires différents en 30 jours (habituellement 13)"
+        },
+        {
+          "code": "DEVISE",
+          "libelle": "Devises",
+          "contribution": 0.106084,
+          "phrase": "Même devise : payé et reçu en UK pounds"
+        }
+      ]
+    }
+  },
+  {
+    "id": 28,
+    "categorie": "normale",
+    "transaction_id": 8307995,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 3284.03,
+      "horodatage": "2023-07-13T12:16:10",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "ACH",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 2,
+        "em_ratio_montant_30j": 0.3043345808982849,
+        "em_ecart_precedent_s": 62972,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 2,
+        "em_nb_distincts_30j": 19,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.00376558303833,
+        "re_ecart_precedent_s": 2580044,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0160324573516846,
+      "lightgbm": -7.812985939160991
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.046917,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.101027,
+        "RAFALE_DESTINATAIRE": -0.17162,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.097758,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.110651,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.084863,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.211451,
+        "HORAIRE": -0.221272,
+        "DEVISE": 0.08425,
+        "PAYS": -0.078643,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.211451,
+          "phrase": "Réception précédente il y a 717 h (habituellement 14 h)"
+        },
+        {
+          "code": "CONTREPARTIES_MULTIPLES_EMETTEUR",
+          "libelle": "Nombreux destinataires différents",
+          "contribution": 0.097758,
+          "phrase": "2 destinataires différents en 24 h (habituellement 1), 19 destinataires différents en 30 jours (habituellement 13)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.084863,
+          "phrase": "Envoi précédent il y a 17 h (habituellement 3,3 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 29,
+    "categorie": "normale",
+    "transaction_id": 8384759,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 5730.2,
+      "horodatage": "2023-07-15T20:45:08",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Credit card",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 0,
+        "em_ratio_montant_30j": 1.1262909173965454,
+        "em_ecart_precedent_s": 631009,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 0,
+        "em_nb_distincts_30j": 6,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 1.0,
+        "re_ecart_precedent_s": 2592000,
+        "re_sans_historique_30j": 1,
+        "re_nb_distincts_30j": 0
+      }
+    },
+    "scores_attendus": {
+      "lof": 1.0630549192428589,
+      "lightgbm": -6.8510197841394636
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.0,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.201071,
+        "RAFALE_DESTINATAIRE": -0.300991,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.0,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.095935,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.250007,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.440186,
+        "HORAIRE": -0.156384,
+        "DEVISE": 0.0,
+        "PAYS": -0.046764,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.440186,
+          "phrase": "Aucune réception dans les 30 jours précédents"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_EMETTEUR",
+          "libelle": "Émetteur nouveau ou inactif",
+          "contribution": 0.250007,
+          "phrase": "Envoi précédent il y a 175 h (habituellement 3,3 h)"
+        }
+      ]
+    }
+  },
+  {
+    "id": 30,
+    "categorie": "normale",
+    "transaction_id": 9325130,
+    "blanchiment": 0,
+    "typologie": "Normal_Small_Fan_Out",
+    "entree": {
+      "montant": 467.11,
+      "horodatage": "2023-08-17T08:13:33",
+      "devise_paiement": "UK pounds",
+      "devise_reception": "UK pounds",
+      "pays_emetteur": "UK",
+      "pays_destinataire": "UK",
+      "type_paiement": "Debit card",
+      "historique": {
+        "em_nb_1h": 0,
+        "em_nb_24h": 1,
+        "em_ratio_montant_30j": 0.11635071784257889,
+        "em_ecart_precedent_s": 31045,
+        "em_sans_historique_30j": 0,
+        "em_nb_distincts_24h": 1,
+        "em_nb_distincts_30j": 17,
+        "re_nb_1h": 0,
+        "re_nb_24h": 0,
+        "re_ratio_montant_30j": 0.9863693714141846,
+        "re_ecart_precedent_s": 1346700,
+        "re_sans_historique_30j": 0,
+        "re_nb_distincts_30j": 1
+      }
+    },
+    "scores_attendus": {
+      "lof": 0.9910038709640503,
+      "lightgbm": -8.223028841925924
+    },
+    "explication_lof": {
+      "valeur_de_base": 1.1740068522870541,
+      "contributions_groupes": {
+        "MONTANT": 0.1877,
+        "MONTANT_INHABITUEL_EMETTEUR": 0.0,
+        "MONTANT_INHABITUEL_DESTINATAIRE": 0.0,
+        "RAFALE_EMETTEUR": -0.080606,
+        "RAFALE_DESTINATAIRE": -0.240048,
+        "CONTREPARTIES_MULTIPLES_EMETTEUR": 0.0,
+        "SOURCES_MULTIPLES_DESTINATAIRE": -0.11483,
+        "REPRISE_OU_NOUVEAU_EMETTEUR": 0.0,
+        "REPRISE_OU_NOUVEAU_DESTINATAIRE": 0.145012,
+        "HORAIRE": -0.065788,
+        "DEVISE": 0.07516,
+        "PAYS": -0.089604,
+        "TYPE_PAIEMENT": 0.0
+      },
+      "codes_motifs": [
+        {
+          "code": "MONTANT",
+          "libelle": "Montant",
+          "contribution": 0.1877,
+          "phrase": "Montant de seulement 467,11 £ (habituellement 6 120,24 £)"
+        },
+        {
+          "code": "REPRISE_OU_NOUVEAU_DESTINATAIRE",
+          "libelle": "Destinataire nouveau ou inactif",
+          "contribution": 0.145012,
+          "phrase": "Réception précédente il y a 374 h (habituellement 14 h)"
+        },
+        {
+          "code": "DEVISE",
+          "libelle": "Devises",
+          "contribution": 0.07516,
+          "phrase": "Même devise : payé et reçu en UK pounds"
+        }
+      ]
+    }
+  }
+]
