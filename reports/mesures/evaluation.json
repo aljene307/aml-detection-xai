@@ -1,0 +1,1642 @@
+{
+  "hypotheses": {
+    "description": "Hypothèses de coût et de capacité (docs/CHOIX.md, section 9). Valeurs réglables, monnaie : livre sterling, celle des montants du jeu.",
+    "analystes": 5,
+    "heures_par_jour": 7,
+    "minutes_par_alerte": 15,
+    "cout_horaire_livres": 30,
+    "formules": {
+      "alertes_par_jour": "analystes × heures_par_jour × 60 ÷ minutes_par_alerte",
+      "cout_alerte_livres": "minutes_par_alerte ÷ 60 × cout_horaire_livres",
+      "cout_total_livres": "somme des montants des blanchiments non détectés + nombre d'alertes × cout_alerte_livres"
+    },
+    "alertes_par_jour": 140.0,
+    "cout_alerte_livres": 7.5
+  },
+  "jours_validation": 64.04,
+  "capacite_alertes": 8965.7,
+  "cas": 1988,
+  "montant_blanchi_total": 102848287.88,
+  "part_montant_over_invoicing": 0.7506,
+  "cout_sans_alerte": 102848287.88,
+  "methodes": {
+    "Isolation Forest, sans étiquette": {
+      "fichier_scores": "isolation_forest__n_estimators-100__max_samples-256__max_features-1.0__graine-42.npy",
+      "pr_auc": 0.00418,
+      "seuils": {
+        "au_budget": {
+          "seuil": 0.635805519774584,
+          "alertes": 8965,
+          "alertes_par_jour": 140.0,
+          "cas_detectes": 69,
+          "montant_manque": 98460953.3,
+          "cout_alertes": 67237.5,
+          "cout_total": 98528190.8
+        },
+        "retenu": {
+          "seuil": 0.6359087562758536,
+          "alertes": 8899,
+          "alertes_par_jour": 139.0,
+          "cas_detectes": 69,
+          "montant_manque": 98460953.3,
+          "cout_alertes": 66742.5,
+          "cout_total": 98527695.8
+        },
+        "cout_minimal": {
+          "seuil": 0.472761034140146,
+          "alertes": 605400,
+          "alertes_par_jour": 9453.4,
+          "cas_detectes": 1535,
+          "montant_manque": 3920009.09,
+          "cout_alertes": 4540500.0,
+          "cout_total": 8460509.09,
+          "respecte_capacite": false
+        }
+      },
+      "metriques_seuil_retenu": {
+        "vp": 69,
+        "fp": 8830,
+        "fn": 1919,
+        "vn": 1890152,
+        "precision": 0.007754,
+        "rappel": 0.034708,
+        "f2": 0.020474,
+        "mcc": 0.014233,
+        "part_montant_detecte": 0.0427
+      },
+      "cout_retenu_sans_over_invoicing": 24510224.11,
+      "k_premieres_par_jour": {
+        "vp": 75,
+        "fp": 9025,
+        "fn": 1913,
+        "vn": 1889957,
+        "precision": 0.008242,
+        "rappel": 0.037726,
+        "f2": 0.021992,
+        "mcc": 0.015441,
+        "k_par_jour": 140
+      },
+      "sensibilite": [
+        {
+          "alertes_par_jour": 25.0,
+          "seuil": 0.6534482833512548,
+          "alertes": 1601,
+          "cas_detectes": 19,
+          "montant_manque": 99308832.24,
+          "cout_alertes": 12007.5,
+          "cout_total": 99320839.74,
+          "rappel": 0.0096
+        },
+        {
+          "alertes_par_jour": 50.0,
+          "seuil": 0.6473252581241207,
+          "alertes": 3202,
+          "cas_detectes": 30,
+          "montant_manque": 98986116.25,
+          "cout_alertes": 24015.0,
+          "cout_total": 99010131.25,
+          "rappel": 0.0151
+        },
+        {
+          "alertes_par_jour": 100.0,
+          "seuil": 0.6403297654728307,
+          "alertes": 6404,
+          "cas_detectes": 52,
+          "montant_manque": 98732573.38,
+          "cout_alertes": 48030.0,
+          "cout_total": 98780603.38,
+          "rappel": 0.0262
+        },
+        {
+          "alertes_par_jour": 140.0,
+          "seuil": 0.635805519774584,
+          "alertes": 8965,
+          "cas_detectes": 69,
+          "montant_manque": 98460953.3,
+          "cout_alertes": 67237.5,
+          "cout_total": 98528190.8,
+          "rappel": 0.0347
+        },
+        {
+          "alertes_par_jour": 200.0,
+          "seuil": 0.6297304764249974,
+          "alertes": 12808,
+          "cas_detectes": 94,
+          "montant_manque": 96844680.7,
+          "cout_alertes": 96060.0,
+          "cout_total": 96940740.7,
+          "rappel": 0.0473
+        },
+        {
+          "alertes_par_jour": 300.0,
+          "seuil": 0.6205647216752244,
+          "alertes": 19212,
+          "cas_detectes": 143,
+          "montant_manque": 90414000.94,
+          "cout_alertes": 144090.0,
+          "cout_total": 90558090.94,
+          "rappel": 0.0719
+        },
+        {
+          "alertes_par_jour": 500.0,
+          "seuil": 0.6087642588137687,
+          "alertes": 32020,
+          "cas_detectes": 224,
+          "montant_manque": 86449922.7,
+          "cout_alertes": 240150.0,
+          "cout_total": 86690072.7,
+          "rappel": 0.1127
+        },
+        {
+          "alertes_par_jour": 1000.0,
+          "seuil": 0.5954762009695668,
+          "alertes": 64040,
+          "cas_detectes": 349,
+          "montant_manque": 84504665.05,
+          "cout_alertes": 480300.0,
+          "cout_total": 84984965.05,
+          "rappel": 0.1756
+        },
+        {
+          "alertes_par_jour": 2000.0,
+          "seuil": 0.5779165675464163,
+          "alertes": 128080,
+          "cas_detectes": 545,
+          "montant_manque": 81230381.54,
+          "cout_alertes": 960600.0,
+          "cout_total": 82190981.54,
+          "rappel": 0.2741
+        },
+        {
+          "alertes_par_jour": 5000.0,
+          "seuil": 0.5154865100041421,
+          "alertes": 320202,
+          "cas_detectes": 1123,
+          "montant_manque": 11650558.85,
+          "cout_alertes": 2401515.0,
+          "cout_total": 14052073.85,
+          "rappel": 0.5649
+        }
+      ],
+      "typologies": {
+        "Behavioural_Change_1": {
+          "cas": 97,
+          "detectes": 0,
+          "rappel": 0.0,
+          "ic_bas": 0.0,
+          "ic_haut": 0.0381
+        },
+        "Behavioural_Change_2": {
+          "cas": 75,
+          "detectes": 0,
+          "rappel": 0.0,
+          "ic_bas": 0.0,
+          "ic_haut": 0.0487
+        },
+        "Smurfing": {
+          "cas": 215,
+          "detectes": 0,
+          "rappel": 0.0,
+          "ic_bas": 0.0,
+          "ic_haut": 0.0176
+        },
+        "Gather-Scatter": {
+          "cas": 39,
+          "detectes": 0,
+          "rappel": 0.0,
+          "ic_bas": 0.0,
+          "ic_haut": 0.0897
+        },
+        "Stacked Bipartite": {
+          "cas": 100,
+          "detectes": 1,
+          "rappel": 0.01,
+          "ic_bas": 0.0018,
+          "ic_haut": 0.0545
+        },
+        "Layered_Fan_Out": {
+          "cas": 73,
+          "detectes": 1,
+          "rappel": 0.0137,
+          "ic_bas": 0.0024,
+          "ic_haut": 0.0736
+        },
+        "Cash_Withdrawal": {
+          "cas": 282,
+          "detectes": 6,
+          "rappel": 0.0213,
+          "ic_bas": 0.0098,
+          "ic_haut": 0.0456
+        },
+        "Deposit-Send": {
+          "cas": 174,
+          "detectes": 4,
+          "rappel": 0.023,
+          "ic_bas": 0.009,
+          "ic_haut": 0.0576
+        },
+        "Layered_Fan_In": {
+          "cas": 102,
+          "detectes": 3,
+          "rappel": 0.0294,
+          "ic_bas": 0.0101,
+          "ic_haut": 0.0829
+        },
+        "Fan_In": {
+          "cas": 113,
+          "detectes": 4,
+          "rappel": 0.0354,
+          "ic_bas": 0.0138,
+          "ic_haut": 0.0875
+        },
+        "Bipartite": {
+          "cas": 83,
+          "detectes": 3,
+          "rappel": 0.0361,
+          "ic_bas": 0.0124,
+          "ic_haut": 0.101
+        },
+        "Fan_Out": {
+          "cas": 69,
+          "detectes": 3,
+          "rappel": 0.0435,
+          "ic_bas": 0.0149,
+          "ic_haut": 0.1202
+        },
+        "Single_large": {
+          "cas": 40,
+          "detectes": 2,
+          "rappel": 0.05,
+          "ic_bas": 0.0138,
+          "ic_haut": 0.165
+        },
+        "Structuring": {
+          "cas": 337,
+          "detectes": 17,
+          "rappel": 0.0504,
+          "ic_bas": 0.0317,
+          "ic_haut": 0.0793
+        },
+        "Over-Invoicing": {
+          "cas": 18,
+          "detectes": 1,
+          "rappel": 0.0556,
+          "ic_bas": 0.0099,
+          "ic_haut": 0.2576
+        },
+        "Scatter-Gather": {
+          "cas": 73,
+          "detectes": 5,
+          "rappel": 0.0685,
+          "ic_bas": 0.0296,
+          "ic_haut": 0.1505
+        },
+        "Cycle": {
+          "cas": 98,
+          "detectes": 19,
+          "rappel": 0.1939,
+          "ic_bas": 0.1278,
+          "ic_haut": 0.2831
+        }
+      },
+      "fausses_alertes_par_type": {
+        "Normal_Fan_In": 0.4651,
+        "Normal_Plus_Mutual": 0.1849,
+        "Normal_Fan_Out": 0.1692,
+        "Normal_Mutual": 0.0949,
+        "Normal_Foward": 0.0391,
+        "Normal_Small_Fan_Out": 0.0256
+      },
+      "nouveaute": {
+        "emetteur_sans_historique_30j": {
+          "part_transactions": 0.0531,
+          "part_alertes": 0.655,
+          "precision_dans_groupe": 0.0069,
+          "precision_hors_groupe": 0.0094,
+          "taux_blanchiment_groupe": 0.0035
+        },
+        "emetteur_jamais_vu_en_entrainement": {
+          "part_transactions": 0.23,
+          "part_alertes": 0.5547,
+          "precision_dans_groupe": 0.0002,
+          "precision_hors_groupe": 0.0172,
+          "taux_blanchiment_groupe": 0.0001
+        },
+        "destinataire_sans_historique_30j": {
+          "part_transactions": 0.1603,
+          "part_alertes": 0.3108,
+          "precision_dans_groupe": 0.0061,
+          "precision_hors_groupe": 0.0085,
+          "taux_blanchiment_groupe": 0.0013
+        },
+        "destinataire_jamais_vu_en_entrainement": {
+          "part_transactions": 0.2767,
+          "part_alertes": 0.247,
+          "precision_dans_groupe": 0.0014,
+          "precision_hors_groupe": 0.0098,
+          "taux_blanchiment_groupe": 0.0006
+        }
+      }
+    },
+    "LOF, sans étiquette": {
+      "fichier_scores": "lof__n_neighbors-20__echantillon-100000__graine-42.npy",
+      "pr_auc": 0.033047,
+      "seuils": {
+        "au_budget": {
+          "seuil": 1.5246481895446777,
+          "alertes": 8965,
+          "alertes_par_jour": 140.0,
+          "cas_detectes": 601,
+          "montant_manque": 20143246.04,
+          "cout_alertes": 67237.5,
+          "cout_total": 20210483.54
+        },
+        "retenu": {
+          "seuil": 1.5251219272613525,
+          "alertes": 8951,
+          "alertes_par_jour": 139.8,
+          "cas_detectes": 601,
+          "montant_manque": 20143246.04,
+          "cout_alertes": 67132.5,
+          "cout_total": 20210378.54
+        },
+        "cout_minimal": {
+          "seuil": 1.0773614645004272,
+          "alertes": 467710,
+          "alertes_par_jour": 7303.4,
+          "cas_detectes": 1491,
+          "montant_manque": 5312963.1,
+          "cout_alertes": 3507825.0,
+          "cout_total": 8820788.1,
+          "respecte_capacite": false
+        }
+      },
+      "metriques_seuil_retenu": {
+        "vp": 601,
+        "fp": 8350,
+        "fn": 1387,
+        "vn": 1890632,
+        "precision": 0.067143,
+        "rappel": 0.302314,
+        "f2": 0.177779,
+        "mcc": 0.140658,
+        "part_montant_detecte": 0.8041
+      },
+      "cout_retenu_sans_over_invoicing": 15410748.72,
+      "k_premieres_par_jour": {
+        "vp": 607,
+        "fp": 8493,
+        "fn": 1381,
+        "vn": 1890489,
+        "precision": 0.066703,
+        "rappel": 0.305332,
+        "f2": 0.177985,
+        "mcc": 0.140885,
+        "k_par_jour": 140
+      },
+      "sensibilite": [
+        {
+          "alertes_par_jour": 25.0,
+          "seuil": 2.1778063774108887,
+          "alertes": 1601,
+          "cas_detectes": 82,
+          "montant_manque": 26585564.81,
+          "cout_alertes": 12007.5,
+          "cout_total": 26597572.31,
+          "rappel": 0.0412
+        },
+        {
+          "alertes_par_jour": 50.0,
+          "seuil": 1.8724788427352905,
+          "alertes": 3202,
+          "cas_detectes": 226,
+          "montant_manque": 23945263.22,
+          "cout_alertes": 24015.0,
+          "cout_total": 23969278.22,
+          "rappel": 0.1137
+        },
+        {
+          "alertes_par_jour": 100.0,
+          "seuil": 1.6160504817962646,
+          "alertes": 6404,
+          "cas_detectes": 489,
+          "montant_manque": 21254067.16,
+          "cout_alertes": 48030.0,
+          "cout_total": 21302097.16,
+          "rappel": 0.246
+        },
+        {
+          "alertes_par_jour": 140.0,
+          "seuil": 1.5246481895446777,
+          "alertes": 8965,
+          "cas_detectes": 601,
+          "montant_manque": 20143246.04,
+          "cout_alertes": 67237.5,
+          "cout_total": 20210483.54,
+          "rappel": 0.3023
+        },
+        {
+          "alertes_par_jour": 200.0,
+          "seuil": 1.452082872390747,
+          "alertes": 12808,
+          "cas_detectes": 715,
+          "montant_manque": 18968456.62,
+          "cout_alertes": 96060.0,
+          "cout_total": 19064516.62,
+          "rappel": 0.3597
+        },
+        {
+          "alertes_par_jour": 300.0,
+          "seuil": 1.3869746923446655,
+          "alertes": 19212,
+          "cas_detectes": 821,
+          "montant_manque": 17832334.17,
+          "cout_alertes": 144090.0,
+          "cout_total": 17976424.17,
+          "rappel": 0.413
+        },
+        {
+          "alertes_par_jour": 500.0,
+          "seuil": 1.3196789026260376,
+          "alertes": 32020,
+          "cas_detectes": 953,
+          "montant_manque": 13097410.69,
+          "cout_alertes": 240150.0,
+          "cout_total": 13337560.69,
+          "rappel": 0.4794
+        },
+        {
+          "alertes_par_jour": 1000.0,
+          "seuil": 1.2448526620864868,
+          "alertes": 64040,
+          "cas_detectes": 1094,
+          "montant_manque": 11504801.99,
+          "cout_alertes": 480300.0,
+          "cout_total": 11985101.99,
+          "rappel": 0.5503
+        },
+        {
+          "alertes_par_jour": 2000.0,
+          "seuil": 1.1808087825775146,
+          "alertes": 128080,
+          "cas_detectes": 1229,
+          "montant_manque": 10284635.4,
+          "cout_alertes": 960600.0,
+          "cout_total": 11245235.4,
+          "rappel": 0.6182
+        },
+        {
+          "alertes_par_jour": 5000.0,
+          "seuil": 1.1053602695465088,
+          "alertes": 320202,
+          "cas_detectes": 1395,
+          "montant_manque": 6956468.5,
+          "cout_alertes": 2401515.0,
+          "cout_total": 9357983.5,
+          "rappel": 0.7017
+        }
+      ],
+      "typologies": {
+        "Behavioural_Change_1": {
+          "cas": 97,
+          "detectes": 0,
+          "rappel": 0.0,
+          "ic_bas": 0.0,
+          "ic_haut": 0.0381
+        },
+        "Behavioural_Change_2": {
+          "cas": 75,
+          "detectes": 0,
+          "rappel": 0.0,
+          "ic_bas": 0.0,
+          "ic_haut": 0.0487
+        },
+        "Bipartite": {
+          "cas": 83,
+          "detectes": 7,
+          "rappel": 0.0843,
+          "ic_bas": 0.0415,
+          "ic_haut": 0.164
+        },
+        "Fan_Out": {
+          "cas": 69,
+          "detectes": 8,
+          "rappel": 0.1159,
+          "ic_bas": 0.0599,
+          "ic_haut": 0.2125
+        },
+        "Layered_Fan_Out": {
+          "cas": 73,
+          "detectes": 11,
+          "rappel": 0.1507,
+          "ic_bas": 0.0863,
+          "ic_haut": 0.25
+        },
+        "Gather-Scatter": {
+          "cas": 39,
+          "detectes": 7,
+          "rappel": 0.1795,
+          "ic_bas": 0.0898,
+          "ic_haut": 0.3267
+        },
+        "Stacked Bipartite": {
+          "cas": 100,
+          "detectes": 22,
+          "rappel": 0.22,
+          "ic_bas": 0.15,
+          "ic_haut": 0.3107
+        },
+        "Cycle": {
+          "cas": 98,
+          "detectes": 24,
+          "rappel": 0.2449,
+          "ic_bas": 0.1704,
+          "ic_haut": 0.3386
+        },
+        "Scatter-Gather": {
+          "cas": 73,
+          "detectes": 18,
+          "rappel": 0.2466,
+          "ic_bas": 0.162,
+          "ic_haut": 0.3564
+        },
+        "Structuring": {
+          "cas": 337,
+          "detectes": 105,
+          "rappel": 0.3116,
+          "ic_bas": 0.2645,
+          "ic_haut": 0.3629
+        },
+        "Layered_Fan_In": {
+          "cas": 102,
+          "detectes": 32,
+          "rappel": 0.3137,
+          "ic_bas": 0.2318,
+          "ic_haut": 0.4091
+        },
+        "Fan_In": {
+          "cas": 113,
+          "detectes": 39,
+          "rappel": 0.3451,
+          "ic_bas": 0.2639,
+          "ic_haut": 0.4366
+        },
+        "Deposit-Send": {
+          "cas": 174,
+          "detectes": 72,
+          "rappel": 0.4138,
+          "ic_bas": 0.3432,
+          "ic_haut": 0.4881
+        },
+        "Cash_Withdrawal": {
+          "cas": 282,
+          "detectes": 120,
+          "rappel": 0.4255,
+          "ic_bas": 0.3692,
+          "ic_haut": 0.4839
+        },
+        "Smurfing": {
+          "cas": 215,
+          "detectes": 97,
+          "rappel": 0.4512,
+          "ic_bas": 0.3861,
+          "ic_haut": 0.518
+        },
+        "Single_large": {
+          "cas": 40,
+          "detectes": 23,
+          "rappel": 0.575,
+          "ic_bas": 0.4219,
+          "ic_haut": 0.7149
+        },
+        "Over-Invoicing": {
+          "cas": 18,
+          "detectes": 16,
+          "rappel": 0.8889,
+          "ic_bas": 0.672,
+          "ic_haut": 0.969
+        }
+      },
+      "fausses_alertes_par_type": {
+        "Normal_Small_Fan_Out": 0.3617,
+        "Normal_Fan_In": 0.1319,
+        "Normal_Plus_Mutual": 0.0978,
+        "Normal_Fan_Out": 0.0908,
+        "Normal_Cash_Deposits": 0.088,
+        "Normal_Cash_Withdrawal": 0.068
+      },
+      "nouveaute": {
+        "emetteur_sans_historique_30j": {
+          "part_transactions": 0.0531,
+          "part_alertes": 0.1522,
+          "precision_dans_groupe": 0.0213,
+          "precision_hors_groupe": 0.0754,
+          "taux_blanchiment_groupe": 0.0035
+        },
+        "emetteur_jamais_vu_en_entrainement": {
+          "part_transactions": 0.23,
+          "part_alertes": 0.1503,
+          "precision_dans_groupe": 0.003,
+          "precision_hors_groupe": 0.0785,
+          "taux_blanchiment_groupe": 0.0001
+        },
+        "destinataire_sans_historique_30j": {
+          "part_transactions": 0.1603,
+          "part_alertes": 0.2555,
+          "precision_dans_groupe": 0.0192,
+          "precision_hors_groupe": 0.0836,
+          "taux_blanchiment_groupe": 0.0013
+        },
+        "destinataire_jamais_vu_en_entrainement": {
+          "part_transactions": 0.2767,
+          "part_alertes": 0.1914,
+          "precision_dans_groupe": 0.0163,
+          "precision_hors_groupe": 0.0792,
+          "taux_blanchiment_groupe": 0.0006
+        }
+      }
+    },
+    "LOF, réglé": {
+      "fichier_scores": "lof__n_neighbors-10__echantillon-100000__graine-42.npy",
+      "pr_auc": 0.044436,
+      "seuils": {
+        "au_budget": {
+          "seuil": 1.5061827898025513,
+          "alertes": 8965,
+          "alertes_par_jour": 140.0,
+          "cas_detectes": 679,
+          "montant_manque": 20280767.39,
+          "cout_alertes": 67237.5,
+          "cout_total": 20348004.89
+        },
+        "retenu": {
+          "seuil": 1.507451057434082,
+          "alertes": 8909,
+          "alertes_par_jour": 139.1,
+          "cas_detectes": 679,
+          "montant_manque": 20280767.39,
+          "cout_alertes": 66817.5,
+          "cout_total": 20347584.89
+        },
+        "cout_minimal": {
+          "seuil": 1.1199899911880493,
+          "alertes": 286006,
+          "alertes_par_jour": 4466.0,
+          "cas_detectes": 1405,
+          "montant_manque": 6224151.33,
+          "cout_alertes": 2145045.0,
+          "cout_total": 8369196.33,
+          "respecte_capacite": false
+        }
+      },
+      "metriques_seuil_retenu": {
+        "vp": 679,
+        "fp": 8230,
+        "fn": 1309,
+        "vn": 1890752,
+        "precision": 0.076215,
+        "rappel": 0.341549,
+        "f2": 0.201352,
+        "mcc": 0.159586,
+        "part_montant_detecte": 0.8028
+      },
+      "cout_retenu_sans_over_invoicing": 13619108.56,
+      "k_premieres_par_jour": {
+        "vp": 676,
+        "fp": 8424,
+        "fn": 1312,
+        "vn": 1890558,
+        "precision": 0.074286,
+        "rappel": 0.34004,
+        "f2": 0.198217,
+        "mcc": 0.157156,
+        "k_par_jour": 140
+      },
+      "sensibilite": [
+        {
+          "alertes_par_jour": 25.0,
+          "seuil": 2.03422212600708,
+          "alertes": 1601,
+          "cas_detectes": 167,
+          "montant_manque": 28236043.39,
+          "cout_alertes": 12007.5,
+          "cout_total": 28248050.89,
+          "rappel": 0.084
+        },
+        {
+          "alertes_par_jour": 50.0,
+          "seuil": 1.7808490991592407,
+          "alertes": 3202,
+          "cas_detectes": 358,
+          "montant_manque": 25384347.72,
+          "cout_alertes": 24015.0,
+          "cout_total": 25408362.72,
+          "rappel": 0.1801
+        },
+        {
+          "alertes_par_jour": 100.0,
+          "seuil": 1.5772714614868164,
+          "alertes": 6404,
+          "cas_detectes": 576,
+          "montant_manque": 22745666.29,
+          "cout_alertes": 48030.0,
+          "cout_total": 22793696.29,
+          "rappel": 0.2897
+        },
+        {
+          "alertes_par_jour": 140.0,
+          "seuil": 1.5061827898025513,
+          "alertes": 8965,
+          "cas_detectes": 679,
+          "montant_manque": 20280767.39,
+          "cout_alertes": 67237.5,
+          "cout_total": 20348004.89,
+          "rappel": 0.3415
+        },
+        {
+          "alertes_par_jour": 200.0,
+          "seuil": 1.4446930885314941,
+          "alertes": 12808,
+          "cas_detectes": 757,
+          "montant_manque": 19775665.12,
+          "cout_alertes": 96060.0,
+          "cout_total": 19871725.12,
+          "rappel": 0.3808
+        },
+        {
+          "alertes_par_jour": 300.0,
+          "seuil": 1.3857618570327759,
+          "alertes": 19212,
+          "cas_detectes": 857,
+          "montant_manque": 15730853.45,
+          "cout_alertes": 144090.0,
+          "cout_total": 15874943.45,
+          "rappel": 0.4311
+        },
+        {
+          "alertes_par_jour": 500.0,
+          "seuil": 1.3228873014450073,
+          "alertes": 32020,
+          "cas_detectes": 961,
+          "montant_manque": 14913585.87,
+          "cout_alertes": 240150.0,
+          "cout_total": 15153735.87,
+          "rappel": 0.4834
+        },
+        {
+          "alertes_par_jour": 1000.0,
+          "seuil": 1.2506015300750732,
+          "alertes": 64040,
+          "cas_detectes": 1098,
+          "montant_manque": 13402669.66,
+          "cout_alertes": 480300.0,
+          "cout_total": 13882969.66,
+          "rappel": 0.5523
+        },
+        {
+          "alertes_par_jour": 2000.0,
+          "seuil": 1.1866753101348877,
+          "alertes": 128080,
+          "cas_detectes": 1239,
+          "montant_manque": 10265806.82,
+          "cout_alertes": 960600.0,
+          "cout_total": 11226406.82,
+          "rappel": 0.6232
+        },
+        {
+          "alertes_par_jour": 5000.0,
+          "seuil": 1.1112406253814697,
+          "alertes": 320202,
+          "cas_detectes": 1430,
+          "montant_manque": 6046002.98,
+          "cout_alertes": 2401515.0,
+          "cout_total": 8447517.98,
+          "rappel": 0.7193
+        }
+      ],
+      "typologies": {
+        "Behavioural_Change_1": {
+          "cas": 97,
+          "detectes": 0,
+          "rappel": 0.0,
+          "ic_bas": 0.0,
+          "ic_haut": 0.0381
+        },
+        "Behavioural_Change_2": {
+          "cas": 75,
+          "detectes": 0,
+          "rappel": 0.0,
+          "ic_bas": 0.0,
+          "ic_haut": 0.0487
+        },
+        "Bipartite": {
+          "cas": 83,
+          "detectes": 8,
+          "rappel": 0.0964,
+          "ic_bas": 0.0497,
+          "ic_haut": 0.1788
+        },
+        "Fan_Out": {
+          "cas": 69,
+          "detectes": 9,
+          "rappel": 0.1304,
+          "ic_bas": 0.0702,
+          "ic_haut": 0.2297
+        },
+        "Layered_Fan_Out": {
+          "cas": 73,
+          "detectes": 16,
+          "rappel": 0.2192,
+          "ic_bas": 0.1397,
+          "ic_haut": 0.3268
+        },
+        "Cycle": {
+          "cas": 98,
+          "detectes": 25,
+          "rappel": 0.2551,
+          "ic_bas": 0.1792,
+          "ic_haut": 0.3495
+        },
+        "Gather-Scatter": {
+          "cas": 39,
+          "detectes": 10,
+          "rappel": 0.2564,
+          "ic_bas": 0.1457,
+          "ic_haut": 0.4108
+        },
+        "Stacked Bipartite": {
+          "cas": 100,
+          "detectes": 26,
+          "rappel": 0.26,
+          "ic_bas": 0.184,
+          "ic_haut": 0.3537
+        },
+        "Scatter-Gather": {
+          "cas": 73,
+          "detectes": 20,
+          "rappel": 0.274,
+          "ic_bas": 0.1849,
+          "ic_haut": 0.3856
+        },
+        "Layered_Fan_In": {
+          "cas": 102,
+          "detectes": 37,
+          "rappel": 0.3627,
+          "ic_bas": 0.276,
+          "ic_haut": 0.4595
+        },
+        "Fan_In": {
+          "cas": 113,
+          "detectes": 42,
+          "rappel": 0.3717,
+          "ic_bas": 0.2882,
+          "ic_haut": 0.4636
+        },
+        "Structuring": {
+          "cas": 337,
+          "detectes": 126,
+          "rappel": 0.3739,
+          "ic_bas": 0.3239,
+          "ic_haut": 0.4267
+        },
+        "Deposit-Send": {
+          "cas": 174,
+          "detectes": 76,
+          "rappel": 0.4368,
+          "ic_bas": 0.3652,
+          "ic_haut": 0.5111
+        },
+        "Smurfing": {
+          "cas": 215,
+          "detectes": 95,
+          "rappel": 0.4419,
+          "ic_bas": 0.3771,
+          "ic_haut": 0.5087
+        },
+        "Cash_Withdrawal": {
+          "cas": 282,
+          "detectes": 147,
+          "rappel": 0.5213,
+          "ic_bas": 0.4631,
+          "ic_haut": 0.5789
+        },
+        "Single_large": {
+          "cas": 40,
+          "detectes": 27,
+          "rappel": 0.675,
+          "ic_bas": 0.5202,
+          "ic_haut": 0.7992
+        },
+        "Over-Invoicing": {
+          "cas": 18,
+          "detectes": 15,
+          "rappel": 0.8333,
+          "ic_bas": 0.6078,
+          "ic_haut": 0.9416
+        }
+      },
+      "fausses_alertes_par_type": {
+        "Normal_Small_Fan_Out": 0.365,
+        "Normal_Plus_Mutual": 0.1112,
+        "Normal_Fan_In": 0.096,
+        "Normal_Fan_Out": 0.0937,
+        "Normal_Cash_Withdrawal": 0.0898,
+        "Normal_Cash_Deposits": 0.0729
+      },
+      "nouveaute": {
+        "emetteur_sans_historique_30j": {
+          "part_transactions": 0.0531,
+          "part_alertes": 0.134,
+          "precision_dans_groupe": 0.0293,
+          "precision_hors_groupe": 0.0835,
+          "taux_blanchiment_groupe": 0.0035
+        },
+        "emetteur_jamais_vu_en_entrainement": {
+          "part_transactions": 0.23,
+          "part_alertes": 0.113,
+          "precision_dans_groupe": 0.003,
+          "precision_hors_groupe": 0.0855,
+          "taux_blanchiment_groupe": 0.0001
+        },
+        "destinataire_sans_historique_30j": {
+          "part_transactions": 0.1603,
+          "part_alertes": 0.2724,
+          "precision_dans_groupe": 0.0202,
+          "precision_hors_groupe": 0.0972,
+          "taux_blanchiment_groupe": 0.0013
+        },
+        "destinataire_jamais_vu_en_entrainement": {
+          "part_transactions": 0.2767,
+          "part_alertes": 0.1983,
+          "precision_dans_groupe": 0.0192,
+          "precision_hors_groupe": 0.0903,
+          "taux_blanchiment_groupe": 0.0006
+        }
+      }
+    },
+    "LightGBM, par défaut": {
+      "fichier_scores": "desequilibre__option-aucun__graine-42.npy",
+      "pr_auc": 0.410958,
+      "seuils": {
+        "au_budget": {
+          "seuil": -5.237072491303647,
+          "alertes": 8961,
+          "alertes_par_jour": 139.9,
+          "cas_detectes": 1126,
+          "montant_manque": 37318284.48,
+          "cout_alertes": 67207.5,
+          "cout_total": 37385491.98
+        },
+        "retenu": {
+          "seuil": -5.200432465566857,
+          "alertes": 8823,
+          "alertes_par_jour": 137.8,
+          "cas_detectes": 1126,
+          "montant_manque": 37318284.48,
+          "cout_alertes": 66172.5,
+          "cout_total": 37384456.98
+        },
+        "cout_minimal": {
+          "seuil": -609.9294122474515,
+          "alertes": 1069412,
+          "alertes_par_jour": 16699.0,
+          "cas_detectes": 1853,
+          "montant_manque": 911836.04,
+          "cout_alertes": 8020590.0,
+          "cout_total": 8932426.04,
+          "respecte_capacite": false
+        }
+      },
+      "metriques_seuil_retenu": {
+        "vp": 1126,
+        "fp": 7697,
+        "fn": 862,
+        "vn": 1891285,
+        "precision": 0.127621,
+        "rappel": 0.566398,
+        "f2": 0.335618,
+        "mcc": 0.267415,
+        "part_montant_detecte": 0.6372
+      },
+      "cout_retenu_sans_over_invoicing": 11505661.12,
+      "k_premieres_par_jour": {
+        "vp": 1124,
+        "fp": 7976,
+        "fn": 864,
+        "vn": 1891006,
+        "precision": 0.123516,
+        "rappel": 0.565392,
+        "f2": 0.32958,
+        "mcc": 0.262793,
+        "k_par_jour": 140
+      },
+      "sensibilite": [
+        {
+          "alertes_par_jour": 25.0,
+          "seuil": 5.964061918592795,
+          "alertes": 1601,
+          "cas_detectes": 920,
+          "montant_manque": 45868190.62,
+          "cout_alertes": 12007.5,
+          "cout_total": 45880198.12,
+          "rappel": 0.4628
+        },
+        {
+          "alertes_par_jour": 50.0,
+          "seuil": -2.2882900158517394,
+          "alertes": 3202,
+          "cas_detectes": 1003,
+          "montant_manque": 41596848.62,
+          "cout_alertes": 24015.0,
+          "cout_total": 41620863.62,
+          "rappel": 0.5045
+        },
+        {
+          "alertes_par_jour": 100.0,
+          "seuil": -4.381333834007795,
+          "alertes": 6401,
+          "cas_detectes": 1084,
+          "montant_manque": 37782268.32,
+          "cout_alertes": 48007.5,
+          "cout_total": 37830275.82,
+          "rappel": 0.5453
+        },
+        {
+          "alertes_par_jour": 139.9,
+          "seuil": -5.237072491303647,
+          "alertes": 8961,
+          "cas_detectes": 1126,
+          "montant_manque": 37318284.48,
+          "cout_alertes": 67207.5,
+          "cout_total": 37385491.98,
+          "rappel": 0.5664
+        },
+        {
+          "alertes_par_jour": 199.6,
+          "seuil": -5.785135904006993,
+          "alertes": 12783,
+          "cas_detectes": 1180,
+          "montant_manque": 36755425.22,
+          "cout_alertes": 95872.5,
+          "cout_total": 36851297.72,
+          "rappel": 0.5936
+        },
+        {
+          "alertes_par_jour": 296.8,
+          "seuil": -5.974153038904671,
+          "alertes": 19006,
+          "cas_detectes": 1206,
+          "montant_manque": 36554499.74,
+          "cout_alertes": 142545.0,
+          "cout_total": 36697044.74,
+          "rappel": 0.6066
+        },
+        {
+          "alertes_par_jour": 500.0,
+          "seuil": -6.290074089427114,
+          "alertes": 32020,
+          "cas_detectes": 1264,
+          "montant_manque": 30892898.39,
+          "cout_alertes": 240150.0,
+          "cout_total": 31133048.39,
+          "rappel": 0.6358
+        },
+        {
+          "alertes_par_jour": 988.3,
+          "seuil": -7.046468804202383,
+          "alertes": 63292,
+          "cas_detectes": 1408,
+          "montant_manque": 28237176.05,
+          "cout_alertes": 474690.0,
+          "cout_total": 28711866.05,
+          "rappel": 0.7082
+        },
+        {
+          "alertes_par_jour": 1986.9,
+          "seuil": -7.4092256510666665,
+          "alertes": 127240,
+          "cas_detectes": 1481,
+          "montant_manque": 19857260.57,
+          "cout_alertes": 954300.0,
+          "cout_total": 20811560.57,
+          "rappel": 0.745
+        },
+        {
+          "alertes_par_jour": 4999.4,
+          "seuil": -8.507598213029599,
+          "alertes": 320166,
+          "cas_detectes": 1633,
+          "montant_manque": 18229504.46,
+          "cout_alertes": 2401245.0,
+          "cout_total": 20630749.46,
+          "rappel": 0.8214
+        }
+      ],
+      "typologies": {
+        "Behavioural_Change_1": {
+          "cas": 97,
+          "detectes": 15,
+          "rappel": 0.1546,
+          "ic_bas": 0.096,
+          "ic_haut": 0.2396
+        },
+        "Behavioural_Change_2": {
+          "cas": 75,
+          "detectes": 20,
+          "rappel": 0.2667,
+          "ic_bas": 0.1798,
+          "ic_haut": 0.3763
+        },
+        "Layered_Fan_Out": {
+          "cas": 73,
+          "detectes": 26,
+          "rappel": 0.3562,
+          "ic_bas": 0.256,
+          "ic_haut": 0.4707
+        },
+        "Fan_Out": {
+          "cas": 69,
+          "detectes": 29,
+          "rappel": 0.4203,
+          "ic_bas": 0.3111,
+          "ic_haut": 0.5379
+        },
+        "Cycle": {
+          "cas": 98,
+          "detectes": 42,
+          "rappel": 0.4286,
+          "ic_bas": 0.3351,
+          "ic_haut": 0.5274
+        },
+        "Fan_In": {
+          "cas": 113,
+          "detectes": 50,
+          "rappel": 0.4425,
+          "ic_bas": 0.3543,
+          "ic_haut": 0.5344
+        },
+        "Scatter-Gather": {
+          "cas": 73,
+          "detectes": 33,
+          "rappel": 0.4521,
+          "ic_bas": 0.3431,
+          "ic_haut": 0.5658
+        },
+        "Gather-Scatter": {
+          "cas": 39,
+          "detectes": 18,
+          "rappel": 0.4615,
+          "ic_bas": 0.3157,
+          "ic_haut": 0.6143
+        },
+        "Stacked Bipartite": {
+          "cas": 100,
+          "detectes": 48,
+          "rappel": 0.48,
+          "ic_bas": 0.3846,
+          "ic_haut": 0.5768
+        },
+        "Single_large": {
+          "cas": 40,
+          "detectes": 20,
+          "rappel": 0.5,
+          "ic_bas": 0.352,
+          "ic_haut": 0.648
+        },
+        "Over-Invoicing": {
+          "cas": 18,
+          "detectes": 9,
+          "rappel": 0.5,
+          "ic_bas": 0.2903,
+          "ic_haut": 0.7097
+        },
+        "Bipartite": {
+          "cas": 83,
+          "detectes": 44,
+          "rappel": 0.5301,
+          "ic_bas": 0.4238,
+          "ic_haut": 0.6338
+        },
+        "Layered_Fan_In": {
+          "cas": 102,
+          "detectes": 57,
+          "rappel": 0.5588,
+          "ic_bas": 0.4621,
+          "ic_haut": 0.6513
+        },
+        "Deposit-Send": {
+          "cas": 174,
+          "detectes": 113,
+          "rappel": 0.6494,
+          "ic_bas": 0.576,
+          "ic_haut": 0.7164
+        },
+        "Cash_Withdrawal": {
+          "cas": 282,
+          "detectes": 192,
+          "rappel": 0.6809,
+          "ic_bas": 0.6243,
+          "ic_haut": 0.7325
+        },
+        "Structuring": {
+          "cas": 337,
+          "detectes": 244,
+          "rappel": 0.724,
+          "ic_bas": 0.674,
+          "ic_haut": 0.769
+        },
+        "Smurfing": {
+          "cas": 215,
+          "detectes": 166,
+          "rappel": 0.7721,
+          "ic_bas": 0.7115,
+          "ic_haut": 0.8231
+        }
+      },
+      "fausses_alertes_par_type": {
+        "Normal_Small_Fan_Out": 0.201,
+        "Normal_Plus_Mutual": 0.1517,
+        "Normal_Fan_In": 0.1442,
+        "Normal_Mutual": 0.1123,
+        "Normal_Cash_Deposits": 0.1106,
+        "Normal_Foward": 0.0902
+      },
+      "nouveaute": {
+        "emetteur_sans_historique_30j": {
+          "part_transactions": 0.0531,
+          "part_alertes": 0.3164,
+          "precision_dans_groupe": 0.0398,
+          "precision_hors_groupe": 0.1683,
+          "taux_blanchiment_groupe": 0.0035
+        },
+        "emetteur_jamais_vu_en_entrainement": {
+          "part_transactions": 0.23,
+          "part_alertes": 0.2224,
+          "precision_dans_groupe": 0.0036,
+          "precision_hors_groupe": 0.1631,
+          "taux_blanchiment_groupe": 0.0001
+        },
+        "destinataire_sans_historique_30j": {
+          "part_transactions": 0.1603,
+          "part_alertes": 0.4141,
+          "precision_dans_groupe": 0.0257,
+          "precision_hors_groupe": 0.1997,
+          "taux_blanchiment_groupe": 0.0013
+        },
+        "destinataire_jamais_vu_en_entrainement": {
+          "part_transactions": 0.2767,
+          "part_alertes": 0.2252,
+          "precision_dans_groupe": 0.0443,
+          "precision_hors_groupe": 0.1518,
+          "taux_blanchiment_groupe": 0.0006
+        }
+      }
+    },
+    "LightGBM, réglé": {
+      "fichier_scores": "grille__option-aucun__num_leaves-63__learning_rate-0.05.npy",
+      "pr_auc": 0.575562,
+      "seuils": {
+        "au_budget": {
+          "seuil": -5.034545456564461,
+          "alertes": 8948,
+          "alertes_par_jour": 139.7,
+          "cas_detectes": 1346,
+          "montant_manque": 22983478.14,
+          "cout_alertes": 67110.0,
+          "cout_total": 23050588.14
+        },
+        "retenu": {
+          "seuil": -5.034005813871007,
+          "alertes": 8947,
+          "alertes_par_jour": 139.7,
+          "cas_detectes": 1346,
+          "montant_manque": 22983478.14,
+          "cout_alertes": 67102.5,
+          "cout_total": 23050580.64
+        },
+        "cout_minimal": {
+          "seuil": -7.5746973612104345,
+          "alertes": 248630,
+          "alertes_par_jour": 3882.4,
+          "cas_detectes": 1817,
+          "montant_manque": 3281918.69,
+          "cout_alertes": 1864725.0,
+          "cout_total": 5146643.69,
+          "respecte_capacite": false
+        }
+      },
+      "metriques_seuil_retenu": {
+        "vp": 1346,
+        "fp": 7601,
+        "fn": 642,
+        "vn": 1891381,
+        "precision": 0.150441,
+        "rappel": 0.677062,
+        "f2": 0.398248,
+        "mcc": 0.317849,
+        "part_montant_detecte": 0.7765
+      },
+      "cout_retenu_sans_over_invoicing": 10325225.03,
+      "k_premieres_par_jour": {
+        "vp": 1344,
+        "fp": 7756,
+        "fn": 644,
+        "vn": 1891226,
+        "precision": 0.147692,
+        "rappel": 0.676056,
+        "f2": 0.394089,
+        "mcc": 0.314669,
+        "k_par_jour": 140
+      },
+      "sensibilite": [
+        {
+          "alertes_par_jour": 25.0,
+          "seuil": 0.24472848419743126,
+          "alertes": 1601,
+          "cas_detectes": 1074,
+          "montant_manque": 42504037.17,
+          "cout_alertes": 12007.5,
+          "cout_total": 42516044.67,
+          "rappel": 0.5402
+        },
+        {
+          "alertes_par_jour": 50.0,
+          "seuil": -3.377710050258607,
+          "alertes": 3202,
+          "cas_detectes": 1194,
+          "montant_manque": 38650116.47,
+          "cout_alertes": 24015.0,
+          "cout_total": 38674131.47,
+          "rappel": 0.6006
+        },
+        {
+          "alertes_par_jour": 100.0,
+          "seuil": -4.715700462082346,
+          "alertes": 6402,
+          "cas_detectes": 1297,
+          "montant_manque": 30870513.01,
+          "cout_alertes": 48015.0,
+          "cout_total": 30918528.01,
+          "rappel": 0.6524
+        },
+        {
+          "alertes_par_jour": 139.7,
+          "seuil": -5.034545456564461,
+          "alertes": 8948,
+          "cas_detectes": 1346,
+          "montant_manque": 22983478.14,
+          "cout_alertes": 67110.0,
+          "cout_total": 23050588.14,
+          "rappel": 0.6771
+        },
+        {
+          "alertes_par_jour": 199.8,
+          "seuil": -5.328655940583681,
+          "alertes": 12796,
+          "cas_detectes": 1383,
+          "montant_manque": 19501394.87,
+          "cout_alertes": 95970.0,
+          "cout_total": 19597364.87,
+          "rappel": 0.6957
+        },
+        {
+          "alertes_par_jour": 299.9,
+          "seuil": -5.636180411891966,
+          "alertes": 19204,
+          "cas_detectes": 1446,
+          "montant_manque": 15891518.55,
+          "cout_alertes": 144030.0,
+          "cout_total": 16035548.55,
+          "rappel": 0.7274
+        },
+        {
+          "alertes_par_jour": 500.0,
+          "seuil": -5.846913078349227,
+          "alertes": 32019,
+          "cas_detectes": 1510,
+          "montant_manque": 15043643.67,
+          "cout_alertes": 240142.5,
+          "cout_total": 15283786.17,
+          "rappel": 0.7596
+        },
+        {
+          "alertes_par_jour": 999.3,
+          "seuil": -6.277828664675304,
+          "alertes": 63995,
+          "cas_detectes": 1612,
+          "montant_manque": 9693908.32,
+          "cout_alertes": 479962.5,
+          "cout_total": 10173870.82,
+          "rappel": 0.8109
+        },
+        {
+          "alertes_par_jour": 1863.9,
+          "seuil": -7.222394078668317,
+          "alertes": 119365,
+          "cas_detectes": 1740,
+          "montant_manque": 8547984.29,
+          "cout_alertes": 895237.5,
+          "cout_total": 9443221.79,
+          "rappel": 0.8753
+        },
+        {
+          "alertes_par_jour": 4998.6,
+          "seuil": -7.821682615285761,
+          "alertes": 320114,
+          "cas_detectes": 1844,
+          "montant_manque": 3107147.13,
+          "cout_alertes": 2400855.0,
+          "cout_total": 5508002.13,
+          "rappel": 0.9276
+        }
+      ],
+      "typologies": {
+        "Behavioural_Change_1": {
+          "cas": 97,
+          "detectes": 37,
+          "rappel": 0.3814,
+          "ic_bas": 0.291,
+          "ic_haut": 0.4809
+        },
+        "Layered_Fan_Out": {
+          "cas": 73,
+          "detectes": 30,
+          "rappel": 0.411,
+          "ic_bas": 0.3053,
+          "ic_haut": 0.5255
+        },
+        "Cycle": {
+          "cas": 98,
+          "detectes": 41,
+          "rappel": 0.4184,
+          "ic_bas": 0.3256,
+          "ic_haut": 0.5173
+        },
+        "Fan_Out": {
+          "cas": 69,
+          "detectes": 34,
+          "rappel": 0.4928,
+          "ic_bas": 0.3783,
+          "ic_haut": 0.6079
+        },
+        "Behavioural_Change_2": {
+          "cas": 75,
+          "detectes": 40,
+          "rappel": 0.5333,
+          "ic_bas": 0.4216,
+          "ic_haut": 0.6418
+        },
+        "Bipartite": {
+          "cas": 83,
+          "detectes": 46,
+          "rappel": 0.5542,
+          "ic_bas": 0.4472,
+          "ic_haut": 0.6564
+        },
+        "Stacked Bipartite": {
+          "cas": 100,
+          "detectes": 56,
+          "rappel": 0.56,
+          "ic_bas": 0.4623,
+          "ic_haut": 0.6533
+        },
+        "Single_large": {
+          "cas": 40,
+          "detectes": 23,
+          "rappel": 0.575,
+          "ic_bas": 0.4219,
+          "ic_haut": 0.7149
+        },
+        "Scatter-Gather": {
+          "cas": 73,
+          "detectes": 46,
+          "rappel": 0.6301,
+          "ic_bas": 0.5155,
+          "ic_haut": 0.7318
+        },
+        "Deposit-Send": {
+          "cas": 174,
+          "detectes": 113,
+          "rappel": 0.6494,
+          "ic_bas": 0.576,
+          "ic_haut": 0.7164
+        },
+        "Gather-Scatter": {
+          "cas": 39,
+          "detectes": 26,
+          "rappel": 0.6667,
+          "ic_bas": 0.5098,
+          "ic_haut": 0.7937
+        },
+        "Over-Invoicing": {
+          "cas": 18,
+          "detectes": 12,
+          "rappel": 0.6667,
+          "ic_bas": 0.4375,
+          "ic_haut": 0.8372
+        },
+        "Fan_In": {
+          "cas": 113,
+          "detectes": 77,
+          "rappel": 0.6814,
+          "ic_bas": 0.5908,
+          "ic_haut": 0.7601
+        },
+        "Layered_Fan_In": {
+          "cas": 102,
+          "detectes": 70,
+          "rappel": 0.6863,
+          "ic_bas": 0.5909,
+          "ic_haut": 0.7682
+        },
+        "Smurfing": {
+          "cas": 215,
+          "detectes": 170,
+          "rappel": 0.7907,
+          "ic_bas": 0.7315,
+          "ic_haut": 0.8397
+        },
+        "Structuring": {
+          "cas": 337,
+          "detectes": 278,
+          "rappel": 0.8249,
+          "ic_bas": 0.7808,
+          "ic_haut": 0.8618
+        },
+        "Cash_Withdrawal": {
+          "cas": 282,
+          "detectes": 247,
+          "rappel": 0.8759,
+          "ic_bas": 0.8323,
+          "ic_haut": 0.9094
+        }
+      },
+      "fausses_alertes_par_type": {
+        "Normal_Small_Fan_Out": 0.33,
+        "Normal_Plus_Mutual": 0.2156,
+        "Normal_Mutual": 0.1221,
+        "Normal_Foward": 0.0896,
+        "Normal_Cash_Deposits": 0.0801,
+        "Normal_Cash_Withdrawal": 0.0543
+      },
+      "nouveaute": {
+        "emetteur_sans_historique_30j": {
+          "part_transactions": 0.0531,
+          "part_alertes": 0.3308,
+          "precision_dans_groupe": 0.052,
+          "precision_hors_groupe": 0.1991,
+          "taux_blanchiment_groupe": 0.0035
+        },
+        "emetteur_jamais_vu_en_entrainement": {
+          "part_transactions": 0.23,
+          "part_alertes": 0.1082,
+          "precision_dans_groupe": 0.0124,
+          "precision_hors_groupe": 0.1672,
+          "taux_blanchiment_groupe": 0.0001
+        },
+        "destinataire_sans_historique_30j": {
+          "part_transactions": 0.1603,
+          "part_alertes": 0.5016,
+          "precision_dans_groupe": 0.033,
+          "precision_hors_groupe": 0.2687,
+          "taux_blanchiment_groupe": 0.0013
+        },
+        "destinataire_jamais_vu_en_entrainement": {
+          "part_transactions": 0.2767,
+          "part_alertes": 0.1869,
+          "precision_dans_groupe": 0.0855,
+          "precision_hors_groupe": 0.1654,
+          "taux_blanchiment_groupe": 0.0006
+        }
+      }
+    }
+  },
+  "artefacts": {
+    "tous_les_cas": {
+      "cas": 1988,
+      "pr_auc_lightgbm": 0.411,
+      "pr_auc_lof": 0.033,
+      "rapport": 12.4
+    },
+    "sans_over_invoicing": {
+      "cas": 1970,
+      "pr_auc_lightgbm": 0.4105,
+      "pr_auc_lof": 0.0311,
+      "rapport": 13.2
+    },
+    "sans_montants_a_nombreuses_decimales": {
+      "cas": 1776,
+      "pr_auc_lightgbm": 0.4198,
+      "pr_auc_lof": 0.0311,
+      "rapport": 13.5
+    },
+    "sans_les_deux": {
+      "cas": 1758,
+      "pr_auc_lightgbm": 0.4195,
+      "pr_auc_lof": 0.029,
+      "rapport": 14.5
+    }
+  },
+  "duree_s": 10.49,
+  "pic_memoire_mo": 871
+}

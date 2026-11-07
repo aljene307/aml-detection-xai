@@ -1,0 +1,12 @@
+{
+  "description": "Hypothèses de coût et de capacité (docs/CHOIX.md, section 9). Valeurs réglables, monnaie : livre sterling, celle des montants du jeu.",
+  "analystes": 5,
+  "heures_par_jour": 7,
+  "minutes_par_alerte": 15,
+  "cout_horaire_livres": 30,
+  "formules": {
+    "alertes_par_jour": "analystes × heures_par_jour × 60 ÷ minutes_par_alerte",
+    "cout_alerte_livres": "minutes_par_alerte ÷ 60 × cout_horaire_livres",
+    "cout_total_livres": "somme des montants des blanchiments non détectés + nombre d'alertes × cout_alerte_livres"
+  }
+}

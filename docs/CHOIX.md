@@ -196,20 +196,69 @@ complétée quand l'étape correspondante aura produit ses chiffres.
 - **Alternative écartée** : séparation aléatoire stratifiée (réservée par le
   sujet aux jeux sans information temporelle).
 
-## 9. Coût d'analyse et budget k (précision 3)
+## 9. Coût d'analyse, seuil et budget k (précision 3)
 
-- **Choix** : le coût d'une alerte et le budget k sont calculés à partir
-  d'**hypothèses écrites et réglables** (dans le code et par curseurs dans
-  l'application) :
-  - coût d'une alerte = temps d'analyse d'une alerte × tarif horaire d'un
-    analyste ;
-  - budget k = nombre d'analystes × alertes traitées par analyste et par
-    jour, rapporté à la période évaluée.
-- **Raison** : le seuil retenu dépend directement de ces valeurs ; elles
-  doivent être visibles et discutables plutôt que cachées.
-- **Mesures** : à compléter (valeurs retenues, sources, et sensibilité du
-  seuil à ces hypothèses).
-- **Alternative écartée** : un coût fixe arbitraire sans justification.
+- **Coût (sujet, module 4)**, en livres sterling, monnaie des montants du jeu :
+  somme des montants des blanchiments non détectés + nombre d'alertes × coût
+  d'une alerte. Une alerte est une transaction dont le score atteint le seuil.
+- **Hypothèses écrites et réglables** (`config/hypotheses.json`, lues par
+  `src/aml_xai/evaluation.py`, puis par curseurs dans l'application) :
+  5 analystes, 7 h par jour, 15 min par alerte, 30 £ de l'heure.
+  - alertes par jour = analystes × heures par jour × 60 ÷ minutes par alerte
+    = 5 × 7 × 60 ÷ 15 = **140** ;
+  - coût d'une alerte = 15 ÷ 60 × 30 = **7,50 £**.
+  Une première proposition (40 alertes de 20 min par analyste) dépassait
+  13 h de travail par jour : k est maintenant déduit de la formule.
+- **Règle fixée avant les mesures** : seuil choisi sur la validation. Le seuil
+  **retenu** est celui de coût minimal parmi ceux qui respectent la capacité
+  (140 × 64,04 jours = 8 966 alertes) ; le seuil de coût minimal sans
+  contrainte et le seuil au budget sont montrés pour comparaison. Un seul
+  seuil (valeur de score), fixé sur la validation et confirmé sur le test ;
+  « les k premières par jour » en complément seulement. Au seuil retenu :
+  précision, rappel, F2 (le rappel compte deux fois plus que la précision)
+  et MCC (corrélation entre alertes et vrais cas, de −1 à 1).
+- **Mesures** (validation, `reports/mesures/evaluation.json`) : 1 988 cas,
+  102,8 M£ blanchis, soit 51 735 £ par cas en moyenne.
+
+  | Méthode | Coût minimal sans contrainte : alertes par jour | Seuil retenu : coût total | Précision | Rappel | F2 | MCC | Coût sans Over-Invoicing |
+  |---|---|---|---|---|---|---|---|
+  | Isolation Forest, sans étiquette | 9 453 | 98,5 M£ | 0,008 | 0,035 | 0,020 | 0,014 | 24,5 M£ |
+  | LOF, sans étiquette | 7 303 | **20,2 M£** | 0,067 | 0,302 | 0,178 | 0,141 | 15,4 M£ |
+  | LOF, réglé | 4 466 | 20,3 M£ | 0,076 | 0,342 | 0,201 | 0,160 | 13,6 M£ |
+  | LightGBM, par défaut | 16 699 | 37,4 M£ | 0,128 | 0,566 | 0,336 | 0,267 | 11,5 M£ |
+  | LightGBM, réglé | 3 882 | 23,1 M£ | **0,150** | **0,677** | **0,398** | **0,318** | **10,3 M£** |
+
+  - **Aucun seuil de coût minimal ne respecte la capacité** : il faudrait de
+    3 900 à 16 700 alertes par jour, 28 à 120 fois les 140 possibles. Un cas
+    manqué coûte en moyenne 51 735 £ contre 7,50 £ par alerte : alerter reste
+    rentable tant qu'environ une alerte sur 7 000 est un vrai cas. Le seuil
+    retenu est donc fixé par la capacité (environ 140 alertes par jour pour
+    les cinq méthodes).
+  - **Le coût est dominé par 18 cas** : `Over-Invoicing` représente 75 % du
+    montant blanchi de la validation. LOF en trouve 16 sur 18 (des montants
+    au-delà du plafond des transactions normales sont rares, donc
+    anormaux) ; LightGBM par défaut 9, réglé 12. D'où le paradoxe : au seuil
+    retenu, LOF sans étiquette a le coût le plus bas, avec deux fois moins de
+    cas trouvés que LightGBM. Sans ces 18 cas, le classement par le coût
+    rejoint celui de la PR-AUC : LightGBM réglé 10,3 M£, LOF 15,4 M£.
+  - **Les k premières par jour** donnent presque les mêmes résultats que le
+    seuil unique (LightGBM réglé : précision 0,148, rappel 0,676).
+- **Limites** : le montant d'une transaction est une approximation du coût
+  réel d'un blanchiment manqué, qui comprend aussi des amendes et un risque
+  d'image. La monnaie des montants est supposée être la livre sterling. Le
+  coût est très sensible à une poignée de gros montants : il faut toujours le
+  lire avec la PR-AUC, le F2, le MCC et le coût sans `Over-Invoicing`.
+- **Seuil retenu : coût minimal sous la contrainte de capacité, et la
+  capacité est toujours atteinte** : pour les cinq méthodes, la contrainte
+  est active. Le seuil retenu se place au plus près des 140 alertes par jour
+  (de 137,8 à 139,8) : il s'arrête sur le dernier cas trouvé avant la limite,
+  car les alertes suivantes ne seraient que des fausses alertes à 7,50 £.
+- **Décision : le coût du sujet reste la mesure principale**, avec le coût
+  sans `Over-Invoicing` comme sensibilité. **Pas de coût plafonné par cas** :
+  il serait choisi après avoir vu son effet sur le classement, ce que la
+  méthode interdit.
+- **Alternatives écartées** : un coût fixe par cas manqué sans source ; un
+  coût plafonné par cas (voir ci-dessus).
 
 ## 10. Environnement Python et versions figées
 
@@ -817,3 +866,40 @@ mesures. Le test n'est pas lu.
   artefact), on recalcule l'écart sans elle. Les cas `Over-Invoicing` sont
   peu nombreux (10 dans le test, section 15) : leur poids dans la PR-AUC
   globale sera mesuré, pas supposé.
+- **Résultat de la vérification** (validation,
+  `reports/mesures/evaluation.json`, PR-AUC de LightGBM par défaut et de LOF
+  sans étiquette) :
+
+  | Cas gardés | Cas | LightGBM | LOF | Rapport |
+  |---|---|---|---|---|
+  | Tous | 1 988 | 0,411 | 0,033 | 12,4 |
+  | Sans `Over-Invoicing` | 1 970 | 0,411 | 0,031 | 13,2 |
+  | Sans montants à nombreuses décimales | 1 776 | 0,420 | 0,031 | 13,5 |
+  | Sans les deux | 1 758 | 0,420 | 0,029 | 14,5 |
+
+  **Pour la PR-AUC, l'hypothèse est réfutée** : sans les cas liés aux
+  artefacts, l'écart **augmente**. Ce sont ces cas qui aident LOF (16
+  `Over-Invoicing` sur 18 trouvés au budget), pas LightGBM (9 sur 18). **Pour
+  le coût, l'effet est inverse** : `Over-Invoicing` pèse 75 % du montant et
+  avantage LOF (section 9). Le rythme mensuel n'est pas vérifié : la
+  validation ne couvre que 64 jours, soit 2 ou 3 fois chaque jour du mois,
+  trop peu pour une mesure fiable.
+- **Conclusion pour l'oral : l'hypothèse sur les artefacts est réfutée pour
+  la PR-AUC.** L'écart entre LightGBM et LOF ne vient pas des artefacts ;
+  il augmente même sans eux.
+
+## 27. Perspective : variables comparant un compte à son propre passé
+
+- **Constat** (étape 5, validation, seuil retenu) : les typologies de
+  changement de comportement échappent. LOF ne trouve aucun cas
+  `Behavioural_Change_1` ni `Behavioural_Change_2` ; LightGBM est à son plus
+  faible sur `Behavioural_Change_1` (15 % par défaut, 38 % réglé).
+- **Cause probable** : peu de variables comparent un compte à son propre
+  passé. Seul le rapport du montant à la moyenne sur 30 jours le fait.
+- **Perspective** : des rapports d'activité, par exemple le nombre de
+  transactions sur 24 h rapporté à la moyenne journalière du mois, ou le
+  nombre de contreparties nouvelles par rapport au mois précédent.
+- **Décision : on ne l'ajoute pas maintenant.** Les variables, la matrice et
+  tous les choix des étapes 3 à 5 ont été faits sans elles ; les ajouter
+  après avoir vu les typologies manquées reviendrait à régler le projet sur
+  la validation. C'est une piste de suite, à présenter comme telle.
