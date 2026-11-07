@@ -95,6 +95,39 @@ def random_groups(rng, n_groups: int, chosen: list[int], among_others: bool) -> 
 DUREE_UNITES = [(86_400, "jours"), (3_600, "h"), (60, "min"), (1, "s")]
 
 
+REQUIRED_DELETION_SHARE = 0.90
+
+
+def deletion_test(score, x: np.ndarray, codes: list[list[str]], reference: np.ndarray, gmatrix: np.ndarray,
+                  names: list[str], among_others: bool, seed: int = SEED) -> dict:
+    """Baisse du score en retirant les codes motifs de chaque alerte, contre autant de groupes au hasard."""
+    rng = np.random.default_rng(seed)
+    wins, drops_codes, drops_random = 0, [], []
+    for i, alert_codes in enumerate(codes):
+        chosen = [names.index(c) for c in alert_codes]
+        if not chosen:
+            continue
+        a = deletion_drop(score, x[i], chosen, reference, gmatrix)
+        b = deletion_drop(score, x[i], random_groups(rng, len(names), chosen, among_others), reference, gmatrix)
+        drops_codes.append(a)
+        drops_random.append(b)
+        wins += a > b
+    n = len(drops_codes)
+    return {"alertes": n, "part_codes_plus_forts": round(wins / n, 4),
+            "part_codes_ne_baissent_pas": round(float(np.mean(np.array(drops_codes) <= 0)), 4),
+            "baisse_mediane_codes": round(float(np.median(drops_codes)), 4),
+            "baisse_mediane_hasard": round(float(np.median(drops_random)), 4)}
+
+
+def both_tests(score, x, codes, medians, shap_reference, gmatrix, names) -> dict:
+    """La règle fixée avant les mesures, et le second test conçu après les résultats (section 28)."""
+    rule = deletion_test(score, x, codes, medians, gmatrix, names, among_others=False)
+    rule["fidele"] = rule["part_codes_plus_forts"] >= REQUIRED_DELETION_SHARE
+    after = deletion_test(score, x, codes, shap_reference, gmatrix, names, among_others=True)
+    after["statut"] = "conçu après les résultats, à titre d'information"
+    return {"regle": rule, "apres_resultats": after}
+
+
 def _durees(*seconds: float) -> list[str]:
     """Durées écrites dans la même unité, celle de la plus courte (« 29 h », « 14 h »)."""
     size, unit = next((s, u) for s, u in DUREE_UNITES if min(seconds) >= s or s == 1)

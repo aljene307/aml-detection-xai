@@ -1,0 +1,65 @@
+{
+  "configuration": {
+    "config/hypotheses.json": true,
+    "config/codes_motifs.json": true,
+    "models/frequences.json": true,
+    "models/transformation.json": true,
+    "models/valeurs_habituelles.json": true
+  },
+  "matrices": {
+    "matrice_entrainement.npy": true,
+    "matrice_validation.npy": true
+  },
+  "modeles": {
+    "Isolation Forest, sans étiquette": {
+      "scores_validation_identiques": true,
+      "fichier": "isolation_forest_sans_etiquette.joblib",
+      "empreinte_modele": "652991304366d2e369e1ba5877b646a2d0f6f02763ddb5f1c142828ad51f3f1e",
+      "duree_s": 15.8
+    },
+    "Isolation Forest, réglé": {
+      "scores_validation_identiques": true,
+      "fichier": "isolation_forest_regle.joblib",
+      "empreinte_modele": "2e7da50bdef0bdc1d920b29e1e33f460263352c4bfb226cdf2e5c8a6f171f8e2",
+      "duree_s": 50.2
+    },
+    "LOF, sans étiquette": {
+      "scores_validation_identiques": true,
+      "fichier": "lof_sans_etiquette.joblib",
+      "empreinte_modele": "ee151dc6ffc5e8b9abd68a8b73954b52337a219a10ae08480c69e9f41979b680",
+      "duree_s": 476.5
+    },
+    "LOF, réglé": {
+      "scores_validation_identiques": true,
+      "fichier": "lof_regle.joblib",
+      "empreinte_modele": "105eb9dd0dc3f9e58e99d4a9a9fca3c4df97089531a9707c01b52453ca4af39a",
+      "duree_s": 440.7
+    },
+    "Autoencodeur": {
+      "scores_validation_identiques": true,
+      "fichier": "autoencodeur.joblib",
+      "empreinte_modele": "27573a14729556e13d57d24c954061aba2a3eb7c8f03b87f1e2170f57708ede5",
+      "duree_s": 8.1
+    },
+    "LightGBM, par défaut": {
+      "scores_validation_identiques": true,
+      "fichier": "lightgbm_par_defaut.joblib",
+      "empreinte_modele": "84ff84fb58f8fdbfc4aa85ddb5e2e0f1ba59095de82d8dc8309c59c9f5130211",
+      "duree_s": 41.0
+    },
+    "LightGBM, réglé": {
+      "scores_validation_identiques": true,
+      "fichier": "lightgbm_regle.joblib",
+      "empreinte_modele": "9f16df069b3dcb544ccd506158724fa7cc3d1ac409da2e7d4af9df108d658a2a",
+      "duree_s": 19.1
+    },
+    "Régression logistique": {
+      "scores_validation_identiques": true,
+      "fichier": "regression_logistique.joblib",
+      "empreinte_modele": "6a696ea2b63596f26d430f310cc401aa5f1f97db7fcdb75da007f2058c63d04c",
+      "duree_s": 11.6
+    }
+  },
+  "duree_s": 1065.31,
+  "pic_memoire_mo": 4690
+}

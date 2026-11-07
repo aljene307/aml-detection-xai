@@ -43,6 +43,7 @@ from aml_xai.config import (
     TYPOLOGY,
 )
 from aml_xai.explain import (
+    both_tests,
     deletion_drop,
     group_matrix,
     kernel_background,
@@ -51,7 +52,6 @@ from aml_xai.explain import (
     load_codes,
     lof_score,
     phrase,
-    random_groups,
     reason_codes,
 )
 from aml_xai.features import model_feature_names
@@ -66,7 +66,6 @@ LGBM_PATH = TRIAL_MODELS_DIR / "lightgbm_regle.joblib"
 LGBM_DELETION_ALERTS = 500
 LOF_ALERTS = 100
 LOF_STABILITY_ALERTS = 50
-REQUIRED_DELETION_SHARE = 0.90
 USUAL_VALUES_PATH = MODELS_DIR / "valeurs_habituelles.json"
 # Variables citées dans les phrases : leur médiane d'entraînement sert de valeur habituelle
 USUAL_FEATURES = ["em_ratio_montant_30j", "re_ratio_montant_30j", "em_nb_1h", "em_nb_24h", "re_nb_1h", "re_nb_24h",
@@ -137,33 +136,8 @@ def describe(contributions: np.ndarray, base: np.ndarray, scores: np.ndarray, gm
     return out
 
 
-def deletion_test(score, x: np.ndarray, explained: list[dict], reference, gmatrix, names,
-                  among_others: bool, seed: int = SEED) -> dict:
-    """Baisse du score en retirant les codes motifs, contre autant de groupes au hasard."""
-    rng = np.random.default_rng(seed)
-    wins, drops_codes, drops_random = 0, [], []
-    for i, e in enumerate(explained):
-        chosen = [names.index(c["code"]) for c in e["codes"]]
-        if not chosen:
-            continue
-        a = deletion_drop(score, x[i], chosen, reference, gmatrix)
-        b = deletion_drop(score, x[i], random_groups(rng, len(names), chosen, among_others), reference, gmatrix)
-        drops_codes.append(a)
-        drops_random.append(b)
-        wins += a > b
-    n = len(drops_codes)
-    return {"alertes": n, "part_codes_plus_forts": round(wins / n, 4),
-            "part_codes_ne_baissent_pas": round(float(np.mean(np.array(drops_codes) <= 0)), 4),
-            "baisse_mediane_codes": round(float(np.median(drops_codes)), 4),
-            "baisse_mediane_hasard": round(float(np.median(drops_random)), 4)}
-
-
-def both_tests(score, x, explained, medians, shap_reference, gmatrix, names) -> dict:
-    rule = deletion_test(score, x, explained, medians, gmatrix, names, among_others=False)
-    rule["fidele"] = rule["part_codes_plus_forts"] >= REQUIRED_DELETION_SHARE
-    after = deletion_test(score, x, explained, shap_reference, gmatrix, names, among_others=True)
-    after["statut"] = "conçu après les résultats, à titre d'information"
-    return {"regle": rule, "apres_resultats": after}
+def codes_of(explained: dict) -> list[str]:
+    return [c["code"] for c in explained["codes"]]
 
 
 def code_frequencies(explained: list[dict], by_typology: bool = False) -> dict:
@@ -245,7 +219,7 @@ def case_explanations() -> None:
             "nombre_de_codes": pd.Series([len(e["codes"]) for e in explained]).value_counts().sort_index().to_dict(),
             "frequence_codes": code_frequencies(explained),
             "codes_par_typologie": code_frequencies([e for e in explained if e["blanchiment"]], by_typology=True),
-            "suppression": both_tests(lgbm_score, valid[alerts[sample]], [explained[i] for i in sample],
+            "suppression": both_tests(lgbm_score, valid[alerts[sample]], [codes_of(explained[i]) for i in sample],
                                       medians, train_mean, gmatrix, names),
         }
 
@@ -284,7 +258,8 @@ def case_explanations() -> None:
                 zip(names, np.abs(values @ gmatrix).mean(axis=0).round(4).tolist()), key=lambda kv: -kv[1])),
             "nombre_de_codes": pd.Series([len(e["codes"]) for e in lof_explained]).value_counts().sort_index().to_dict(),
             "frequence_codes": code_frequencies(lof_explained),
-            "suppression": both_tests(score, valid[chosen], lof_explained, medians, background_mean, gmatrix, names),
+            "suppression": both_tests(score, valid[chosen], [codes_of(e) for e in lof_explained], medians,
+                                      background_mean, gmatrix, names),
             "stabilite": {"alertes": LOF_STABILITY_ALERTS,
                           "memes_codes_meme_ordre": round(same_list / LOF_STABILITY_ALERTS, 3),
                           "memes_codes": round(same_set / LOF_STABILITY_ALERTS, 3)},

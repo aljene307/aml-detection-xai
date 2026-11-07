@@ -32,6 +32,7 @@ from aml_xai.evaluation import (
     false_alerts_by_type,
     load_hypotheses,
     novelty_shares,
+    period_frame,
     typology_recall,
 )
 from aml_xai.measure import measure
@@ -67,25 +68,6 @@ def method_files() -> dict[str, str]:
     }
 
 
-def validation_frame(periods: dict) -> pd.DataFrame:
-    period = [(TIMESTAMP, ">=", periods["fin_entrainement"]), (TIMESTAMP, "<", periods["fin_validation"])]
-    columns = [TIMESTAMP, *ACCOUNT_COLUMNS, "Amount", TARGET, TYPOLOGY]
-    df = pd.read_parquet(PARQUET_PATH, columns=["transaction_id", *columns], filters=period)
-    history = pd.read_parquet(FEATURES_PATH, columns=["transaction_id", "em_sans_historique_30j",
-                                                      "re_sans_historique_30j"], filters=period)
-    if not np.array_equal(df["transaction_id"].to_numpy(), history["transaction_id"].to_numpy()):
-        raise RuntimeError("Les deux fichiers ne donnent pas les mêmes lignes.")
-    df["em_sans_historique"] = history["em_sans_historique_30j"].to_numpy() == 1
-    df["re_sans_historique"] = history["re_sans_historique_30j"].to_numpy() == 1
-    train = pd.read_parquet(PARQUET_PATH, columns=ACCOUNT_COLUMNS,
-                            filters=[(TIMESTAMP, "<", periods["fin_entrainement"])])
-    for side, column in zip(["em", "re"], ACCOUNT_COLUMNS):
-        df[f"{side}_jamais_vu"] = ~df[column].isin(set(train[column].unique()))
-    cents = df["Amount"].to_numpy() * 100
-    df["nombreuses_decimales"] = np.abs(cents - np.rint(cents)) > 1e-6
-    return df
-
-
 def summary(row: dict, days: float) -> dict:
     return {
         "seuil": float(row["seuil"]),
@@ -109,7 +91,7 @@ def main() -> None:
         periods = model_periods()
         days = (periods["fin_validation"] - periods["fin_entrainement"]).total_seconds() / 86_400
         capacity = hypotheses["alertes_par_jour"] * days
-        df = validation_frame(periods)
+        df = period_frame(periods["fin_entrainement"], periods["fin_entrainement"], periods["fin_validation"])
         labels = df[TARGET].to_numpy().astype(np.int8)
         amounts = df["Amount"].to_numpy()
         day_keys = df[TIMESTAMP].dt.floor("D").to_numpy()

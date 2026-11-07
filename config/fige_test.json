@@ -1,0 +1,72 @@
+{
+  "description": "Choix figés avant l'ouverture du test, recopiés de docs/CHOIX.md, section 29 (un test vérifie que chaque empreinte et chaque seuil y figurent).",
+  "configuration": {
+    "config/hypotheses.json": "6ec83b91f1b3ec4ab48bf759fb9f548bed03d13f2c112e94c82cd61998c79219",
+    "config/codes_motifs.json": "49f13bd62c486c160af1421a4fc7443d5e8c31cffa283031a67b982c85256db6",
+    "models/frequences.json": "7342314390547a5e9962efc436a4ecf1f248de22ecba3d296c5386e939a553bb",
+    "models/transformation.json": "63bbada1066dc83d1b85829a8495ba2f0c02a5317a939c4796353f5f2624c6d9",
+    "models/valeurs_habituelles.json": "30c9a18193cf65e5e86b12a3b939d2f00263ecc8302a4ed964d15b6ef9ecd8f7"
+  },
+  "matrices": {
+    "matrice_entrainement.npy": "298000e532c51f684ccf048eae40f9d1a0bd1e7477a3b604f1015ca78fcf6997",
+    "matrice_validation.npy": "bbdc59e74280b55a48f1acfd535a76b076e7258ef43157fabac0d88baf7a5700"
+  },
+  "modeles": {
+    "Isolation Forest, sans étiquette": {
+      "type": "isolation_forest",
+      "reglage": {"n_estimators": 100, "max_samples": 256, "max_features": 1.0},
+      "seuil": 0.6359087562758536,
+      "scores_validation": "scores_grilles/isolation_forest__n_estimators-100__max_samples-256__max_features-1.0__graine-42.npy",
+      "empreinte_validation": "5c03b5b9b9fb91dc4dce541dde80a90213e82d57992b9767886fd33780e36b22"
+    },
+    "Isolation Forest, réglé": {
+      "type": "isolation_forest",
+      "reglage": {"n_estimators": 100, "max_samples": 4096, "max_features": 0.5},
+      "seuil": null,
+      "scores_validation": "scores_grilles/isolation_forest__n_estimators-100__max_samples-4096__max_features-0.5__graine-42.npy",
+      "empreinte_validation": "ce8970f1c7c0bf581485b3a964ebc8c7047bc091ccc276760858f61573df9eff"
+    },
+    "LOF, sans étiquette": {
+      "type": "lof",
+      "reglage": {"n_neighbors": 20, "echantillon": 100000},
+      "seuil": 1.5251219272613525,
+      "scores_validation": "scores_grilles/lof__n_neighbors-20__echantillon-100000__graine-42.npy",
+      "empreinte_validation": "36fe100569493a74cfabb3450043f1c0d1669697587bd220fa3bce3f2cd625cc"
+    },
+    "LOF, réglé": {
+      "type": "lof",
+      "reglage": {"n_neighbors": 10, "echantillon": 100000},
+      "seuil": 1.507451057434082,
+      "scores_validation": "scores_grilles/lof__n_neighbors-10__echantillon-100000__graine-42.npy",
+      "empreinte_validation": "c4bb2fdbe9932c301d60d15aa5381a33ad8c1d743d56d4f1ccebdd29d60ac2e8"
+    },
+    "Autoencodeur": {
+      "type": "autoencodeur",
+      "reglage": {"goulot": 8},
+      "seuil": null,
+      "scores_validation": "scores_grilles/autoencodeur__goulot-8__graine-42.npy",
+      "empreinte_validation": "21688cc6b1524bce80c08fe3fc0bd91a515a2529218b788285648836c0b2d860"
+    },
+    "LightGBM, par défaut": {
+      "type": "lightgbm",
+      "reglage": {},
+      "seuil": -5.200432465566857,
+      "scores_validation": "scores_supervise/desequilibre__option-aucun__graine-42.npy",
+      "empreinte_validation": "bcb2ac5700db468e8ca7a5236b75e2445863fdf75dd279fdea319768f1624d02"
+    },
+    "LightGBM, réglé": {
+      "type": "lightgbm",
+      "reglage": {"num_leaves": 63, "learning_rate": 0.05, "n_estimators": 29},
+      "seuil": -5.034005813871007,
+      "scores_validation": "scores_supervise/grille__option-aucun__num_leaves-63__learning_rate-0.05.npy",
+      "empreinte_validation": "b134b25d8d4666f4e043c974cbc9c40a0f4e34e7636a757d64bfdd2f4606a470"
+    },
+    "Régression logistique": {
+      "type": "logistique",
+      "reglage": {},
+      "seuil": null,
+      "scores_validation": "scores_supervise/logistique__option-aucun.npy",
+      "empreinte_validation": "48d3f2a704310b2ba97b7140787d3a0235c6bc3fb6bcee7ee4b0ee250abebed7"
+    }
+  }
+}

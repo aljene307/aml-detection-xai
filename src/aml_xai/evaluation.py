@@ -16,7 +16,15 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from aml_xai.config import ROOT
+from aml_xai.config import (
+    ACCOUNT_COLUMNS,
+    FEATURES_PATH,
+    PARQUET_PATH,
+    ROOT,
+    TARGET,
+    TIMESTAMP,
+    TYPOLOGY,
+)
 from aml_xai.eda import wilson_interval
 from aml_xai.supervised import ranking
 
@@ -120,3 +128,23 @@ def novelty_shares(alerted: np.ndarray, labels: np.ndarray, groups: dict[str, np
             "taux_blanchiment_groupe": float(labels[member].mean()) if member.any() else 0.0,
         }
     return out
+
+
+def period_frame(train_end: pd.Timestamp, start: pd.Timestamp, end: pd.Timestamp) -> pd.DataFrame:
+    """Transactions de `[start ; end[` pour l'évaluation : montants, étiquettes, typologies,
+    absence d'historique, comptes jamais vus avant `train_end`, montants à nombreuses décimales."""
+    period = [(TIMESTAMP, ">=", start), (TIMESTAMP, "<", end)]
+    columns = [TIMESTAMP, *ACCOUNT_COLUMNS, "Amount", TARGET, TYPOLOGY]
+    df = pd.read_parquet(PARQUET_PATH, columns=["transaction_id", *columns], filters=period)
+    history = pd.read_parquet(FEATURES_PATH, columns=["transaction_id", "em_sans_historique_30j",
+                                                      "re_sans_historique_30j"], filters=period)
+    if not np.array_equal(df["transaction_id"].to_numpy(), history["transaction_id"].to_numpy()):
+        raise RuntimeError("Les deux fichiers ne donnent pas les mêmes lignes.")
+    df["em_sans_historique"] = history["em_sans_historique_30j"].to_numpy() == 1
+    df["re_sans_historique"] = history["re_sans_historique_30j"].to_numpy() == 1
+    train = pd.read_parquet(PARQUET_PATH, columns=ACCOUNT_COLUMNS, filters=[(TIMESTAMP, "<", train_end)])
+    for side, column in zip(["em", "re"], ACCOUNT_COLUMNS):
+        df[f"{side}_jamais_vu"] = ~df[column].isin(set(train[column].unique()))
+    cents = df["Amount"].to_numpy() * 100
+    df["nombreuses_decimales"] = np.abs(cents - np.rint(cents)) > 1e-6
+    return df

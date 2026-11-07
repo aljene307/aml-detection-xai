@@ -1121,3 +1121,53 @@ ce sont exactement les modèles évalués sur la validation.
    TreeSHAP sur les alertes de LightGBM réglé (suppression sur 500 tirées au
    hasard, graine 42), KernelSHAP sur 100 alertes de LOF sans étiquette
    (graine 42).
+
+### Attentes écrites avant l'ouverture du test
+
+Écrites sans connaître le moindre résultat du test, pour être vérifiées
+ensuite (section 30) :
+
+1. Les versions **réglées** (LightGBM réglé, LOF réglé) baissent un peu entre
+   la validation et le test, car leurs scores de validation sont optimistes
+   (section 24).
+2. Les versions **sans étiquette** et **LightGBM par défaut**, non réglées sur
+   la validation, sont plus stables.
+3. Le **nombre d'alertes par jour** au seuil figé s'écarte de 140 si les
+   scores glissent dans le temps ; on ne s'attend pas à un écart de plus de
+   la moitié.
+4. Le taux de blanchiment du test est plus élevé (0,113 % contre 0,105 %) et
+   les typologies sont réparties autrement (10 cas `Over-Invoicing` contre
+   18) : le coût dépend moins de cette typologie qu'en validation.
+5. Le classement des méthodes reste le même : LightGBM devant LOF, LOF devant
+   l'autoencodeur, Isolation Forest dernier.
+
+## 30. Étape 7 : préparation et répétition, avant l'ouverture du test
+
+- **Préparation (7a, `scripts/prepare_test.py`)** : empreintes des 5 fichiers
+  de configuration et des 2 matrices identiques à la section 29 ; les
+  8 modèles, appris avec leur réglage figé, redonnent **exactement** leurs
+  scores de validation (empreintes identiques). LightGBM réglé est réappris
+  avec 29 arbres sans arrêt précoce : identique au modèle à arrêt précoce,
+  car le boosting construit ses arbres l'un après l'autre. Modèles
+  enregistrés avec leur empreinte (`reports/mesures/test_preparation.json`).
+  Le test n'a pas été lu.
+- **Mémoire de la préparation** : pic de 4 690 Mo, trois fois l'objectif de
+  1,5 Go (réapprentissage de huit modèles dans un même processus, dont la
+  régression logistique et Isolation Forest sur tout l'entraînement). Calcul
+  allé au bout ; à séparer en plusieurs processus s'il doit être refait.
+- **Répétition de 7b sur la validation** (`scripts/evaluate_test.py --periode
+  validation`, `reports/mesures/repetition_validation.json`) : tout le
+  parcours de 7b, sans lire le test. Il retrouve **à l'identique** les
+  8 PR-AUC des étapes 3 et 4, les 13 mesures au seuil des 5 modèles à seuil
+  (étape 5), les artefacts et les tests de suppression de l'étape 6. Pic de
+  1 361 Mo, durée 28 minutes. Le script de 7b est donc vérifié de bout en
+  bout avant l'ouverture.
+- **Protection** : `test.json` n'est écrit qu'à la toute fin, en une fois (un
+  arrêt en cours de route n'écrit rien) ; le script refuse de tourner s'il
+  existe déjà. Une correction exige `--correction "raison"`, écrit
+  `test_correction_N.json` et garde les fichiers précédents (tests dans
+  `tests/test_frozen.py`).
+- **Déplacements de code** : la lecture d'une période (`period_frame`) et le
+  test de suppression (`deletion_test`, `both_tests`) sont passés des scripts
+  aux modules partagés, pour que 7b calcule exactement comme les étapes 5
+  et 6 ; l'évaluation de l'étape 5 redonne un fichier identique.
