@@ -50,3 +50,6 @@ Thumbs.db
 desktop.ini
 .vscode/
 .idea/
+
+# Secrets de Streamlit (seul un exemple serait commité)
+.streamlit/secrets.toml

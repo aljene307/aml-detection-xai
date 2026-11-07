@@ -1351,3 +1351,56 @@ configuration et matrices identiques aux empreintes figées.
   avait démarré l'API et passé ses tests.
 - **Service gratuit** : mise en veille après 15 minutes sans appel ; le
   premier appel suivant prend environ une minute.
+
+## 33. Application Streamlit (étape 9)
+
+- **Architecture** : seule la page « Analyser une transaction » appelle l'API.
+  Les pages Exemples, Budget et coût, Résultats, Méthode et limites lisent
+  uniquement des fichiers JSON commités et fonctionnent si l'API ne répond
+  pas (testé avec une API injoignable). L'application ne charge aucun modèle.
+- **Fichiers lus sans l'API**, préparés par `scripts/build_app_data.py` :
+  `data/demo/exemples_app.json` (score, rang, alerte et explication des deux
+  modèles pour les 30 exemples ; LightGBM par le même code que l'API, LOF
+  repris des explications calculées à l'avance ; scores vérifiés égaux aux
+  scores attendus) et `reports/mesures/budget_validation.json`.
+- **Client de l'API** (`app/client.py`) : adresse lue dans `st.secrets`, en
+  rattrapant l'erreur s'il n'existe pas de fichier de secrets, puis dans
+  `API_URL`, puis l'adresse Render par défaut ; délai de 90 s pour le réveil,
+  un seul nouvel essai (connexion refusée, délai dépassé ou réponse 502, 503
+  ou 504 pendant le réveil), puis le message « Réveil de l'API, environ une
+  minute ». Au démarrage, un appel `/health` dans un fil séparé réveille
+  l'API sans bloquer l'affichage. `.streamlit/secrets.toml` est ignoré par
+  Git.
+- **Rang** : affiché « parmi les X % les plus suspectes des transactions de
+  validation » (texte de l'API modifié en conséquence).
+- **Budget et coût** : hypothèses réglables par curseurs, alertes par jour et
+  coût d'une alerte recalculés par les formules de `config/hypotheses.json`.
+  Courbes calculées sur la **validation** avec la règle de la recommandation
+  finale (les k transactions les plus suspectes de chaque jour, k de 1 à
+  2 000), pour les 5 modèles à seuil ; vérifiées à k = 140 contre l'étape 5.
+  Point du test à 140 alertes par jour lu dans `reports/mesures/test.json`,
+  étiqueté « test, ouvert une seule fois » (rappel et précision seulement :
+  le coût de cette règle n'est pas enregistré pour le test, et rien n'est
+  recalculé sur le test).
+- **Mentions** : données synthétiques (SAML-D, licence CC BY-NC-SA 4.0) dans
+  la barre latérale et en pied de chaque page.
+- **Formulaire** : date et heure dans un seul champ texte, car le champ
+  « heure » de Streamlit perd les secondes, ce qui changeait la transaction
+  (l'explication de LOF d'un exemple n'était alors plus retrouvée) ; un test
+  vérifie que, sans modification, le formulaire envoie exactement l'exemple.
+- **Leçons du projet 1** : versions figées dans `app/requirements.txt`
+  (36 paquets, dépendances indirectes comprises, sans modèle ni SHAP) ;
+  Python 3.11 ; imports faits au démarrage, avant `st.navigation` ; graphiques
+  en Plotly ; `width="stretch"` au lieu de `use_container_width`, déclaré
+  obsolète dans Streamlit 1.66.
+- **Tests** (`tests/test_app.py`, 13 tests) : repli de l'adresse sans secrets,
+  un seul nouvel essai puis message de réveil, formules du budget, les 4 pages
+  sans API, réaction aux curseurs, message de réveil sur la page Analyser,
+  application entière avec sa navigation, formulaire identique à l'exemple,
+  date invalide refusée.
+- **Essai réel de bout en bout** : page Analyser contre l'API Render, avec LOF
+  (trois codes motifs, explication calculée à l'avance) et avec LightGBM
+  (trois codes motifs en direct).
+- **Mémoire en local** (`scripts/measure_app_memory.py`,
+  `reports/mesures/app_memoire.json`) : serveur Streamlit au repos 82 Mo ;
+  processus exécutant les 5 pages, avec un vrai appel à l'API, 151 Mo.
