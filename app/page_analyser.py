@@ -21,7 +21,7 @@ def formulaire(exemple: dict) -> tuple[dict, str] | None:
     entree = exemple["entree"]
     with st.form("transaction"):
         modele = st.radio("Modèle", list(MODELES), format_func=lambda m: MODELES[m] + (
-            " (par défaut, sans étiquette)" if m == "lof" else " (comparaison)"), horizontal=True)
+            " (par défaut)" if m == "lof" else " (comparaison)"), horizontal=True)
         a, b = st.columns(2)
         montant = a.number_input("Montant (£)", min_value=0.01, value=float(entree["montant"]), step=100.0)
         # Un seul champ texte : le champ « heure » de Streamlit perd les secondes, ce qui changerait la transaction
@@ -61,10 +61,11 @@ def formulaire(exemple: dict) -> tuple[dict, str] | None:
 
 
 def resultat(r: dict) -> None:
-    alerte, rang, score = st.columns([1, 2, 1])
+    alerte, score = st.columns(2)
     alerte.metric("Alerte", "Oui" if r["alerte"] else "Non")
-    rang.metric("Rang", r["rang_texte"].capitalize())
     score.metric("Score", fr(r["score"], 3), help=f"Seuil figé : {fr(r['seuil'], 3)}")
+    # Le rang en entier : trop long pour st.metric, qui le couperait
+    st.markdown(f"#### Rang : {r['rang_texte']}")
     st.caption(SENS_SCORE[r["modele"]])
     if r["valeurs_inconnues"]:
         st.info("Valeurs jamais vues à l'entraînement (codées comme rares) : " + ", ".join(r["valeurs_inconnues"]))

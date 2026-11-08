@@ -19,7 +19,7 @@ warm_up()  # réveille l'API à l'avance, sans bloquer l'affichage
 st.sidebar.caption(NOTE_DONNEES)
 
 navigation = st.navigation([
-    st.Page(page_analyser.afficher, title="Analyser une transaction", url_path="analyser", default=True),
+    st.Page(page_analyser.afficher, title="Analyser une transaction", default=True),  # servie à la racine /
     st.Page(page_exemples.afficher, title="Exemples", url_path="exemples"),
     st.Page(page_budget.afficher, title="Budget et coût", url_path="budget"),
     st.Page(page_resultats.afficher, title="Résultats", url_path="resultats"),

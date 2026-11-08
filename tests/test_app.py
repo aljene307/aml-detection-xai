@@ -122,3 +122,33 @@ def test_invalid_date_is_refused_in_the_form():
     app.text_input[0].set_value("30/07/2023 21:58")  # dans un formulaire : pris en compte à l'envoi
     app.button[0].click().run()
     assert any("AAAA-MM-JJ HH:MM:SS" in e.value for e in app.error)
+
+
+def test_vertical_lines_sit_at_the_right_place_on_log_axes():
+    """Sur un axe logarithmique, Plotly place le trait à la valeur réelle et l'étiquette au logarithme."""
+    import math
+
+    from graphiques import comparaison_modeles, courbes_budget
+    from donnees import lire
+
+    budget = {"alertes_par_jour": [1, 10, 100, 1000], "series": {"LOF, sans étiquette": {"rappel": [0, .1, .3, .6]}}}
+    fig = courbes_budget(budget, ["LOF, sans étiquette"], "rappel", 140, {})
+    assert fig.layout.shapes[0].x0 == 140
+    assert fig.layout.annotations[0].x == pytest.approx(math.log10(140))
+    test = lire("reports/mesures/test.json")
+    fig = comparaison_modeles(test, lire("reports/mesures/repetition_validation.json"))
+    assert fig.layout.shapes[0].x0 == test["taux"]
+    assert fig.layout.annotations[0].x == pytest.approx(math.log10(test["taux"]))
+
+
+def test_analyse_page_shows_the_whole_rank():
+    script = f"""
+import sys
+sys.path.insert(0, {str(APP)!r})
+import page_analyser
+page_analyser.resultat({{"modele": "lof", "score": 1.06, "seuil": 1.5, "alerte": False, "rang": 0.32,
+    "rang_texte": "parmi les 32 % les plus suspectes des transactions de validation", "valeurs_inconnues": [],
+    "explication": None, "message": "explication absente"}})
+"""
+    app = AppTest.from_string(script, default_timeout=60).run()
+    assert any("parmi les 32 % les plus suspectes des transactions de validation" in m.value for m in app.markdown)

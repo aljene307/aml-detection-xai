@@ -34,7 +34,7 @@ def afficher() -> None:
              "montants des blanchiments non détectés + nombre d'alertes × coût d'une alerte, en livres sterling.")
     a, b, c, d = st.columns(4)
     analystes = a.slider("Analystes", 1, 20, hyp["analystes"])
-    heures = b.slider("Heures par jour", 1.0, 10.0, float(hyp["heures_par_jour"]), 0.5)
+    heures = b.slider("Heures par jour", 1, 10, int(hyp["heures_par_jour"]))
     minutes = c.slider("Minutes par alerte", 5, 60, hyp["minutes_par_alerte"])
     cout_horaire = d.slider("Coût horaire (£)", 10, 100, hyp["cout_horaire_livres"])
     k, cout_alerte = hypotheses_derivees(analystes, heures, minutes, cout_horaire)

@@ -1,5 +1,7 @@
 """Graphiques Plotly de l'application (mêmes couleurs que le notebook)."""
 
+import math
+
 import plotly.graph_objects as go
 
 BLEU, ORANGE, VERT, GRIS = "#2a78d6", "#eb6834", "#008300", "#52514e"
@@ -10,6 +12,14 @@ COULEUR_METHODE = {"Isolation Forest": GRIS, "LOF": BLEU, "LightGBM": VERT, "Aut
 def style(nom_modele: str) -> dict:
     methode = next(m for m in COULEUR_METHODE if nom_modele.startswith(m))
     return {"color": COULEUR_METHODE[methode], "dash": "dash" if "réglé" in nom_modele else "solid"}
+
+
+def trait_vertical_log(fig: go.Figure, x: float, texte: str, tirets: str, cote: str) -> None:
+    """Trait vertical sur un axe x logarithmique : le trait se place à la valeur réelle,
+    mais son étiquette au logarithme de la valeur (fonctionnement de Plotly)."""
+    fig.add_vline(x=x, line_color=GRIS, line_width=1, line_dash=tirets)
+    fig.add_annotation(x=math.log10(x), y=1, yref="paper", text=texte, showarrow=False,
+                       xanchor=cote, yanchor="bottom", font={"color": GRIS, "size": 11})
 
 
 def mise_en_page(fig: go.Figure, titre: str, hauteur: int = 420) -> go.Figure:
@@ -46,9 +56,7 @@ def courbes_budget(budget: dict, modeles: list[str], mesure: str, k: float, poin
                                      marker={"symbol": "diamond", "size": 11, "color": style(nom)["color"],
                                              "line": {"color": "white", "width": 1.5}},
                                      hovertemplate=f"{nom}<br>test, ouvert une seule fois : %{{y:.3f}}<extra></extra>"))
-    fig.add_vline(x=k, line_color=GRIS, line_width=1, line_dash="dot",
-                  annotation_text=f"budget choisi : {k:.0f} par jour".replace(".", ","),
-                  annotation_position="top left")
+    trait_vertical_log(fig, k, f"budget choisi : {k:.0f} par jour", "dot", "left")
     fig.update_xaxes(type="log", title="Alertes par jour (échelle logarithmique)")
     return fig
 
@@ -64,8 +72,7 @@ def comparaison_modeles(test: dict, validation: dict) -> go.Figure:
     fig.add_trace(go.Scatter(x=[test["modeles"][n]["pr_auc"] for n in noms], y=noms, mode="markers",
                              name="test (intervalle à 95 %)", marker={"color": BLEU, "size": 10, "symbol": "diamond"},
                              error_x={"type": "data", "array": haut, "arrayminus": bas, "color": BLEU}))
-    fig.add_vline(x=test["taux"], line_dash="dash", line_color=GRIS, annotation_text="hasard",
-                  annotation_position="top right")
+    trait_vertical_log(fig, test["taux"], "hasard", "dash", "left")
     fig.update_xaxes(type="log", title="PR-AUC (échelle logarithmique)")
     return mise_en_page(fig, "Chaque modèle garde son niveau de validation sur le test", 460)
 
