@@ -26,9 +26,11 @@ def colonne_modele(colonne, code: str, e: dict, libelles: dict) -> None:
 
 def afficher() -> None:
     st.title("Exemples")
-    st.write("Trente transactions du **test**, tirées par une règle fixe : 10 vrais cas alertés par LightGBM "
-             "(typologies différentes), 10 fausses alertes, 5 cas manqués, 5 transactions normales. Scores et "
-             "explications sont calculés à l'avance : cette page n'appelle pas l'API.")
+    st.write("Trente transactions du **test**, tirées par une règle fixe. Les catégories viennent de "
+             "**LightGBM réglé** (avec étiquettes) au seuil figé : 10 vrais cas alertés (typologies différentes), "
+             "10 fausses alertes, 5 cas manqués, 5 transactions normales non alertées. LOF peut répondre "
+             "autrement sur la même transaction. Scores et explications sont calculés à l'avance : cette page "
+             "n'appelle pas l'API.")
     liste = exemples()
     tableau = pd.DataFrame([{
         "N°": e["id"], "Catégorie": CATEGORIES[e["categorie"]], "Typologie": e["typologie"],

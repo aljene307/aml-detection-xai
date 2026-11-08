@@ -1483,3 +1483,19 @@ configuration et matrices identiques aux empreintes figées.
   Vérification avant le push, sur un clone du dépôt local avec les mêmes
   réglages : modèle extrait en LF (0 CRLF), 36 tests de l'API, de
   l'application et des choix figés réussis (1 ignoré, qui exige les données).
+- **Vérification de l'application en ligne** (https://aml-detection-xai.streamlit.app,
+  Chrome sans interface, profil temporaire vide) : les 5 pages s'affichent,
+  aucune erreur Python affichée, aucune erreur JavaScript de l'application.
+  Graphiques dessinés : Analyser 1 (13 groupes), Exemples 2, Budget 1,
+  Résultats 3 ; Méthode n'en a pas. Les **rectangles gris** vus sur Analyser
+  (graphique, et même les indicateurs Alerte et Score) et sur les tableaux
+  sont les **emplacements d'attente** de Streamlit Cloud pendant le
+  chargement : ils disparaissent seuls (jusqu'à environ une minute pour les
+  tableaux au réveil de l'application). Ce n'est pas un défaut du code, donc
+  rien n'a été changé. Les erreurs 403/404 de la console viennent des
+  services de Streamlit Cloud (statistiques, compte), pas de l'application.
+- **Libellés des exemples** : les catégories (vrai cas alerté, fausse
+  alerte, cas manqué, normale) viennent de **LightGBM réglé** au seuil figé ;
+  le libellé le dit désormais (« vrai cas alerté par LightGBM »), car LOF
+  répond « Non » sur l'exemple 1. Page Méthode : « artefact du générateur »
+  retiré pour `Over-Invoicing`, comme dans le README.

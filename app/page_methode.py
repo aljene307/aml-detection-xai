@@ -27,7 +27,7 @@ validation 20 %, test 20 %.
 - Les **explications ne sont pas fidèles** selon la règle fixée avant les mesures : retirer les codes motifs
   fait plus baisser le score que retirer d'autres variables dans environ trois alertes sur quatre, au lieu
   des neuf sur dix exigées.
-- Le **coût** est dominé par quelques très gros montants (`Over-Invoicing`), un artefact du générateur.
+- Le **coût** est dominé par quelques très gros montants, surtout `Over-Invoicing` : il se lit avec le rappel et la précision.
 - Le **montant** n'est qu'une approximation du coût réel d'un blanchiment manqué (amendes, risque d'image).
 - Les **changements de comportement** échappent à LOF, faute de variables comparant un compte à son passé.
 

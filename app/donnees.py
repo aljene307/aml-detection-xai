@@ -26,8 +26,10 @@ HISTORIQUE = {
     "re_nb_distincts_30j": "Émetteurs différents sur 30 jours",
 }
 MODELES = {"lof": "LOF, sans étiquette", "lightgbm": "LightGBM, réglé"}
-CATEGORIES = {"vrai_cas_alerte": "vrai cas alerté", "fausse_alerte": "fausse alerte",
-              "cas_manque": "cas manqué", "normale": "transaction normale"}
+# Catégories des exemples : réponse de LightGBM réglé au seuil figé, comparée à l'étiquette.
+# LOF peut répondre autrement sur la même transaction.
+CATEGORIES = {"vrai_cas_alerte": "vrai cas alerté par LightGBM", "fausse_alerte": "fausse alerte de LightGBM",
+              "cas_manque": "cas manqué par LightGBM", "normale": "normale, non alertée par LightGBM"}
 
 
 @st.cache_data(show_spinner=False)

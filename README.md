@@ -15,7 +15,7 @@ chaque alerte par des **codes motifs** lisibles (SHAP).
 - **API en ligne** : https://aml-detection-xai-api.onrender.com (documentation interactive :
   [/docs](https://aml-detection-xai-api.onrender.com/docs)). Service gratuit : le premier appel
   après une période sans activité prend environ une minute.
-- **Application Streamlit** : lien ajouté après sa mise en ligne.
+- **Application Streamlit** : https://aml-detection-xai.streamlit.app
 - **Journal de tous les choix, avec leurs raisons et leurs mesures** : [docs/CHOIX.md](docs/CHOIX.md).
 - **Notebook complet** (sections 1 à 8) : [notebooks/projet_aml.ipynb](notebooks/projet_aml.ipynb).
 - **Synthèse d'une page** : [reports/synthese.pdf](reports/synthese.pdf).
