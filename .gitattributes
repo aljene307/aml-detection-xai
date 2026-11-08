@@ -4,3 +4,7 @@
 *.pdf binary
 *.parquet binary
 *.joblib binary
+
+# Modèle LightGBM au format texte : son lecteur plante sur des fins de ligne CRLF.
+# Toujours extrait en LF, quel que soit le système.
+models/*.txt text eol=lf

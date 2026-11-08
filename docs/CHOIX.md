@@ -1466,3 +1466,20 @@ configuration et matrices identiques aux empreintes figées.
   (empreintes identiques), répétition de l'étape 7 sur la validation
   identique aux étapes 3 à 6, et notebook identique d'une exécution à
   l'autre.
+- **Test rapide du README sur un clone neuf**
+  (dossier `aml_clone_readme`, hors du dépôt, clone depuis GitHub, environnement neuf,
+  commandes du README, ports 8010 et 8511, Streamlit sans navigateur) :
+  `git clone` (70 s), `py -3.11 -m venv` (22 s), mise à jour de pip (27 s),
+  installation de `requirements-dev.txt` (402 s) : réussis. **`pytest` :
+  plantage (code 3)** ; **API : ne démarre pas** (« Model format error,
+  expect a tree here ») ; application : réussie (`/_stcore/health` et page
+  d'accueil : 200). Rien n'a été corrigé dans le clone.
+- **Cause et correction** : sous Windows (`core.autocrlf = true`), Git
+  extrait `models/lightgbm_regle.txt` avec des fins de ligne CRLF (715 sur
+  715), et le lecteur de LightGBM fait alors planter Python (vérifié : copie
+  en LF chargée, copie en CRLF plantage, chacune dans son propre processus).
+  Sur Render (Linux), le fichier arrive en LF, d'où une API en ligne qui
+  fonctionne. Correction : `models/*.txt text eol=lf` dans `.gitattributes`.
+  Vérification avant le push, sur un clone du dépôt local avec les mêmes
+  réglages : modèle extrait en LF (0 CRLF), 36 tests de l'API, de
+  l'application et des choix figés réussis (1 ignoré, qui exige les données).
