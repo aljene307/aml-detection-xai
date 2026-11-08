@@ -1404,3 +1404,43 @@ configuration et matrices identiques aux empreintes figées.
 - **Mémoire en local** (`scripts/measure_app_memory.py`,
   `reports/mesures/app_memoire.json`) : serveur Streamlit au repos 82 Mo ;
   processus exécutant les 5 pages, avec un vrai appel à l'API, 151 Mo.
+
+## 34. Finalisation (étape 10)
+
+- **Audit avant publication** (lecture seule, 31 commits) : gitleaks sur tout
+  l'historique, aucune fuite ; auteur et committer toujours l'adresse noreply
+  de GitHub ; aucune adresse personnelle ou de l'école, aucun chemin du PC,
+  ni ligne de co-auteur ni mention d'outil externe, dans le contenu comme dans
+  les messages ; une seule branche, aucune étiquette
+  ni sauvegarde. Chaque motif de recherche a d'abord été vérifié sur un exemple
+  fabriqué (une première recherche avec `grep` ne trouvait pas les chemins
+  Windows). Aucune réécriture de l'historique n'a été nécessaire. `LICENSE`
+  (MIT) présent ; licence et citation des données dans le README.
+- **Captures** (`scripts/take_screenshots.py`, `docs/captures/`) : Chrome déjà
+  installé, sans interface, dans un contexte neuf et vide ; relues une à une
+  (aucun chemin, adresse, nom personnel ni message d'erreur). La relecture a
+  révélé quatre défauts de l'application, corrigés : rang coupé, libellé
+  répété, traits verticaux mal placés sur les axes logarithmiques (Plotly place
+  le trait à la valeur réelle et son étiquette au logarithme), curseur des
+  heures non entier ; et la page par défaut, servie à la racine.
+- **Reproduction dans un clone** : `evaluate_test.py` refuse de tourner si
+  `test.json` existe, et les grilles et le modèle supervisé reprennent après les
+  calculs déjà écrits. Le README fait donc déplacer ces fichiers avant de les
+  recalculer, puis les compare avec `scripts/compare_results.py` (durées et
+  mémoire ignorées, tolérance relative de 1e-9).
+- **Empreintes figées et fins de ligne** : les empreintes de la section 29 ont
+  été prises sur le PC, en LF pour `config/*.json` et en CRLF pour
+  `models/frequences.json`, `transformation.json` et `valeurs_habituelles.json`.
+  Git convertissant les fins de ligne selon le système, un clone neuf aurait été
+  refusé alors que le contenu est identique. Le contrôle accepte maintenant, pour
+  les fichiers texte, le même contenu en LF ou en CRLF ; les matrices restent
+  comparées octet par octet. Vérifié sur un clone neuf en LF.
+  **Seule la méthode de vérification change, pas les valeurs figées** :
+  `git diff 21f2150 -- config/fige_test.json` est vide ; la section 29 est
+  identique depuis `21f2150` (dernier commit poussé avant l'ouverture du
+  test) ; depuis `7dc2131` (choix figés), ses 15 empreintes et ses 5 seuils
+  sont identiques, et le texte figé est le début exact de la section actuelle,
+  qui n'a reçu que l'ajout des attentes, avant l'ouverture du test.
+- **Render après les redéploiements** : `/health` répond `ok` avec les deux
+  modèles ; mémoire de 251 Mo puis 242,5 Mo selon le déploiement (225 Mo au
+  premier), toujours sous les 512 Mo.
