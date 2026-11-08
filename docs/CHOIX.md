@@ -1441,6 +1441,28 @@ configuration et matrices identiques aux empreintes figées.
   test) ; depuis `7dc2131` (choix figés), ses 15 empreintes et ses 5 seuils
   sont identiques, et le texte figé est le début exact de la section actuelle,
   qui n'a reçu que l'ajout des attentes, avant l'ouverture du test.
+- **Mémoire de la reconstruction** : la préparation du test (pic de 4 690 Mo,
+  section 30) apprend maintenant chaque modèle dans son propre processus, avec
+  sa graine fixe, et le contrôle one-hot chaque méthode dans le sien. Le pic
+  venait d'un seul modèle : Isolation Forest réglé, dont chaque arbre copie
+  la moitié des colonnes de tout l'entraînement, sur 12 cœurs en parallèle
+  (5 057 Mo à lui seul). Il apprend maintenant sur 2 cœurs, puis reprend son
+  réglage d'origine (`n_jobs = -1`) : 1 678 Mo. Les 8 modèles ont exactement
+  les mêmes empreintes qu'avant, leurs scores de validation sont identiques
+  aux scores figés, et `one_hot.json` comme `test_preparation.json` n'ont
+  aucun écart hors durées et mémoire. Pics par modèle : de 671 à 1 678 Mo
+  (processus principal : 163 Mo) ; contrôle one-hot : 1 379, 1 976 et
+  1 162 Mo (avant : 2 149 Mo). Aucune étape ne dépasse maintenant environ
+  2 Go.
 - **Render après les redéploiements** : `/health` répond `ok` avec les deux
   modèles ; mémoire de 251 Mo puis 242,5 Mo selon le déploiement (225 Mo au
   premier), toujours sous les 512 Mo.
+- **Reconstruction complète non faite** : le test du README sur un clone neuf
+  a été limité aux étapes rapides (clone, environnement neuf, installation,
+  tests, API et application), faute de temps ; la reconstruction complète
+  (environ 4 heures, estimée à partir des durées mesurées) n'a pas été
+  lancée. La reproductibilité des résultats repose donc sur les contrôles déjà
+  faits : modèles réappris redonnant exactement leurs scores de validation
+  (empreintes identiques), répétition de l'étape 7 sur la validation
+  identique aux étapes 3 à 6, et notebook identique d'une exécution à
+  l'autre.

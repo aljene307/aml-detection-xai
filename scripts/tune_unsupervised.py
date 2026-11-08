@@ -28,6 +28,7 @@ import argparse
 import gc
 import json
 import os
+import subprocess
 import sys
 import time
 
@@ -271,10 +272,8 @@ def case_small_sample() -> None:
     print(json.dumps(summary, indent=2, ensure_ascii=False))
 
 
-def case_one_hot() -> None:
-    free = available_ram_mb()
-    if free < MIN_FREE_RAM_MB:
-        sys.exit(f"Arrêt : seulement {free:.0f} Mo disponibles, {MIN_FREE_RAM_MB} requis.")
+def one_hot_method(method: str) -> dict:
+    """Une méthode du contrôle one-hot, dans ce processus : mêmes lignes et mêmes réglages pour les deux codages."""
     maps = json.loads(FREQUENCY_MAPS_PATH.read_text(encoding="utf-8"))
     periods = model_periods()
     train, valid = load_matrix(MATRIX_PATHS["entrainement"]), load_matrix(MATRIX_PATHS["validation"])
@@ -301,30 +300,47 @@ def case_one_hot() -> None:
         return {"frequence": base, "one_hot": np.hstack([base[:, keep], dummies])}
 
     valid_versions = matrices(valid, raw_valid, subset)
-    out = {
-        "lignes_mesure": len(subset),
-        "cas_mesure": int(y.sum()),
-        "colonnes": {k: v.shape[1] for k, v in valid_versions.items()},
-        "methodes": {},
-    }
+    rows = sample_rows(len(train), ONE_HOT_FOREST_ROWS) if method == "isolation_forest" else training_rows(
+        method, len(train), DEFAULT_SETTINGS[method])
+    train_versions = matrices(train, raw_train, rows)
+    del raw_train
+    gc.collect()
+    out = {"lignes_mesure": len(subset), "cas_mesure": int(y.sum()),
+           "colonnes": {k: v.shape[1] for k, v in valid_versions.items()},
+           "resultat": {"lignes_apprentissage": len(rows)}}
+    for name in ["frequence", "one_hot"]:
+        start = time.perf_counter()
+        model = fit(default_model(method), train_versions[name])  # sans étiquettes
+        scores = anomaly_scores(model, valid_versions[name])
+        out["resultat"][name] = {
+            "pr_auc": round(float(average_precision_score(y, scores)), 6),
+            "roc_auc": round(float(roc_auc_score(y, scores)), 6),
+            "duree_s": round(time.perf_counter() - start, 1),
+        }
+    out["resultat"]["pic_memoire_mo"] = round(peak_memory_mb())
+    return out
+
+
+def case_one_hot() -> None:
+    """Une méthode par processus (pic de mémoire plus bas), assemblées dans l'ordre habituel."""
+    free = available_ram_mb()
+    if free < MIN_FREE_RAM_MB:
+        sys.exit(f"Arrêt : seulement {free:.0f} Mo disponibles, {MIN_FREE_RAM_MB} requis.")
+    out = {"methodes": {}}
     for method in ORDER:
-        rows = sample_rows(len(train), ONE_HOT_FOREST_ROWS) if method == "isolation_forest" else training_rows(
-            method, len(train), DEFAULT_SETTINGS[method])
-        train_versions = matrices(train, raw_train, rows)
-        out["methodes"][method] = {"lignes_apprentissage": len(rows)}
-        for name in ["frequence", "one_hot"]:
-            start = time.perf_counter()
-            model = fit(default_model(method), train_versions[name])  # sans étiquettes
-            scores = anomaly_scores(model, valid_versions[name])
-            out["methodes"][method][name] = {
-                "pr_auc": round(float(average_precision_score(y, scores)), 6),
-                "roc_auc": round(float(roc_auc_score(y, scores)), 6),
-                "duree_s": round(time.perf_counter() - start, 1),
-            }
-            print(method, name, out["methodes"][method][name], flush=True)
-        del train_versions
-        gc.collect()
-    out["pic_memoire_mo"] = round(peak_memory_mb())
+        child = subprocess.run([sys.executable, __file__, "--cas", "one_hot", "--methode", method],
+                               capture_output=True, text=True, encoding="utf-8")
+        if child.returncode != 0:
+            raise RuntimeError(f"{method} : échec du processus.\n{child.stderr[-2000:]}")
+        part = json.loads(child.stdout.strip().splitlines()[-1])
+        for key in ("lignes_mesure", "cas_mesure", "colonnes"):
+            out.setdefault(key, part[key])
+            if out[key] != part[key]:
+                raise RuntimeError(f"{method} : {key} différent des autres méthodes.")
+        out["methodes"][method] = part["resultat"]
+        print(method, part["resultat"], flush=True)
+    out = {k: out[k] for k in ("lignes_mesure", "cas_mesure", "colonnes", "methodes")}
+    out["pic_memoire_mo"] = max(m["pic_memoire_mo"] for m in out["methodes"].values())
     (MEASURES_DIR / "one_hot.json").write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(out, indent=2, ensure_ascii=False))
 
@@ -356,6 +372,7 @@ def lof_seed_jobs(results: dict):
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cas", choices=["grilles", "tableau", "petit_echantillon", "one_hot", "ex_aequo", "graines_lof"], required=True)
+    parser.add_argument("--methode", choices=ORDER, help="une seule méthode du contrôle one-hot (processus séparé)")
     args = parser.parse_args()
     if args.cas == "grilles":
         case_grids()
@@ -363,6 +380,8 @@ def main() -> None:
         case_grids(lof_seed_jobs)
     elif args.cas == "tableau":
         case_table()
+    elif args.cas == "one_hot" and args.methode:
+        print(json.dumps(one_hot_method(args.methode), ensure_ascii=False))
     elif args.cas == "one_hot":
         case_one_hot()
     elif args.cas == "ex_aequo":

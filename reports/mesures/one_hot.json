@@ -11,40 +11,43 @@
       "frequence": {
         "pr_auc": 0.017442,
         "roc_auc": 0.861227,
-        "duree_s": 5.1
+        "duree_s": 3.6
       },
       "one_hot": {
         "pr_auc": 0.017337,
         "roc_auc": 0.831917,
-        "duree_s": 5.7
-      }
+        "duree_s": 4.0
+      },
+      "pic_memoire_mo": 1379
     },
     "isolation_forest": {
       "lignes_apprentissage": 1000000,
       "frequence": {
         "pr_auc": 0.003848,
         "roc_auc": 0.780198,
-        "duree_s": 3.6
+        "duree_s": 3.1
       },
       "one_hot": {
         "pr_auc": 0.002679,
         "roc_auc": 0.694297,
-        "duree_s": 3.7
-      }
+        "duree_s": 3.0
+      },
+      "pic_memoire_mo": 1976
     },
     "lof": {
       "lignes_apprentissage": 100000,
       "frequence": {
         "pr_auc": 0.039862,
         "roc_auc": 0.856982,
-        "duree_s": 118.8
+        "duree_s": 62.2
       },
       "one_hot": {
         "pr_auc": 0.030282,
         "roc_auc": 0.858431,
-        "duree_s": 218.1
-      }
+        "duree_s": 171.4
+      },
+      "pic_memoire_mo": 1162
     }
   },
-  "pic_memoire_mo": 2149
+  "pic_memoire_mo": 1976
 }

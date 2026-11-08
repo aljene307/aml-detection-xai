@@ -17,6 +17,8 @@ from aml_xai.unsupervised import SAMPLE_ROWS, anomaly_scores, fit, model_from_se
 
 FROZEN_PATH = ROOT / "config" / "fige_test.json"
 TEST_RESULT = "test.json"
+# Isolation Forest avec une part des variables : cœurs utilisés pour apprendre (mémoire)
+FOREST_FIT_JOBS = 2
 
 
 def load_frozen(path: Path = FROZEN_PATH) -> dict:
@@ -76,6 +78,12 @@ def build_and_fit(spec: dict, train: np.ndarray, labels: np.ndarray):
     kind, settings = spec["type"], spec["reglage"]
     rows = training_rows(spec, len(train))
     x = np.asarray(train if rows is None else train[rows], dtype=np.float32)
+    if kind == "isolation_forest" and settings.get("max_features", 1.0) < 1.0:
+        # Avec une part des variables, chaque arbre copie ses colonnes de tout l'entraînement :
+        # sur 12 cœurs en parallèle, le pic dépassait 5 Go. Deux cœurs pour apprendre, puis le
+        # réglage d'origine. Résultat identique : les graines des arbres sont tirées avant.
+        model = model_from_settings(kind, settings, SEED).set_params(n_jobs=FOREST_FIT_JOBS)
+        return fit(model, x).set_params(n_jobs=-1)
     if kind in ("isolation_forest", "lof", "autoencodeur"):
         return fit(model_from_settings(kind, settings, SEED), x)
     if kind == "lightgbm":

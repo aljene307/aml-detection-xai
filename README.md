@@ -156,10 +156,9 @@ $env:API_URL = "http://127.0.0.1:8000"
 ## Reproduire tous les résultats
 
 Le jeu est public : **aucune clé ni aucun jeton n'est nécessaire** pour le télécharger
-(`kagglehub`). Il faut environ 4 Go d'espace disque. La plupart des étapes restent sous 2 Go de
-mémoire, mais la préparation du test (`scripts\prepare_test.py`) monte jusqu'à environ 4,7 Go :
-prévoir 5 Go de mémoire libre pour cette étape. La reconstruction complète prend plusieurs
-heures (les étapes de LOF sont les plus longues).
+(`kagglehub`). Il faut environ 4 Go d'espace disque et au moins 2 Go de mémoire libre : aucune
+étape ne dépasse environ 2 Go (les scripts refusent de démarrer sous 1,5 Go libres). La
+reconstruction complète prend environ 4 heures (les étapes de LOF sont les plus longues).
 
 ```powershell
 # Données et contrôles de qualité
