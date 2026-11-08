@@ -42,11 +42,21 @@ def sha256_npy(array: np.ndarray) -> str:
     return hashlib.sha256(buffer.getvalue()).hexdigest()
 
 
+def matches_frozen(path: Path, digest: str) -> bool:
+    """Le fichier a-t-il l'empreinte figée ? Binaire : octet par octet. Texte : le même contenu
+    en LF ou en CRLF (Git convertit les fins de ligne selon le système ; les empreintes de la
+    section 29 ont été prises sur le PC, certaines en LF, d'autres en CRLF)."""
+    if Path(path).suffix == ".npy":
+        return sha256_file(path) == digest
+    lf = Path(path).read_bytes().replace(b"\r\n", b"\n")
+    return digest in (hashlib.sha256(lf).hexdigest(), hashlib.sha256(lf.replace(b"\n", b"\r\n")).hexdigest())
+
+
 def check_files(expected: dict[str, str], base: Path = ROOT) -> dict[str, bool]:
     """Compare les empreintes ; lève une erreur au premier écart."""
     result = {}
     for name, digest in expected.items():
-        result[name] = sha256_file(base / name) == digest
+        result[name] = matches_frozen(base / name, digest)
         if not result[name]:
             raise RuntimeError(f"Empreinte différente de la section 29 : {name}")
     return result

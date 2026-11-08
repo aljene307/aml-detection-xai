@@ -52,3 +52,46 @@ def test_text_fingerprint_ignores_line_endings(tmp_path):
     (tmp_path / "crlf.json").write_bytes(b'{\r\n  "a": 1\r\n}\r\n')
     assert sha256_file(tmp_path / "lf.json", normalize_eol=True) == sha256_file(tmp_path / "crlf.json", normalize_eol=True)
     assert sha256_file(tmp_path / "lf.json") != sha256_file(tmp_path / "crlf.json")
+
+
+def test_compare_results_ignores_durations_and_finds_real_differences(tmp_path):
+    import importlib.util
+    import json
+
+    path = ROOT / "scripts" / "compare_results.py"
+    spec = importlib.util.spec_from_file_location("compare_results", path)
+    compare = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(compare)
+    a = {"pr_auc": 0.5, "duree_s": 10, "pic_memoire_mo": 900, "x": {"notation_s": 3, "rappel": 0.3}}
+    b = {"pr_auc": 0.5 + 1e-12, "duree_s": 99, "pic_memoire_mo": 1, "x": {"notation_s": 7, "rappel": 0.3}}
+    assert compare.differences(a, b) == []
+    b["x"]["rappel"] = 0.31
+    assert compare.differences(a, b) == ["/x/rappel : 0.3 contre 0.31"]
+    (tmp_path / "a.jsonl").write_text(json.dumps({"cle": "k", "pr_auc": 0.1, "duree_s": 1}) + "\n")
+    (tmp_path / "b.jsonl").write_text(json.dumps({"cle": "k", "pr_auc": 0.1, "duree_s": 5}) + "\n")
+    assert compare.differences(compare.load(tmp_path / "a.jsonl"), compare.load(tmp_path / "b.jsonl")) == []
+
+
+def test_frozen_text_files_match_with_either_line_ending(tmp_path):
+    import hashlib
+
+    from aml_xai.frozen import check_files, matches_frozen
+
+    lf = b'{\n  "a": 1\n}\n'
+    crlf = lf.replace(b"\n", b"\r\n")
+    (tmp_path / "f.json").write_bytes(crlf)
+    assert matches_frozen(tmp_path / "f.json", hashlib.sha256(lf).hexdigest())   # figé en LF, extrait en CRLF
+    (tmp_path / "f.json").write_bytes(lf)
+    assert matches_frozen(tmp_path / "f.json", hashlib.sha256(crlf).hexdigest())  # figé en CRLF, extrait en LF
+    (tmp_path / "f.json").write_bytes(lf.replace(b"1", b"2"))
+    assert not matches_frozen(tmp_path / "f.json", hashlib.sha256(lf).hexdigest())  # contenu changé : refusé
+    (tmp_path / "m.npy").write_bytes(crlf)
+    assert not matches_frozen(tmp_path / "m.npy", hashlib.sha256(lf).hexdigest())  # binaire : octet par octet
+    with pytest.raises(RuntimeError):
+        check_files({"f.json": hashlib.sha256(lf).hexdigest()}, tmp_path)
+
+
+def test_frozen_configuration_still_matches_on_this_pc():
+    from aml_xai.frozen import check_files
+
+    assert all(check_files(load_frozen()["configuration"]).values())
